@@ -36,6 +36,17 @@ enum ElementPhase: String, Codable {
 	case solid = "Solid"
 	case liquid = "Liquid"
 	case gas = "Gas"
+
+	var symbol: String {
+		switch self {
+		case .solid:
+			"cube"
+		case .liquid:
+			"drop"
+		case .gas:
+			"bubbles.and.sparkles"
+		}
+	}
 }
 
 enum Category: String, Codable {
