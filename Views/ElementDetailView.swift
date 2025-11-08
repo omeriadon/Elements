@@ -53,10 +53,10 @@ struct ElementDetailView: View {
 						.fontWeight(.heavy)
 					Text(element.category.rawValue.capitalized)
 						.fontDesign(.monospaced)
-						.foregroundStyle(.secondary)
+						.foregroundStyle(element.category.themeColor)
 				}
 			}
-			.frame(maxWidth: .infinity, alignment: .leading)
+
 			HStack {
 				VStack(alignment: .leading) {
 					Text("Atomic Number")
@@ -78,39 +78,51 @@ struct ElementDetailView: View {
 	}
 
 	var info: some View {
-		GroupBox {
+		VStack(alignment: .leading) {
 			Text(element.summary)
+				.padding(.bottom, 10)
 
 			if let link = URL(string: element.source) {
-				Link("Source", destination: link)
-					.foregroundStyle(.tertiary)
+				Link(destination: link) {
+					Label("Source: \(element.source)", systemImage: "link")
+				}
+				.foregroundStyle(.tertiary)
 			} else {
 				Text("Source: \(element.source)")
 					.foregroundStyle(.tertiary)
 			}
 		}
+		.padding(10)
+		.background(.ultraThinMaterial)
+		.clipShape(RoundedRectangle(cornerRadius: 20))
 	}
 
 	var properties: some View {
-		VStack(alignment: .leading, spacing: 20) {
-			VStack(alignment: .leading) {
-				Text("Atomic Mass")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
-				Text(element.atomic_mass.description)
+		HStack {
+			VStack(alignment: .leading, spacing: 20) {
+				VStack(alignment: .leading) {
+					Text("Atomic Mass")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+					Text(String(format: "%.3f", element.atomic_mass) + " amu")
+						.fontDesign(.monospaced)
+				}
+				VStack(alignment: .leading) {
+					Text("Appearance")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+					Text(element.appearance ?? "Unknown")
+						.fontDesign(.monospaced)
+				}
+				VStack(alignment: .leading) {
+					Text("Boiling Point")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+					Text((element.boil?.description ?? "Unknown") + " °K")
+						.fontDesign(.monospaced)
+				}
 			}
-			VStack(alignment: .leading) {
-				Text("Appearance")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
-				Text(element.appearance ?? "Unknown")
-			}
-			VStack(alignment: .leading) {
-				Text("Boiling Point")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
-				Text(element.boil?.description ?? "Unknown")
-			}
+			Spacer()
 		}
 	}
 
@@ -118,22 +130,24 @@ struct ElementDetailView: View {
 		ZStack {
 			Text(element.symbol)
 				.padding(10)
-				.glassEffect(.clear.interactive())
+				.glassEffect(
+					.clear.tint(element.category.themeColor).interactive()
+				)
 
 			ForEach(element.shells.indices, id: \.self) { i in
 				let shell = element.shells[i]
-				let radius = CGFloat(90 + i * 20)
+				let radius = CGFloat(60 + i * 28)
 
 				Circle()
 					.stroke(Color.accentColor.tertiary, lineWidth: 1)
-					.frame(width: radius, height: radius)
+					.frame(width: radius * 1.5, height: radius * 1.5)
 
 				ForEach(0 ..< shell, id: \.self) { j in
 					let angle = Double(j) / Double(shell) * 360.0
 					Circle()
 						.fill(Color.accentColor)
 						.frame(width: 10, height: 10)
-						.offset(y: -radius / 2)
+						.offset(y: -radius / 1.3333333333)
 						.rotationEffect(.degrees(angle))
 				}
 			}
