@@ -40,7 +40,7 @@ struct ElementDetailView: View {
 				Text(element.symbol)
 					.portal(item: element, .destination)
 					.font(.title2)
-					.foregroundStyle(element.category.themeColor)
+					.foregroundStyle(element.series.themeColor)
 					.frame(width: 100, height: 100)
 					.glassEffect(.clear.interactive())
 					.padding(.leading, 10)
@@ -51,9 +51,9 @@ struct ElementDetailView: View {
 						.font(.title)
 						.fontDesign(.monospaced)
 						.fontWeight(.heavy)
-					Text(element.category.rawValue.capitalized)
+					Text(element.series.rawValue.capitalized)
 						.fontDesign(.monospaced)
-						.foregroundStyle(element.category.themeColor)
+						.foregroundStyle(element.series.themeColor)
 				}
 			}
 
@@ -61,7 +61,7 @@ struct ElementDetailView: View {
 				VStack(alignment: .leading) {
 					Text("Atomic Number")
 						.foregroundStyle(.tertiary)
-					Text(element.number.description)
+					Text(element.atomicNumber.description)
 						.fontDesign(.monospaced)
 				}
 
@@ -104,7 +104,7 @@ struct ElementDetailView: View {
 					Text("Atomic Mass")
 						.font(.caption)
 						.foregroundStyle(.tertiary)
-					Text(String(format: "%.3f", element.atomic_mass) + " amu")
+					Text(String(format: "%.3f", element.atomicMass) + " amu")
 						.fontDesign(.monospaced)
 				}
 				VStack(alignment: .leading) {
@@ -118,7 +118,7 @@ struct ElementDetailView: View {
 					Text("Boiling Point")
 						.font(.caption)
 						.foregroundStyle(.tertiary)
-					Text((element.boil?.description ?? "Unknown") + " °K")
+					Text((element.boilingPoint?.description ?? "Unknown") + " °K")
 						.fontDesign(.monospaced)
 				}
 			}
@@ -131,11 +131,11 @@ struct ElementDetailView: View {
 			Text(element.symbol)
 				.padding(10)
 				.glassEffect(
-					.clear.tint(element.category.themeColor).interactive()
+					.clear.tint(element.series.themeColor).interactive()
 				)
 
-			ForEach(element.shells.indices, id: \.self) { i in
-				let shell = element.shells[i]
+			ForEach(element.electronsPerShell.indices, id: \.self) { i in
+				let shell = element.electronsPerShell[i]
 				let radius = CGFloat(60 + i * 28)
 
 				Circle()

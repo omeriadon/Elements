@@ -25,10 +25,10 @@ struct ListView: View {
 						HStack {
 							Text(element.symbol)
 								.font(.title2)
-								.foregroundStyle(element.category.themeColor)
+								.foregroundStyle(element.series.themeColor)
 								.fontDesign(.monospaced)
 								.portal(item: element, .source)
-							Text(element.number.description)
+							Text(element.atomicNumber.description)
 								.foregroundStyle(.tertiary)
 								.fontDesign(.monospaced)
 							Spacer()
@@ -52,7 +52,7 @@ struct ListView: View {
 				Text(element.symbol)
 					.font(.title2)
 					.fontDesign(.monospaced)
-					.foregroundStyle(element.category.themeColor)
+					.foregroundStyle(element.series.themeColor)
 			}
 		}
 		.flowingHeader(
