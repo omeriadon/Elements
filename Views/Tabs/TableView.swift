@@ -29,11 +29,17 @@ struct ElementCell: View {
 	}
 }
 
+struct PlacedElement: Identifiable {
+	let id = UUID()
+	let element: Element
+	let row: Int
+	let column: Int
+}
+
 struct TableView: View {
 	let elements: [Element]
 
-	@State private var scale: CGFloat = 1.0
-	@State private var lastScale: CGFloat = 1.0
+	@State var scale: CGFloat = 1.0
 
 	private let columns: [GridItem] = Array(
 		repeating: .init(
@@ -50,12 +56,12 @@ struct TableView: View {
 
 			switch element.series {
 			case .lanthanide:
-				row = 8 + 3
-				column = (element.atomicNumber - 57) + 2 + 2
+				row = 11
+				column = (element.atomicNumber - 57) + 4
 
 			case .actinide:
-				row = 9 + 3
-				column = (element.atomicNumber - 89) + 2 + 2
+				row = 12
+				column = (element.atomicNumber - 89) + 4
 
 			default:
 				break
@@ -97,23 +103,24 @@ struct TableView: View {
 						}
 					}
 				}
+				.gesture(
+					MagnificationGesture()
+						.onChanged { value in
+							scale = value
+						}
+						.onEnded { value in
+							withAnimation(.spring()) {
+								scale = min(max(value, 0.5), 3.0)
+							}
+						}
+				)
 				.scaleEffect(scale)
 			}
-			.gesture(
-				MagnificationGesture()
-					.onChanged { value in
-						scale = min(max(lastScale * value, 0.5), 3.0)
-					}
-					.onEnded { _ in
-						lastScale = scale
-					}
-			)
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {
 					Button {
 						withAnimation(.interpolatingSpring(stiffness: 100, damping: 15)) {
 							scale = 1.0
-							lastScale = 1.0
 						}
 					} label: {
 						Image(systemName: "arrow.counterclockwise")
@@ -121,12 +128,5 @@ struct TableView: View {
 				}
 			}
 		}
-	}
-
-	private struct PlacedElement: Identifiable {
-		let id = UUID()
-		let element: Element
-		let row: Int
-		let column: Int
 	}
 }
