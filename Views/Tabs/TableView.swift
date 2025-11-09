@@ -12,12 +12,15 @@ let elementCellHeight = 80
 
 struct ElementCell: View {
 	let element: Element
+	var isGestureActive: Bool
 
 	var action: () -> Void
 
 	var body: some View {
 		Button {
-			action()
+			if !isGestureActive {
+				action()
+			}
 		} label: {
 			VStack(spacing: 2) {
 				Text("\(element.atomicNumber)")
@@ -51,6 +54,7 @@ struct TableView: View {
 	@State var scale: CGFloat = 1.0
 	@State var lastScale: CGFloat = 1.0
 	@GestureState var gestureScale: CGFloat = 1.0
+	@GestureState var isGesturing: Bool = false
 	@State var selectedElement: Element? = nil
 
 	private let columns: [GridItem] = Array(
@@ -101,7 +105,7 @@ struct TableView: View {
 										.foregroundColor(.secondary)
 
 								} else if let placed = positionedElements.first(where: { $0.row == row && $0.column == column }) {
-									ElementCell(element: placed.element) {
+									ElementCell(element: placed.element, isGestureActive: isGesturing) {
 										selectedElement = placed.element
 									}
 								} else {
@@ -123,8 +127,11 @@ struct TableView: View {
 					.updating($gestureScale) { value, state, _ in
 						state = min(max(value, 0.5 / lastScale), 3.0 / lastScale)
 					}
+					.updating($isGesturing) { _, state, _ in
+						state = true
+					}
 					.onEnded { value in
-						lastScale = min(max(lastScale * value, 0.5), 3.0)
+						lastScale = min(max(lastScale * value, 0.5), 2.0)
 					}
 			)
 
@@ -140,6 +147,7 @@ struct TableView: View {
 					.foregroundStyle(element.series.themeColor)
 					.fontDesign(.monospaced)
 					.bold()
+					.scaleEffect(scale)
 			}
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {
