@@ -13,23 +13,28 @@ let elementCellHeight = 80
 struct ElementCell: View {
 	let element: Element
 
-	@State var isPressed = false
+	var action: () -> Void
 
 	var body: some View {
-		VStack(spacing: 2) {
-			Text("\(element.atomicNumber)")
-				.font(.footnote.monospacedDigit())
-			Text(element.symbol)
-				.portal(item: element, .source)
-				.font(.title2)
-				.foregroundStyle(element.series.themeColor)
-				.fontDesign(.monospaced)
-				.bold()
-			Text(element.name)
-				.font(.footnote)
+		Button {
+			action()
+		} label: {
+			VStack(spacing: 2) {
+				Text("\(element.atomicNumber)")
+					.font(.footnote.monospacedDigit())
+				Text(element.symbol)
+					.portal(item: element, .source)
+					.font(.title2)
+					.foregroundStyle(element.series.themeColor)
+					.fontDesign(.monospaced)
+					.bold()
+				Text(element.name)
+					.font(.footnote)
+			}
+			.tint(.secondary)
+			.frame(width: CGFloat(elementCellHeight), height: CGFloat(elementCellHeight))
+			.background(element.series.themeColor.tertiary, in: RoundedRectangle(cornerRadius: 10))
 		}
-		.frame(width: CGFloat(elementCellHeight), height: CGFloat(elementCellHeight))
-		.background(element.series.themeColor.tertiary, in: RoundedRectangle(cornerRadius: 10))
 	}
 }
 
@@ -44,6 +49,8 @@ struct TableView: View {
 	let elements: [Element]
 
 	@State var scale: CGFloat = 1.0
+	@State var lastScale: CGFloat = 1.0
+	@GestureState var gestureScale: CGFloat = 1.0
 	@State var selectedElement: Element? = nil
 
 	private let columns: [GridItem] = Array(
@@ -94,10 +101,9 @@ struct TableView: View {
 										.foregroundColor(.secondary)
 
 								} else if let placed = positionedElements.first(where: { $0.row == row && $0.column == column }) {
-									ElementCell(element: placed.element)
-										.onTapGesture {
-											selectedElement = placed.element
-										}
+									ElementCell(element: placed.element) {
+										selectedElement = placed.element
+									}
 								} else {
 									Color.clear
 								}
@@ -109,41 +115,41 @@ struct TableView: View {
 						}
 					}
 				}
-				.gesture(
-					MagnificationGesture()
-						.onChanged { value in
-							scale = value
-						}
-						.onEnded { value in
-							withAnimation(.spring()) {
-								scale = min(max(value, 0.5), 3.0)
-							}
-						}
-				)
-				.scaleEffect(scale)
+				.scaleEffect(lastScale * gestureScale)
 			}
-			.sheet(item: $selectedElement) { element in
-				ElementDetailView(element: element)
-			}
-			.portalTransition(
-				item: $selectedElement,
-				animation: .smooth(duration: 0.4, extraBounce: 0.1)
-			) { element in
-				Text(element.symbol)
-					.font(.title2)
-					.foregroundStyle(element.series.themeColor)
-					.fontDesign(.monospaced)
-					.bold()
-			}
-			.toolbar {
-				ToolbarItem(placement: .primaryAction) {
-					Button {
-						withAnimation(.interpolatingSpring(stiffness: 100, damping: 15)) {
-							scale = 1.0
-						}
-					} label: {
-						Image(systemName: "arrow.counterclockwise")
+			.contentShape(Rectangle())
+			.simultaneousGesture(
+				MagnificationGesture()
+					.updating($gestureScale) { value, state, _ in
+						state = min(max(value, 0.5 / lastScale), 3.0 / lastScale)
 					}
+					.onEnded { value in
+						lastScale = min(max(lastScale * value, 0.5), 3.0)
+					}
+			)
+		}
+		.sheet(item: $selectedElement) { element in
+			ElementDetailView(element: element)
+		}
+		.portalTransition(
+			item: $selectedElement,
+			animation: .smooth(duration: 0.4, extraBounce: 0.1)
+		) { element in
+			Text(element.symbol)
+				.font(.title2)
+				.foregroundStyle(element.series.themeColor)
+				.fontDesign(.monospaced)
+				.bold()
+		}
+		.toolbar {
+			ToolbarItem(placement: .primaryAction) {
+				Button {
+					withAnimation(.interpolatingSpring(stiffness: 100, damping: 15)) {
+						scale = 1.0
+						lastScale = 1.0
+					}
+				} label: {
+					Image(systemName: "arrow.counterclockwise")
 				}
 			}
 		}
