@@ -1045,7 +1045,7 @@ struct ElementDetailView: View {
 							.foregroundStyle(.tertiary)
 
 					} right: {
-						Text(String(format: "%", calculated) + " pm")
+						Text(String(format: "%.4f", calculated) + " pm")
 							.fontDesign(.monospaced)
 					}
 				}
@@ -1057,7 +1057,7 @@ struct ElementDetailView: View {
 							.foregroundStyle(.tertiary)
 
 					} right: {
-						Text(String(format: "%", empirical) + " pm")
+						Text(String(format: "%.4f", empirical) + " pm")
 							.fontDesign(.monospaced)
 					}
 				}
@@ -1069,7 +1069,7 @@ struct ElementDetailView: View {
 							.foregroundStyle(.tertiary)
 
 					} right: {
-						Text(String(format: "%", covalent) + " pm")
+						Text(String(format: "%.4f", covalent) + " pm")
 							.fontDesign(.monospaced)
 					}
 				}
@@ -1081,7 +1081,7 @@ struct ElementDetailView: View {
 							.foregroundStyle(.tertiary)
 
 					} right: {
-						Text(String(format: "%", vanderwaals) + " pm")
+						Text(String(format: "%.4f", vanderwaals) + " pm")
 							.fontDesign(.monospaced)
 					}
 				}
