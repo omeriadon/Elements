@@ -7,21 +7,25 @@
 
 import SwiftUI
 
+let elementCellHeight = 80
+
 struct ElementCell: View {
 	let element: Element
 
 	var body: some View {
 		VStack(spacing: 2) {
-			Text(element.symbol)
-				.font(.headline)
 			Text("\(element.atomicNumber)")
-				.font(.caption)
+				.font(.footnote)
+			Text(element.symbol)
+				.font(.title2)
 			Text(element.name)
 				.font(.footnote)
 		}
-		.frame(width: 55, height: 55)
-		.background(.blue.opacity(0.3))
-		.cornerRadius(6)
+		.frame(
+			width: CGFloat(elementCellHeight),
+			height: CGFloat(elementCellHeight)
+		)
+		.background(element.series.themeColor.secondary, in: RoundedRectangle(cornerRadius: 10))
 	}
 }
 
@@ -29,7 +33,10 @@ struct TableView: View {
 	let elements: [Element]
 
 	private let columns: [GridItem] = Array(
-		repeating: .init(.fixed(50), alignment: .top),
+		repeating: .init(
+			.fixed(CGFloat(elementCellHeight)),
+			alignment: .center
+		),
 		count: 18
 	)
 
@@ -40,12 +47,13 @@ struct TableView: View {
 
 			switch element.series {
 			case .lanthanide:
-				// Move them to the lanthanide row, offset by series index
-				row = 7 // below main table (example row index)
-				column = (element.atomicNumber - 57) + 2 // starts at La = 57
+				row = 8
+				column = (element.atomicNumber - 57) + 2
+
 			case .actinide:
-				row = 8 // actinide row
-				column = (element.atomicNumber - 89) + 2 // starts at Ac = 89
+				row = 9
+				column = (element.atomicNumber - 89) + 2
+
 			default:
 				break
 			}
@@ -57,7 +65,7 @@ struct TableView: View {
 	var body: some View {
 		ScrollView([.horizontal, .vertical]) {
 			LazyVGrid(columns: columns) {
-				ForEach(0 ..< 9, id: \.self) { row in
+				ForEach(0 ..< 10, id: \.self) { row in
 					ForEach(0 ..< 18, id: \.self) { column in
 						Group {
 							if let placed = positionedElements.first(where: {
@@ -65,17 +73,18 @@ struct TableView: View {
 							}) {
 								ElementCell(element: placed.element)
 							} else {
-								Color.clear.frame(width: 50, height: 50)
+								Color.clear
+									.frame(
+										width: CGFloat(elementCellHeight),
+										height: CGFloat(elementCellHeight)
+									)
 							}
 						}
-						.padding(10)
 					}
 				}
 			}
-			.padding()
 		}
 	}
-
 
 	private struct PlacedElement: Identifiable {
 		let id = UUID()
