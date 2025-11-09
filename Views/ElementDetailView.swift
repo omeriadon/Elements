@@ -93,6 +93,7 @@ struct ElementDetailView: View {
 					.glassEffect(.clear.interactive())
 					.padding(.leading, 10)
 					.fontDesign(.monospaced)
+					.bold()
 				Spacer()
 				VStack(alignment: .trailing) {
 					if let discovered = element.discovered {

@@ -24,10 +24,11 @@ struct ListView: View {
 					} label: {
 						HStack {
 							Text(element.symbol)
+								.portal(item: element, .destination)
 								.font(.title2)
 								.foregroundStyle(element.series.themeColor)
 								.fontDesign(.monospaced)
-								.portal(item: element, .source)
+								.bold()
 							Text(element.atomicNumber.description)
 								.foregroundStyle(.tertiary)
 								.fontDesign(.monospaced)
@@ -45,7 +46,7 @@ struct ListView: View {
 			.sheet(item: $selectedElement) { element in
 				ElementDetailView(element: element)
 			}
-			.portalTransition( // Step 4
+			.portalTransition(
 				item: $selectedElement,
 				animation: .smooth(duration: 0.4, extraBounce: 0.1)
 			) { element in

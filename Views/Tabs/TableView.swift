@@ -5,6 +5,7 @@
 //  Created by Adon Omeri on 8/11/2025.
 //
 
+import Portal
 import SwiftUI
 
 let elementCellHeight = 80
@@ -12,20 +13,23 @@ let elementCellHeight = 80
 struct ElementCell: View {
 	let element: Element
 
+	@State var isPressed = false
+
 	var body: some View {
 		VStack(spacing: 2) {
 			Text("\(element.atomicNumber)")
 				.font(.footnote.monospacedDigit())
 			Text(element.symbol)
-				.font(.title2.bold().monospaced())
+				.portal(item: element, .source)
+				.font(.title2)
+				.foregroundStyle(element.series.themeColor)
+				.fontDesign(.monospaced)
+				.bold()
 			Text(element.name)
 				.font(.footnote)
 		}
-		.frame(
-			width: CGFloat(elementCellHeight),
-			height: CGFloat(elementCellHeight)
-		)
-		.background(element.series.themeColor.secondary, in: RoundedRectangle(cornerRadius: 10))
+		.frame(width: CGFloat(elementCellHeight), height: CGFloat(elementCellHeight))
+		.background(element.series.themeColor.tertiary, in: RoundedRectangle(cornerRadius: 10))
 	}
 }
 
@@ -40,6 +44,7 @@ struct TableView: View {
 	let elements: [Element]
 
 	@State var scale: CGFloat = 1.0
+	@State var selectedElement: Element? = nil
 
 	private let columns: [GridItem] = Array(
 		repeating: .init(
@@ -88,10 +93,11 @@ struct TableView: View {
 										.font(.caption2.monospacedDigit())
 										.foregroundColor(.secondary)
 
-								} else if let placed = positionedElements.first(where: {
-									$0.row == row && $0.column == column
-								}) {
+								} else if let placed = positionedElements.first(where: { $0.row == row && $0.column == column }) {
 									ElementCell(element: placed.element)
+										.onTapGesture {
+											selectedElement = placed.element
+										}
 								} else {
 									Color.clear
 								}
@@ -115,6 +121,19 @@ struct TableView: View {
 						}
 				)
 				.scaleEffect(scale)
+			}
+			.sheet(item: $selectedElement) { element in
+				ElementDetailView(element: element)
+			}
+			.portalTransition(
+				item: $selectedElement,
+				animation: .smooth(duration: 0.4, extraBounce: 0.1)
+			) { element in
+				Text(element.symbol)
+					.font(.title2)
+					.foregroundStyle(element.series.themeColor)
+					.fontDesign(.monospaced)
+					.bold()
 			}
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {
