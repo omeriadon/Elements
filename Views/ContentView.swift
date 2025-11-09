@@ -23,8 +23,18 @@ struct ContentView: View {
 		),
 		TabItem(
 			name: "Quiz",
-			symbol: "questionmark.app",
+			symbol: "questionmark.bubble",
 			view: AnyView(QuizView(elements: elements))
+		),
+		TabItem(
+			name: "Help",
+			symbol: "questionmark.square",
+			view: AnyView(Text("help here"))
+		),
+		TabItem(
+			name: "Settings",
+			symbol: "gear",
+			view: AnyView(Text("settings here"))
 		),
 	] }
 

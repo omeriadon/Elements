@@ -37,7 +37,7 @@ struct Element: Decodable, Identifiable {
 	let electronConfigurationSemantic: String
 	let electronegativityPauling: Double?
 	let electronsPerShell: [Int]
-	let energyLevels: String?
+	let energyLevels: String
 	let gasPhase: GasPhase?
 	let group: Int
 	let halfLife: HalfLife?
@@ -173,7 +173,7 @@ struct Element: Decodable, Identifiable {
 		electronConfiguration = try container.decode(String.self, forKey: .electronConfiguration)
 		electronConfigurationSemantic = try container.decode(String.self, forKey: .electronConfigurationSemantic)
 		electronegativityPauling = try? container.decode(Double.self, forKey: .electronegativityPauling)
-		energyLevels = try? container.decode(String.self, forKey: .energyLevels)
+		energyLevels = try container.decode(String.self, forKey: .energyLevels)
 		gasPhase = try? container.decode(GasPhase.self, forKey: .gasPhase)
 		group = try container.decode(Int.self, forKey: .group)
 		halfLife = try? container.decode(HalfLife.self, forKey: .halfLife)
@@ -246,6 +246,19 @@ enum DecayMode: String, Codable {
 	var symbol: String {
 		"exclamationmark.triangle"
 	}
+
+	var name: String {
+		switch self {
+		case .alphaEmission:
+			"AlphaEmission"
+		case .betaDecay:
+			"BetaDecay"
+		case .betaPlusDecay:
+			"BetaPlusDecay"
+		case .electronCapture:
+			"ElectronCapture"
+		}
+	}
 }
 
 enum CrystalStructure: String, Codable {
@@ -262,6 +275,37 @@ enum CrystalStructure: String, Codable {
 	case simpleTrigonal = "Simple Trigonal"
 	case centeredTetragonal = "Centered Tetragonal"
 	case tetrahedralPacking = "Tetrahedral Packing"
+
+	var name: String {
+		switch self {
+		case .simpleHexagonal:
+			"Simple Hexagonal"
+		case .simpleCubic:
+			"Simple Cubic"
+		case .bodycenteredCubic:
+			"Body-centered Cubic"
+		case .facecenteredCubic:
+			"Face-centered Cubic"
+		case .facecenteredOrthorhombic:
+			"Face-centered Orthorhombic"
+		case .baseOrthorhombic:
+			"Base Orthorhombic"
+		case .simpleOrthorhombic:
+			"Simple Orthorhombic"
+		case .basecenteredMonoclinic:
+			"Base-centered Monoclinic"
+		case .simpleMonoclinic:
+			"Simple Monoclinic"
+		case .simpleTriclinic:
+			"Simple Triclinic"
+		case .simpleTrigonal:
+			"Simple Trigonal"
+		case .centeredTetragonal:
+			"Centered Tetragonal"
+		case .tetrahedralPacking:
+			"Tetrahedral Packing"
+		}
+	}
 }
 
 enum ElectricalType: String, Codable {
@@ -315,7 +359,7 @@ enum MagneticType: String, Codable {
 	}
 }
 
-enum HalfLife: Decodable {
+enum HalfLife: Decodable, Equatable {
 	case stable
 	case unstable(Double)
 
@@ -358,7 +402,7 @@ enum Lifetime: Decodable {
 
 // MARK: - Structs
 
-struct Abundance: Decodable {
+struct Abundance: Decodable, Equatable {
 	let universe: Double
 	let solar: Double
 	let meteor: Double
@@ -417,8 +461,8 @@ enum DotNumbers: Decodable {
 }
 
 struct Conductivity: Codable {
-	let thermal: Double?
-	let electric: Double?
+	let thermal: Double
+	let electric: Double
 }
 
 struct Density: Codable {
@@ -447,9 +491,9 @@ struct Hardness: Codable {
 }
 
 struct MagneticSusceptibility: Codable {
-	let mass: Double?
-	let molar: Double?
-	let volume: Double?
+	let mass: Double
+	let molar: Double
+	let volume: Double
 }
 
 struct Modulus: Codable {

@@ -40,6 +40,30 @@ struct ElementDetailView: View {
 
 					Divider()
 
+					mechanical
+
+					Divider()
+
+					magnetic
+
+					Divider()
+
+					electrical
+
+					Divider()
+
+					crystal
+
+					Divider()
+
+					nuclear
+
+					Divider()
+
+					other
+
+					Divider()
+
 					info
 				}
 				.padding(.horizontal)
@@ -514,7 +538,7 @@ struct ElementDetailView: View {
 							.font(.caption)
 							.foregroundStyle(.tertiary)
 					} right: {
-						Text(String(format: "%.3f", radius) + " pm")
+						Text(String(format: "%.1f", radius) + " pm")
 							.fontDesign(.monospaced)
 					}
 				}
@@ -608,6 +632,482 @@ struct ElementDetailView: View {
 				} right: {
 					Text(String(format: "%.3f", sos) + " m/s")
 						.fontDesign(.monospaced)
+				}
+			}
+		}
+	}
+
+	var magnetic: some View {
+		VStack(spacing: 20) {
+			if let magneticType = element.magneticType {
+				LeftRight {
+					Text("Magnetic Type")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(magneticType.rawValue)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let magneticSusceptibility = element.magneticSusceptibility {
+				LeftRight {
+					Text("Magnetic Susceptibility - Mass")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", magneticSusceptibility.mass) + " m³/Kg")
+						.fontDesign(.monospaced)
+				}
+
+				LeftRight {
+					Text("Magnetic Susceptibility - Molar")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(
+						String(
+							format: "%.3f",
+							magneticSusceptibility
+								.molar
+						) + " m³/mol"
+					)
+					.fontDesign(.monospaced)
+				}
+
+				LeftRight {
+					Text("Magnetic Susceptibility - Volume")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", magneticSusceptibility.volume))
+						.fontDesign(.monospaced)
+				}
+			}
+		}
+	}
+
+	var electrical: some View {
+		VStack(spacing: 20) {
+			if let conductivity = element.conductivity {
+				LeftRight {
+					Text("Thermal Conductivity")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", conductivity.thermal))
+						.fontDesign(.monospaced)
+				}
+
+				LeftRight {
+					Text("Electrical Conductivity")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", conductivity.electric))
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let resistivity = element.resistivity {
+				LeftRight {
+					Text("Thermal Conductivity")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", resistivity) + " m Ω")
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let electricalType = element.electricalType {
+				LeftRight {
+					Text("Electrical Type")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(electricalType.rawValue.capitalized)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let electronAffinity = element.electronAffinity {
+				LeftRight {
+					Text("Electron Affinity")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", electronAffinity) + " kJ/mol")
+						.fontDesign(.monospaced)
+				}
+			}
+			if let electronegativityPauling = element.electronegativityPauling {
+				LeftRight {
+					Text("Pauling Electronegativity")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", electronegativityPauling) + " kJ/mol")
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let ionizationEnergies = element.ionizationEnergies {
+				LeftRight {
+					Text("Ionization Energies (kJ/mol)")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(ionizationEnergies.map { String(format: "%.3f", $0) }.joined(separator: "\n"))
+						.fontDesign(.monospaced)
+				}
+			}
+		}
+	}
+
+	var crystal: some View {
+		VStack(spacing: 20) {
+			if let crystalStructure = element.crystalStructure {
+				LeftRight {
+					Text("Crystal Structure")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(crystalStructure.name)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let latticeAngles = element.latticeAngles {
+				LeftRight {
+					Text("Lattice Angles")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(latticeAngles)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let latticeConstants = element.latticeConstants {
+				LeftRight {
+					Text("Lattice Constants")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(latticeConstants)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let spaceGroupName = element.spaceGroupName {
+				LeftRight {
+					Text("Space Group Name")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(spaceGroupName)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let spaceGroupNumber = element.spaceGroupNumber {
+				LeftRight {
+					Text("Space Group Number")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(spaceGroupNumber.description)
+						.fontDesign(.monospaced)
+				}
+			}
+		}
+	}
+
+	var nuclear: some View {
+		VStack(spacing: 20) {
+			if let isotopesKnown = element.isotopesKnown {
+				LeftRight {
+					Text("Known Isotopes")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(isotopesKnown)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let isotopicAbundances = element.isotopicAbundances {
+				LeftRight {
+					Text("Isotope Abundances")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(isotopicAbundances)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if case .stable = element.halfLife {
+				LeftRight {
+					Text("Radioactivity")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+				} right: {
+					Text("Stable")
+						.fontDesign(.monospaced)
+				}
+			} else if case let .unstable(halfLife) = element.halfLife {
+				LeftRight {
+					Text("Half Life")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+				} right: {
+					Text(String(format: "%.3f", halfLife) + " years")
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if case let .unstable(lifetime) = element.lifetime {
+				LeftRight {
+					Text("Lifetime")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", lifetime) + " years")
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let decayMode = element.decayMode {
+				LeftRight {
+					Text("Decay Type")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(decayMode.name)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let neutronCrossSection = element.neutronCrossSection {
+				LeftRight {
+					Text("Neutron Cross Section")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", neutronCrossSection))
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let neutronMassAbsorption = element.neutronMassAbsorption {
+				LeftRight {
+					Text("Neutron Mass Absorption")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.3f", neutronMassAbsorption))
+						.fontDesign(.monospaced)
+				}
+			}
+		}
+	}
+
+	var other: some View {
+		VStack(spacing: 20) {
+			LeftRight {
+				Text("Abundance")
+					.font(.caption)
+					.foregroundStyle(.tertiary)
+
+			} right: {
+				Group {
+					if element.abundance == .synthetic {
+						Text("Synthetic")
+					} else {
+						VStack(alignment: .trailing) {
+							Text(
+								"Universe: " + String(
+									format: "%.3f",
+									element.abundance.universe
+								) + "%"
+							)
+							Text(
+								"Solar: " + String(
+									format: "%.3f",
+									element.abundance.solar
+								) + "%"
+							)
+							Text(
+								"Meteor: " + String(
+									format: "%.3f",
+									element.abundance.meteor
+								) + "%"
+							)
+							Text(
+								"Crust: " + String(
+									format: "%.3f",
+									element.abundance.crust
+								) + "%"
+							)
+							Text(
+								"Ocean: " + String(
+									format: "%.3f",
+									element.abundance.ocean
+								) + "%"
+							)
+							Text(
+								"Human: " + String(
+									format: "%.3f",
+									element.abundance.human
+								) + "%"
+							)
+						}
+						.fontDesign(.monospaced)
+					}
+				}
+			}
+
+			if let adiabaticIndex = element.adiabaticIndex {
+				LeftRight {
+					Text("Adiabatic Index")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(adiabaticIndex)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			LeftRight {
+				Text("Energy Levels")
+					.font(.caption)
+					.foregroundStyle(.tertiary)
+
+			} right: {
+				Text(element.energyLevels)
+					.fontDesign(.monospaced)
+			}
+
+			if let gasPhase = element.gasPhase {
+				LeftRight {
+					Text("Gas Phase")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(gasPhase.rawValue.capitalized)
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let molarVolume = element.molarVolume {
+				LeftRight {
+					Text("Gas Phase")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
+
+				} right: {
+					Text(String(format: "%.4f", molarVolume))
+						.fontDesign(.monospaced)
+				}
+			}
+
+			if let radius = element.radius {
+				if let calculated = radius.calculated {
+					LeftRight {
+						Text("Calculated Radius")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+
+					} right: {
+						Text(String(format: "%", calculated) + " pm")
+							.fontDesign(.monospaced)
+					}
+				}
+
+				if let empirical = radius.empirical {
+					LeftRight {
+						Text("Empirical Radius")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+
+					} right: {
+						Text(String(format: "%", empirical) + " pm")
+							.fontDesign(.monospaced)
+					}
+				}
+
+				if let covalent = radius.covalent {
+					LeftRight {
+						Text("Covalent Radius")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+
+					} right: {
+						Text(String(format: "%", covalent) + " pm")
+							.fontDesign(.monospaced)
+					}
+				}
+
+				if let vanderwaals = radius.vanderwaals {
+					LeftRight {
+						Text("Vanderwaals Radius")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+
+					} right: {
+						Text(String(format: "%", vanderwaals) + " pm")
+							.fontDesign(.monospaced)
+					}
+				}
+
+				if let refractiveIndex = element.refractiveIndex {
+					LeftRight {
+						Text("Refractive Index")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+
+					} right: {
+						Text(String(format: "%.3f", refractiveIndex))
+							.fontDesign(.monospaced)
+					}
+				}
+
+				if let allotropes = element.allotropes {
+					LeftRight {
+						Text("Allotropes")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+
+					} right: {
+						Text(allotropes)
+							.fontDesign(.monospaced)
+					}
 				}
 			}
 		}
