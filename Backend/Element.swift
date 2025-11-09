@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Element: Codable, Identifiable {
+struct Element: Decodable, Identifiable {
 	let id = UUID()
 	let name: String
 	let symbol: String
@@ -19,9 +19,9 @@ struct Element: Codable, Identifiable {
 	let appearance: String?
 	let atomicMass: Double
 	let atomicNumber: Int
-	let block: Block?
+	let block: Block
 	let boilingPoint: Double?
-	let classifications: Classifications?
+	let classifications: Classifications
 	let conductivity: Conductivity?
 	let cpkHex: String?
 	let criticalPressure: Double?
@@ -33,13 +33,13 @@ struct Element: Codable, Identifiable {
 	let discovered: Discovery?
 	let electricalType: ElectricalType?
 	let electronAffinity: Double?
-	let electronConfiguration: String?
-	let electronConfigurationSemantic: String?
+	let electronConfiguration: String
+	let electronConfigurationSemantic: String
 	let electronegativityPauling: Double?
 	let electronsPerShell: [Int]
 	let energyLevels: String?
 	let gasPhase: GasPhase?
-	let group: Int?
+	let group: Int
 	let halfLife: HalfLife?
 	let hardness: Hardness?
 	let heat: Heat?
@@ -59,10 +59,10 @@ struct Element: Codable, Identifiable {
 	let neutronCrossSection: Double?
 	let neutronMassAbsorption: Double?
 	let oxidationStates: String?
-	let period: Int?
+	let period: Int
 	let phase: ElementPhase
 	let poissonRatio: Double?
-	let quantumNumbers: String?
+	let quantumNumbers: String
 	let radius: Radius?
 	let refractiveIndex: Double?
 	let resistivity: Double?
@@ -156,9 +156,9 @@ struct Element: Codable, Identifiable {
 		allotropes = try? container.decode(String.self, forKey: .allotropes)
 		alternateNames = try? container.decode(String.self, forKey: .alternateNames)
 		appearance = try? container.decode(String.self, forKey: .appearance)
-		block = try? container.decode(Block.self, forKey: .block)
+		block = try container.decode(Block.self, forKey: .block)
 		boilingPoint = try? container.decode(Double.self, forKey: .boilingPoint)
-		classifications = try? container.decode(Classifications.self, forKey: .classifications)
+		classifications = try container.decode(Classifications.self, forKey: .classifications)
 		conductivity = try? container.decode(Conductivity.self, forKey: .conductivity)
 		cpkHex = try? container.decode(String.self, forKey: .cpkHex)
 		criticalPressure = try? container.decode(Double.self, forKey: .criticalPressure)
@@ -170,12 +170,12 @@ struct Element: Codable, Identifiable {
 		discovered = try? container.decode(Discovery.self, forKey: .discovered)
 		electricalType = try? container.decode(ElectricalType.self, forKey: .electricalType)
 		electronAffinity = try? container.decode(Double.self, forKey: .electronAffinity)
-		electronConfiguration = try? container.decode(String.self, forKey: .electronConfiguration)
-		electronConfigurationSemantic = try? container.decode(String.self, forKey: .electronConfigurationSemantic)
+		electronConfiguration = try container.decode(String.self, forKey: .electronConfiguration)
+		electronConfigurationSemantic = try container.decode(String.self, forKey: .electronConfigurationSemantic)
 		electronegativityPauling = try? container.decode(Double.self, forKey: .electronegativityPauling)
 		energyLevels = try? container.decode(String.self, forKey: .energyLevels)
 		gasPhase = try? container.decode(GasPhase.self, forKey: .gasPhase)
-		group = try? container.decode(Int.self, forKey: .group)
+		group = try container.decode(Int.self, forKey: .group)
 		halfLife = try? container.decode(HalfLife.self, forKey: .halfLife)
 		hardness = try? container.decode(Hardness.self, forKey: .hardness)
 		heat = try? container.decode(Heat.self, forKey: .heat)
@@ -195,9 +195,9 @@ struct Element: Codable, Identifiable {
 		neutronCrossSection = try? container.decode(Double.self, forKey: .neutronCrossSection)
 		neutronMassAbsorption = try? container.decode(Double.self, forKey: .neutronMassAbsorption)
 		oxidationStates = try? container.decode(String.self, forKey: .oxidationStates)
-		period = try? container.decode(Int.self, forKey: .period)
+		period = try container.decode(Int.self, forKey: .period)
 		poissonRatio = try? container.decode(Double.self, forKey: .poissonRatio)
-		quantumNumbers = try? container.decode(String.self, forKey: .quantumNumbers)
+		quantumNumbers = try container.decode(String.self, forKey: .quantumNumbers)
 		radius = try? container.decode(Radius.self, forKey: .radius)
 		refractiveIndex = try? container.decode(Double.self, forKey: .refractiveIndex)
 		resistivity = try? container.decode(Double.self, forKey: .resistivity)
@@ -219,6 +219,22 @@ enum Block: String, Codable {
 	case pBlock = "p-block"
 	case dBlock = "d-block"
 	case fBlock = "f-block"
+
+	var name: String {
+		switch self {
+		case .sBlock:
+			"s block"
+
+		case .pBlock:
+			"p block"
+
+		case .dBlock:
+			"d block"
+
+		case .fBlock:
+			"f block"
+		}
+	}
 }
 
 enum DecayMode: String, Codable {
@@ -226,6 +242,10 @@ enum DecayMode: String, Codable {
 	case betaDecay = "BetaDecay"
 	case betaPlusDecay = "BetaPlusDecay"
 	case electronCapture = "ElectronCapture"
+
+	var symbol: String {
+		"exclamationmark.triangle"
+	}
 }
 
 enum CrystalStructure: String, Codable {
@@ -248,11 +268,31 @@ enum ElectricalType: String, Codable {
 	case conductor = "Conductor"
 	case insulator = "Insulator"
 	case semiconductor = "Semiconductor"
+
+	var symbol: String {
+		switch self {
+		case .conductor:
+			"bolt.fill"
+		case .insulator:
+			"bolt.slash"
+		case .semiconductor:
+			"bolt"
+		}
+	}
 }
 
 enum GasPhase: String, Codable {
 	case diatomic = "Diatomic"
 	case monoatomic = "Monoatomic"
+
+	var symbol: String {
+		switch self {
+		case .diatomic:
+			"circle.grid.2x1"
+		case .monoatomic:
+			"circle"
+		}
+	}
 }
 
 enum MagneticType: String, Codable {
@@ -260,11 +300,33 @@ enum MagneticType: String, Codable {
 	case paramagnetic
 	case ferromagnetic
 	case antiferromagnetic
+
+	var symbol: String {
+		switch self {
+		case .diamagnetic:
+			"arrow.up.left.and.arrow.down.right"
+		case .paramagnetic:
+			"arrow.down.right.and.arrow.up.left"
+		case .ferromagnetic:
+			"arrow.down.right.and.arrow.up.left.square.fill"
+		case .antiferromagnetic:
+			"arrow.up.and.down.and.arrow.left.and.right"
+		}
+	}
 }
 
-enum HalfLife: Codable {
+enum HalfLife: Decodable {
 	case stable
 	case unstable(Double)
+
+	var symbol: String {
+		switch self {
+		case .stable:
+			"checkmark.shield"
+		case .unstable:
+			"exclamationmark.shield"
+		}
+	}
 
 	init(from decoder: Decoder) throws {
 		let container = try decoder.singleValueContainer()
@@ -276,29 +338,9 @@ enum HalfLife: Codable {
 			throw DecodingError.typeMismatch(HalfLife.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected 'Stable' or Double"))
 		}
 	}
-
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.singleValueContainer()
-		switch self {
-		case .stable:
-			try container.encode("Stable")
-		case let .unstable(value):
-			try container.encode(value)
-		}
-	}
-
-	var isStable: Bool {
-		if case .stable = self { return true }
-		return false
-	}
-
-	var seconds: Double? {
-		if case let .unstable(value) = self { return value }
-		return nil
-	}
 }
 
-enum Lifetime: Codable {
+enum Lifetime: Decodable {
 	case stable
 	case unstable(Double)
 
@@ -312,31 +354,11 @@ enum Lifetime: Codable {
 			throw DecodingError.typeMismatch(Lifetime.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected 'Stable' or Double"))
 		}
 	}
-
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.singleValueContainer()
-		switch self {
-		case .stable:
-			try container.encode("Stable")
-		case let .unstable(value):
-			try container.encode(value)
-		}
-	}
-
-	var isStable: Bool {
-		if case .stable = self { return true }
-		return false
-	}
-
-	var seconds: Double? {
-		if case let .unstable(value) = self { return value }
-		return nil
-	}
 }
 
 // MARK: - Structs
 
-struct Abundance: Codable {
+struct Abundance: Decodable {
 	let universe: Double
 	let solar: Double
 	let meteor: Double
@@ -353,8 +375,8 @@ struct Abundance: Codable {
 	}
 }
 
-struct Classifications: Codable {
-	let casNumber: String?
+struct Classifications: Decodable {
+	let casNumber: String
 	let cidNumber: String?
 	let rtecsNumber: String?
 	let dotNumbers: DotNumbers?
@@ -369,7 +391,7 @@ struct Classifications: Codable {
 	}
 }
 
-enum DotNumbers: Codable {
+enum DotNumbers: Decodable {
 	case single(Int)
 	case multiple(String)
 
@@ -381,16 +403,6 @@ enum DotNumbers: Codable {
 			self = .multiple(stringValue)
 		} else {
 			throw DecodingError.typeMismatch(DotNumbers.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected Int or String"))
-		}
-	}
-
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.singleValueContainer()
-		switch self {
-		case let .single(value):
-			try container.encode(value)
-		case let .multiple(value):
-			try container.encode(value)
 		}
 	}
 
@@ -412,12 +424,12 @@ struct Conductivity: Codable {
 struct Density: Codable {
 	let stp: Double?
 	let liquid: Double?
+	let shear: Double?
+	let young: Double?
 }
 
 struct Discovery: Codable {
-	let year: Int?
-	let by: String?
-	let location: String?
+	let year: Int
 }
 
 struct Heat: Codable {
@@ -428,6 +440,7 @@ struct Heat: Codable {
 }
 
 struct Hardness: Codable {
+	let radius: Double?
 	let mohs: Double?
 	let vickers: Double?
 	let brinell: Double?
