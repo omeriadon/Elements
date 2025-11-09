@@ -15,9 +15,9 @@ struct ElementCell: View {
 	var body: some View {
 		VStack(spacing: 2) {
 			Text("\(element.atomicNumber)")
-				.font(.footnote)
+				.font(.footnote.monospacedDigit())
 			Text(element.symbol)
-				.font(.title2)
+				.font(.title2.bold().monospaced())
 			Text(element.name)
 				.font(.footnote)
 		}
@@ -68,18 +68,18 @@ struct TableView: View {
 	var body: some View {
 		NavigationStack {
 			ScrollView([.horizontal, .vertical]) {
-				LazyVGrid(columns: columns, spacing: 0) {
+				LazyVGrid(columns: columns) {
 					ForEach(0 ..< 16, id: \.self) { row in
 						ForEach(0 ..< 22, id: \.self) { column in
 							Group {
 								if row == 2 && column >= 2 && column < 20 {
 									Text("\(column - 1)")
-										.font(.caption2)
+										.font(.caption2.monospacedDigit())
 										.foregroundColor(.secondary)
 
 								} else if column == 1 && row >= 3 && row < 13 {
 									Text("\(row - 2)")
-										.font(.caption2)
+										.font(.caption2.monospacedDigit())
 										.foregroundColor(.secondary)
 
 								} else if let placed = positionedElements.first(where: {
