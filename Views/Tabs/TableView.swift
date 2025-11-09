@@ -127,29 +127,30 @@ struct TableView: View {
 						lastScale = min(max(lastScale * value, 0.5), 3.0)
 					}
 			)
-		}
-		.sheet(item: $selectedElement) { element in
-			ElementDetailView(element: element)
-		}
-		.portalTransition(
-			item: $selectedElement,
-			animation: .smooth(duration: 0.4, extraBounce: 0.1)
-		) { element in
-			Text(element.symbol)
-				.font(.title2)
-				.foregroundStyle(element.series.themeColor)
-				.fontDesign(.monospaced)
-				.bold()
-		}
-		.toolbar {
-			ToolbarItem(placement: .primaryAction) {
-				Button {
-					withAnimation(.interpolatingSpring(stiffness: 100, damping: 15)) {
-						scale = 1.0
-						lastScale = 1.0
+
+			.sheet(item: $selectedElement) { element in
+				ElementDetailView(element: element)
+			}
+			.portalTransition(
+				item: $selectedElement,
+				animation: .smooth(duration: 0.4, extraBounce: 0.1)
+			) { element in
+				Text(element.symbol)
+					.font(.title2)
+					.foregroundStyle(element.series.themeColor)
+					.fontDesign(.monospaced)
+					.bold()
+			}
+			.toolbar {
+				ToolbarItem(placement: .primaryAction) {
+					Button {
+						withAnimation(.interpolatingSpring(stiffness: 100, damping: 15)) {
+							scale = 1.0
+							lastScale = 1.0
+						}
+					} label: {
+						Image(systemName: "arrow.counterclockwise")
 					}
-				} label: {
-					Image(systemName: "arrow.counterclockwise")
 				}
 			}
 		}
