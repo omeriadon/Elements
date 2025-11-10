@@ -11,19 +11,21 @@ func colourForGroup(_ group: Int) -> Color {
 	let clamped = min(max(group, 1), 18)
 	let fraction = Double(clamped - 1) / 17.0
 
-	let r = fraction
-	let g = 0.5 * (1 - fraction)
-	let b = 1 - fraction
+	let r = 0.6 * fraction + 0.2
+	let g = 0.2 + 0.6 * (1 - fraction)
+	let b = 0.7 - 0.5 * fraction
+
 	return Color(red: r, green: g, blue: b)
 }
 
 func colourForPeriod(_ period: Int) -> Color {
 	let clamped = min(max(period, 1), 10)
-	let fraction = Double(clamped - 1) / 6.0
+	let fraction = Double(clamped - 1) / 9.0
 
-	let r = fraction * 0.8 + 0.2
-	let g = 1 - fraction * 0.5
-	let b = fraction * 0.8 + 0.2
+	let r = 0.2 + 0.6 * fraction
+	let g = 0.7 - 0.5 * fraction
+	let b = 0.3 + 0.7 * (1 - fraction)
+
 	return Color(red: r, green: g, blue: b)
 }
 

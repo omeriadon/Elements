@@ -94,146 +94,89 @@ struct ListView: View {
 	}
 
 	var filters: some View {
-		ScrollView(.horizontal) {
-			HStack(spacing: 12) {
-				Menu {
-					Button("All") { selectedCategory = nil }
+		VStack(alignment: .trailing, spacing: 8) {
+			Group {
+				Picker(selection: $selectedCategory) {
+					Text("All").tag(nil as Category?)
 					ForEach(Category.allCases, id: \.self) { category in
-						Button {
-							selectedCategory = category
-						} label: {
-							Label(category.rawValue.capitalized, systemImage: categorySymbol(category))
-								.tint(category.themeColor)
-						}
+						Label(category.rawValue.capitalized, systemImage: categorySymbol(category))
+							.foregroundStyle(category.themeColor)
+							.tag(category as Category?)
 					}
 				} label: {
-					HStack(spacing: 6) {
-						if let category = selectedCategory {
-							Image(systemName: categorySymbol(category))
-							Text(category.rawValue.capitalized)
-						} else {
-							Image(systemName: "line.3.horizontal.decrease.circle")
-							Text("Category")
-						}
-					}
-
-					.padding(.horizontal, 12)
-					.padding(.vertical, 8)
-					.glassEffect(.clear.tint(selectedCategory?.themeColor ?? nil))
+					Label(
+						selectedCategory?.rawValue.capitalized ?? "Category",
+						systemImage: selectedCategory.map { categorySymbol($0) } ?? "line.3.horizontal.decrease.circle"
+					)
 				}
+				.padding(10).glassEffect(.regular.tint(selectedCategory?.themeColor))
 
-				Menu {
-					Button("All") { selectedPhase = nil }
+				Picker(selection: $selectedPhase) {
+					Text("All").tag(nil as ElementPhase?)
 					ForEach(ElementPhase.allCases, id: \.self) { phase in
-						Button {
-							selectedPhase = phase
-						} label: {
-							Label(phase.rawValue, systemImage: phase.symbol)
-								.tint(phaseColor(phase))
-						}
+						Label(phase.rawValue, systemImage: phase.symbol)
+							.foregroundStyle(phaseColor(phase))
+							.tag(phase as ElementPhase?)
 					}
 				} label: {
-					HStack(spacing: 6) {
-						if let phase = selectedPhase {
-							Image(systemName: phase.symbol)
-							Text(phase.rawValue)
-						} else {
-							Image(systemName: "circle.dotted")
-							Text("Phase")
-						}
-					}
-
-					.padding(.horizontal, 12)
-					.padding(.vertical, 8)
-					.glassEffect(.clear.tint(selectedPhase != nil ? phaseColor(selectedPhase!) : nil))
+					Label(
+						selectedPhase?.rawValue ?? "Phase",
+						systemImage: selectedPhase?.symbol ?? "circle.dotted"
+					)
 				}
+				.padding(10).glassEffect(.regular.tint(selectedPhase.map { phaseColor($0) }))
 
-				Menu {
-					Button("All") { selectedGroup = nil }
+				Picker(selection: $selectedGroup) {
+					Text("All").tag(nil as Int?)
 					ForEach(1 ... 18, id: \.self) { group in
-						Button {
-							selectedGroup = group
-						} label: {
-							Label(
-								group.description,
-								systemImage: group.description + ".circle"
-							)
-							.tint(colourForGroup(group))
-						}
+						Text("Group \(group)")
+							.foregroundStyle(colourForGroup(group))
+							.tag(group as Int?)
 					}
 				} label: {
-					HStack(spacing: 6) {
-						Image(systemName: "chevron.up.chevron.down")
-						if let group = selectedGroup {
-							Text("Group \(group)")
-						} else {
-							Text("Group")
-						}
-					}
-
-					.padding(.horizontal, 12)
-					.padding(.vertical, 8)
-					.glassEffect(.clear.tint(selectedGroup != nil ? colourForGroup(selectedGroup!) : nil))
+					Label(
+						selectedGroup.map { "Group \($0)" } ?? "Group",
+						systemImage: "chevron.up.chevron.down"
+					)
 				}
+				.padding(10).glassEffect(.regular.tint(selectedGroup.map { colourForGroup($0) }))
 
-				Menu {
-					Button("All") { selectedPeriod = nil }
+				Picker(selection: $selectedPeriod) {
+					Text("All").tag(nil as Int?)
 					ForEach(1 ... 7, id: \.self) { period in
-						Button {
-							selectedPeriod = period
-						} label: {
-							Label(
-								period.description,
-								systemImage: period.description + ".circle"
-							)
-							.tint(colourForPeriod(period))
-						}
+						Text("Period \(period)")
+							.foregroundStyle(colourForPeriod(period))
+							.tag(period as Int?)
 					}
 				} label: {
-					HStack(spacing: 6) {
-						Image(systemName: "chevron.left.chevron.right")
-						if let period = selectedPeriod {
-							Text("Period \(period)")
-						} else {
-							Text("Period")
-						}
-					}
-
-					.padding(.horizontal, 12)
-					.padding(.vertical, 8)
-					.glassEffect(.clear.tint(selectedPeriod != nil ? colourForPeriod(selectedPeriod!) : nil))
+					Label(
+						selectedPeriod.map { "Period \($0)" } ?? "Period",
+						systemImage: "chevron.left.chevron.right"
+					)
 				}
+				.padding(10)
+				.glassEffect(.regular.tint(selectedPeriod.map { colourForPeriod($0) }))
 
-				Menu {
-					Button("All") { selectedBlock = nil }
+				Picker(selection: $selectedBlock) {
+					Text("All").tag(nil as Block?)
 					ForEach(Block.allCases, id: \.self) { block in
-						Button {
-							selectedBlock = block
-						} label: {
-							Label(block.name.capitalized, systemImage: blockSymbol(block))
-								.tint(blockColor(block))
-						}
+						Label(block.name.capitalized, systemImage: blockSymbol(block))
+							.foregroundStyle(blockColor(block))
+							.tag(block as Block?)
 					}
 				} label: {
-					HStack(spacing: 6) {
-						if let block = selectedBlock {
-							Image(systemName: blockSymbol(block))
-							Text(block.name.capitalized)
-						} else {
-							Image(systemName: "square.grid.2x2")
-							Text("Block")
-						}
-					}
-
-					.padding(.horizontal, 12)
-					.padding(.vertical, 8)
-					.glassEffect(.clear.tint(selectedBlock != nil ? blockColor(selectedBlock!) : nil))
+					Label(
+						selectedBlock?.name.capitalized ?? "Block",
+						systemImage: selectedBlock.map { blockSymbol($0) } ?? "square.grid.2x2"
+					)
 				}
+				.padding(10)
+				.glassEffect(.regular.tint(selectedBlock.map { blockColor($0) }))
 			}
+			.pickerStyle(.navigationLink)
+			.padding(.horizontal, 8)
+			.padding(.vertical, 4)
 		}
-		.padding(.leading)
-		.scrollIndicators(.hidden)
-		.frame(height: 25)
 		.foregroundStyle(.primary)
 	}
 
@@ -244,9 +187,10 @@ struct ListView: View {
 					text: $searchText,
 					prompt: "Search names, series, numbers, and more"
 				)
-				.safeAreaBar(edge: .bottom) {
+				.overlay(alignment: .bottomTrailing) {
 					filters
 						.padding(.bottom)
+						.padding(.trailing)
 				}
 				.onChange(of: filteredElements) { _, _ in
 					if filteredElements.count == 1 {
@@ -281,9 +225,9 @@ struct ListView: View {
 
 	func phaseColor(_ phase: ElementPhase) -> Color {
 		switch phase {
-		case .solid: Color(red: 0.8, green: 0.8, blue: 0.8)
-		case .liquid: Color(red: 0.6, green: 0.8, blue: 1.0)
-		case .gas: Color(red: 1.0, green: 1.0, blue: 0.7)
+		case .solid: .brown
+		case .liquid: .blue
+		case .gas: .yellow
 		}
 	}
 
