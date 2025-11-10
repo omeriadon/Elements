@@ -12,11 +12,13 @@ struct ElementDetailView: View {
 	let element: Element
 	@State private var rotation = 0.0
 
+	@State var isCopied = false
+
 	var body: some View {
 		NavigationStack {
 			GeometryReader { geometry in
 				ScrollView(.vertical) {
-					VStack(spacing: 30) {
+					VStack(alignment: .center, spacing: 30) {
 						general
 
 						Divider()
@@ -78,8 +80,26 @@ struct ElementDetailView: View {
 						Text(element.name)
 							.monospaced()
 					}
+
+					ToolbarItem(placement: .status) {
+						Button {
+							UIPasteboard.general.string = element.name
+							isCopied = true
+						} label: {
+							Group {
+								if !isCopied {
+									Label("Copy", systemImage: "document.on.document")
+										.animation(.easeInOut, value: isCopied)
+								} else {
+									Label("Copied", systemImage: "checkmark")
+										.animation(.easeInOut, value: isCopied)
+								}
+							}
+							.transition(.blurReplace)
+						}
+					}
 				}
-				.frame(width: geometry.size.width - 16)
+				.frame(width: geometry.size.width)
 			}
 		}
 	}
@@ -88,10 +108,9 @@ struct ElementDetailView: View {
 		VStack(spacing: 15) {
 			HStack {
 				Text(element.symbol)
-					.font(.title2)
-					.foregroundStyle(element.series.themeColor)
-					.frame(width: 100, height: 100)
-					.glassEffect(.clear.interactive())
+					.font(.largeTitle)
+					.frame(width: 80, height: 80)
+					.glassEffect(.clear.tint(element.series.themeColor).interactive())
 					.padding(.leading, 10)
 					.fontDesign(.monospaced)
 					.bold()

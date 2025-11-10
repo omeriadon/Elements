@@ -8,7 +8,11 @@
 import Foundation
 import SwiftUI
 
-struct Element: Decodable, Identifiable {
+struct Element: Decodable, Identifiable, Equatable {
+	static func == (lhs: Element, rhs: Element) -> Bool {
+		lhs.name == rhs.name
+	}
+
 	let id = UUID()
 	let name: String
 	let symbol: String
@@ -214,7 +218,7 @@ struct Element: Decodable, Identifiable {
 
 // MARK: - Enums
 
-enum Block: String, Codable {
+enum Block: String, Codable, CaseIterable {
 	case sBlock = "s-block"
 	case pBlock = "p-block"
 	case dBlock = "d-block"
@@ -509,7 +513,7 @@ struct Radius: Codable {
 	let vanderwaals: Double?
 }
 
-enum ElementPhase: String, Codable {
+enum ElementPhase: String, Codable, CaseIterable {
 	case solid = "Solid"
 	case liquid = "Liquid"
 	case gas = "Gas"
@@ -526,7 +530,7 @@ enum ElementPhase: String, Codable {
 	}
 }
 
-enum Category: String, Codable {
+enum Category: String, Codable, CaseIterable {
 	case alkalineEarthMetal = "alkaline earth metal"
 	case metalloid
 	case nonmetal
