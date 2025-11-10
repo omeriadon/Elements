@@ -17,11 +17,6 @@ struct ContentView: View {
 			view: AnyView(TableView(elements: elements))
 		),
 		TabItem(
-			name: "List",
-			symbol: "list.bullet",
-			view: AnyView(ListView(elements: elements))
-		),
-		TabItem(
 			name: "Quiz",
 			symbol: "questionmark.circle",
 			view: AnyView(QuizView(elements: elements))
@@ -47,7 +42,12 @@ struct ContentView: View {
 					Label(tab.name, systemImage: tab.symbol)
 				}
 			}
+
+			Tab(role: .search) {
+				ListView(elements: elements)
+			}
 		}
+		.tabBarMinimizeBehavior(.onScrollDown)
 	}
 }
 
@@ -56,7 +56,6 @@ struct TabItem {
 	let symbol: String
 	let view: AnyView
 }
-
 
 #Preview {
 	ContentView(elements: loadElements())

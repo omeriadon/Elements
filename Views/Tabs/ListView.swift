@@ -94,19 +94,20 @@ struct ListView: View {
 					text: $searchText,
 					tokens: $tokens,
 					suggestedTokens:
-
 					Binding(
 						get: {
 							allTokens()
 						},
-						set: { _ in
-						}
+						set: { _ in }
 					),
-					placement: .navigationBarDrawer,
 					prompt: "Search names, series, numbers, and more"
-
 				) { token in
-					Text(token.label)
+					LeftRight {
+						Text(token.label)
+					} right: {
+						Image(systemName: token.symbol)
+					}
+					.foregroundStyle(token.color)
 				}
 				.onSubmit(of: .search) {
 					addRecentSearch(searchText)
@@ -124,6 +125,11 @@ struct ListView: View {
 					}
 				}
 				.toolbar {
+					ToolbarItem(placement: .primaryAction) {
+						Button {} label: {
+							Label("Sort", systemImage: "arrow.up.arrow.down")
+						}
+					}
 					ToolbarItem(placement: .title) {
 						Text("List")
 							.monospaced()
@@ -135,6 +141,16 @@ struct ListView: View {
 		}
 		.task {
 			await loadStorage()
+		}
+	}
+
+	func suggestedTokensForSearchText(_ text: String) -> [ElementToken] {
+		guard !text.isEmpty else { return [] }
+
+		let lower = text.lowercased()
+
+		return allTokens().filter { token in
+			token.label.lowercased().contains(lower)
 		}
 	}
 
