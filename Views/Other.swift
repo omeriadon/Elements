@@ -5,7 +5,6 @@
 //  Created by Adon Omeri on 9/11/2025.
 //
 
-import SwiftData
 import SwiftUI
 
 func colorForGroup(_ group: Int) -> Color {
@@ -26,15 +25,6 @@ func colorForPeriod(_ period: Int) -> Color {
 	let g = 1 - fraction * 0.5
 	let b = fraction * 0.8 + 0.2
 	return Color(red: r, green: g, blue: b)
-}
-
-@Model
-class Storage {
-	var recentSearches: [String] // your array of strings
-
-	init(recentSearches: [String] = []) {
-		self.recentSearches = recentSearches
-	}
 }
 
 struct LeftRight<Left: View, Right: View>: View {

@@ -11,8 +11,6 @@ import SwiftUI
 struct ListView: View {
 	@Environment(\.modelContext) var modelContext
 
-	@State private var storage: Storage?
-
 	let elements: [Element]
 
 	@State var selectedElement: Element? = nil
@@ -29,7 +27,8 @@ struct ListView: View {
 				element.name.localizedCaseInsensitiveContains(searchText) ||
 					element.symbol.localizedCaseInsensitiveContains(searchText) ||
 					element.atomicNumber.description.contains(searchText) ||
-					element.series.rawValue.localizedCaseInsensitiveContains(searchText)
+					element.series.rawValue.localizedCaseInsensitiveContains(searchText) ||
+					element.atomicNumber.description.contains(searchText)
 			}
 		}
 
@@ -92,32 +91,14 @@ struct ListView: View {
 			main
 				.searchable(
 					text: $searchText,
-					tokens: $tokens,
-					suggestedTokens:
-					Binding(
-						get: {
-							allTokens()
-						},
-						set: { _ in }
-					),
+					placement: .navigationBarDrawer,
 					prompt: "Search names, series, numbers, and more"
-				) { token in
-					LeftRight {
-						Text(token.label)
-					} right: {
-						Image(systemName: token.symbol)
+				)
+				.safeAreaBar(edge: .top, alignment: .leading) {
+					HStack(spacing: 15) {
+						
 					}
-					.foregroundStyle(token.color)
-				}
-				.onSubmit(of: .search) {
-					addRecentSearch(searchText)
-				}
-				.searchSuggestions {
-					if let recentSearches = storage?.recentSearches {
-						ForEach(recentSearches, id: \.self) { search in
-							Text(search).searchCompletion(search)
-						}
-					}
+					.padding()
 				}
 				.onChange(of: filteredElements) { _, _ in
 					if filteredElements.count == 1 {
@@ -125,11 +106,6 @@ struct ListView: View {
 					}
 				}
 				.toolbar {
-					ToolbarItem(placement: .primaryAction) {
-						Button {} label: {
-							Label("Sort", systemImage: "arrow.up.arrow.down")
-						}
-					}
 					ToolbarItem(placement: .title) {
 						Text("List")
 							.monospaced()
@@ -139,39 +115,5 @@ struct ListView: View {
 					ElementDetailView(element: element)
 				}
 		}
-		.task {
-			await loadStorage()
-		}
-	}
-
-	func suggestedTokensForSearchText(_ text: String) -> [ElementToken] {
-		guard !text.isEmpty else { return [] }
-
-		let lower = text.lowercased()
-
-		return allTokens().filter { token in
-			token.label.lowercased().contains(lower)
-		}
-	}
-
-	@MainActor
-	func loadStorage() async {
-		let request = FetchDescriptor<Storage>()
-		if let data = try? modelContext.fetch(request),
-		   let existing = data.first
-		{
-			storage = existing
-		} else {
-			let newStorage = Storage(recentSearches: ["Hydrogen", "Oxygen"])
-			modelContext.insert(newStorage)
-			try? modelContext.save()
-			storage = newStorage
-		}
-	}
-
-	func addRecentSearch(_ element: String) {
-		guard let storage else { return }
-		storage.recentSearches.append(element)
-		try? modelContext.save()
 	}
 }
