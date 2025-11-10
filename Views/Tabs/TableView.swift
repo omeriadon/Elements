@@ -5,7 +5,7 @@
 //  Created by Adon Omeri on 8/11/2025.
 //
 
-import Portal
+
 import SwiftUI
 
 let elementCellHeight = 80
@@ -22,7 +22,6 @@ struct ElementCell: View {
 				Text("\(element.atomicNumber)")
 					.font(.footnote.monospacedDigit())
 				Text(element.symbol)
-					.portal(item: element, .source)
 					.font(.title2)
 					.foregroundStyle(element.series.themeColor)
 					.fontDesign(.monospaced)
@@ -118,8 +117,20 @@ struct TableView: View {
 
 	var body: some View {
 		NavigationStack {
-			main
-				.overlay(alignment: .topTrailing) {
+			ZStack(alignment: .topTrailing) {
+				main
+					.contentShape(Rectangle())
+					.sheet(item: $selectedElement) { element in
+						ElementDetailView(element: element)
+					}
+			}
+			.toolbar {
+				ToolbarItem(placement: .title) {
+					Text("Table")
+						.monospaced()
+				}
+
+				ToolbarItem(placement: .topBarTrailing) {
 					Slider(
 						value: $scale,
 						in: 0.5 ... 2.0,
@@ -132,33 +143,20 @@ struct TableView: View {
 						},
 						minimumValueLabel: {
 							Text("0.5×")
+								.monospaced()
+								.font(.caption)
+
 						},
 						maximumValueLabel: {
 							Text("2.0×")
+								.monospaced()
+								.font(.caption)
 						}
 					)
-					.rotationEffect(.degrees(90))
+					.frame(width: 250)
 				}
-				.contentShape(Rectangle())
-				.sheet(item: $selectedElement) { element in
-					ElementDetailView(element: element)
-				}
-				.portalTransition(
-					item: $selectedElement,
-					animation: .smooth(duration: 0.4, extraBounce: 0.1)
-				) { element in
-					Text(element.symbol)
-						.font(.title2)
-						.foregroundStyle(element.series.themeColor)
-						.fontDesign(.monospaced)
-						.bold()
-				}
-				.toolbar {
-					ToolbarItem(placement: .title) {
-						Text("Table")
-							.monospaced()
-					}
-				}
+				.sharedBackgroundVisibility(.hidden)
+			}
 		}
 	}
 }

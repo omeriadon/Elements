@@ -35,16 +35,9 @@ let package = Package(
             appCategory: .education
         )
     ],
-    dependencies: [
-        .package(url: "https://github.com/Aeastr/Portal", "4.2.6"..<"5.0.0")
-    ],
     targets: [
         .executableTarget(
             name: "AppModule",
-            dependencies: [
-                .product(name: "Portal", package: "portal"),
-                .product(name: "PortalFlowingHeader", package: "portal")
-            ],
             path: "."
         )
     ]

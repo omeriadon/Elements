@@ -5,8 +5,6 @@
 //  Created by Adon Omeri on 8/11/2025.
 //
 
-import Portal
-import PortalFlowingHeader
 import SwiftUI
 
 struct ElementDetailView: View {
@@ -16,77 +14,80 @@ struct ElementDetailView: View {
 
 	var body: some View {
 		NavigationStack {
-			ScrollView(.vertical) {
-				FlowingHeaderView()
-				VStack(spacing: 30) {
-					general
+			GeometryReader { geometry in
+				ScrollView(.vertical) {
+					VStack(spacing: 30) {
+						general
 
-					Divider()
+						Divider()
 
-					shells
-						.padding(.horizontal, -16)
+						shells
+							.padding(.horizontal, -16)
 
-					Divider()
+						Divider()
 
-					atomicStructure
+						atomicStructure
 
-					Divider()
+						Divider()
 
-					thermoDynamic
+						thermoDynamic
 
-					Divider()
+						Divider()
 
-					classification
+						classification
 
-					Divider()
+						Divider()
 
-					mechanical
+						mechanical
 
-					Divider()
+						Divider()
 
-					magnetic
+						magnetic
 
-					Divider()
+						Divider()
 
-					electrical
+						electrical
 
-					Divider()
+						Divider()
 
-					crystal
+						crystal
 
-					Divider()
+						Divider()
 
-					nuclear
+						nuclear
 
-					Divider()
+						Divider()
 
-					other
+						other
 
-					Divider()
+						Divider()
 
-					info
+						info
+					}
+					.padding(.horizontal)
 				}
-				.padding(.horizontal)
-			}
-			.flowingHeaderDestination(displays: [.title])
-			.toolbar {
-				Button(role: .close) {
-					dismiss()
+				.scrollIndicatorsFlash(onAppear: true)
+				.toolbar {
+					ToolbarItem(placement: .topBarTrailing) {
+						Button(role: .close) {
+							dismiss()
+						}
+					}
+
+					ToolbarItem(placement: .title) {
+						Text(element.name)
+							.monospaced()
+					}
 				}
+				.frame(width: geometry.size.width - 16)
 			}
 		}
-		.flowingHeader(
-			title: element.name,
-			subtitle: "",
-			displays: []
-		)
 	}
 
 	var general: some View {
 		VStack(spacing: 15) {
 			HStack {
 				Text(element.symbol)
-					.portal(item: element, .destination)
 					.font(.title2)
 					.foregroundStyle(element.series.themeColor)
 					.frame(width: 100, height: 100)
@@ -1028,12 +1029,12 @@ struct ElementDetailView: View {
 
 			if let molarVolume = element.molarVolume {
 				LeftRight {
-					Text("Gas Phase")
+					Text("Molar Volume")
 						.font(.caption)
 						.foregroundStyle(.tertiary)
 
 				} right: {
-					Text(String(format: "%.4f", molarVolume))
+					Text(String(format: "%.3f", molarVolume) + " cm³/mol")
 						.fontDesign(.monospaced)
 				}
 			}

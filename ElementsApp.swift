@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Portal
+
 
 @main
 struct ElementsApp: App {
@@ -15,9 +15,9 @@ struct ElementsApp: App {
 
 	var body: some Scene {
 		WindowGroup {
-			PortalContainer {
+
 				ContentView(elements: elements)
-			}
+			
 		}
 	}
 }
