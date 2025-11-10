@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-func colorForGroup(_ group: Int) -> Color {
+func colourForGroup(_ group: Int) -> Color {
 	let clamped = min(max(group, 1), 18)
 	let fraction = Double(clamped - 1) / 17.0
 
@@ -17,7 +17,7 @@ func colorForGroup(_ group: Int) -> Color {
 	return Color(red: r, green: g, blue: b)
 }
 
-func colorForPeriod(_ period: Int) -> Color {
+func colourForPeriod(_ period: Int) -> Color {
 	let clamped = min(max(period, 1), 10)
 	let fraction = Double(clamped - 1) / 6.0
 
@@ -133,9 +133,9 @@ enum ElementToken: Identifiable, Hashable {
 			case .gas: return Color(red: 1.0, green: 1.0, blue: 0.7)
 			}
 
-		case let .group(g): return colorForGroup(g)
+		case let .group(g): return colourForGroup(g)
 
-		case let .period(p): return colorForPeriod(p)
+		case let .period(p): return colourForPeriod(p)
 
 		case let .block(block):
 			switch block {

@@ -24,7 +24,7 @@ enum QuizType: String, Codable {
 
 enum QuizFormat: String, Codable {
 	case multipleChoice, textField
-}	
+}
 
 enum Difficulty: String, Codable {
 	case easy, medium, hard

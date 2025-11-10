@@ -17,7 +17,11 @@ struct ListView: View {
 
 	@State var searchText = ""
 
-	@State var tokens: [ElementToken] = []
+	@State var selectedCategory: Category?
+	@State var selectedPhase: ElementPhase?
+	@State var selectedGroup: Int?
+	@State var selectedPeriod: Int?
+	@State var selectedBlock: Block?
 
 	var filteredElements: [Element] {
 		var result = elements
@@ -32,21 +36,24 @@ struct ListView: View {
 			}
 		}
 
-		if !tokens.isEmpty {
-			for token in tokens {
-				switch token {
-				case let .category(category):
-					result = result.filter { $0.series == category }
-				case let .phase(phase):
-					result = result.filter { $0.phase == phase }
-				case let .group(group):
-					result = result.filter { $0.group == group }
-				case let .period(period):
-					result = result.filter { $0.period == period }
-				case let .block(block):
-					result = result.filter { $0.block == block }
-				}
-			}
+		if let category = selectedCategory {
+			result = result.filter { $0.series == category }
+		}
+
+		if let phase = selectedPhase {
+			result = result.filter { $0.phase == phase }
+		}
+
+		if let group = selectedGroup {
+			result = result.filter { $0.group == group }
+		}
+
+		if let period = selectedPeriod {
+			result = result.filter { $0.period == period }
+		}
+
+		if let block = selectedBlock {
+			result = result.filter { $0.block == block }
 		}
 
 		return result
@@ -74,8 +81,8 @@ struct ListView: View {
 								.font(.title3)
 						}
 						.padding()
-						.background(.ultraThinMaterial)
-						.clipShape(RoundedRectangle(cornerRadius: 25))
+						.background(.ultraThickMaterial)
+						.clipShape(Capsule())
 					}
 					.buttonStyle(.plain)
 					.transition(.blurReplace)
@@ -86,19 +93,160 @@ struct ListView: View {
 		}
 	}
 
+	var filters: some View {
+		ScrollView(.horizontal) {
+			HStack(spacing: 12) {
+				Menu {
+					Button("All") { selectedCategory = nil }
+					ForEach(Category.allCases, id: \.self) { category in
+						Button {
+							selectedCategory = category
+						} label: {
+							Label(category.rawValue.capitalized, systemImage: categorySymbol(category))
+								.tint(category.themeColor)
+						}
+					}
+				} label: {
+					HStack(spacing: 6) {
+						if let category = selectedCategory {
+							Image(systemName: categorySymbol(category))
+							Text(category.rawValue.capitalized)
+						} else {
+							Image(systemName: "line.3.horizontal.decrease.circle")
+							Text("Category")
+						}
+					}
+
+					.padding(.horizontal, 12)
+					.padding(.vertical, 8)
+					.glassEffect(.clear.tint(selectedCategory?.themeColor ?? nil))
+				}
+
+				Menu {
+					Button("All") { selectedPhase = nil }
+					ForEach(ElementPhase.allCases, id: \.self) { phase in
+						Button {
+							selectedPhase = phase
+						} label: {
+							Label(phase.rawValue, systemImage: phase.symbol)
+								.tint(phaseColor(phase))
+						}
+					}
+				} label: {
+					HStack(spacing: 6) {
+						if let phase = selectedPhase {
+							Image(systemName: phase.symbol)
+							Text(phase.rawValue)
+						} else {
+							Image(systemName: "circle.dotted")
+							Text("Phase")
+						}
+					}
+
+					.padding(.horizontal, 12)
+					.padding(.vertical, 8)
+					.glassEffect(.clear.tint(selectedPhase != nil ? phaseColor(selectedPhase!) : nil))
+				}
+
+				Menu {
+					Button("All") { selectedGroup = nil }
+					ForEach(1 ... 18, id: \.self) { group in
+						Button {
+							selectedGroup = group
+						} label: {
+							Label(
+								group.description,
+								systemImage: group.description + ".circle"
+							)
+							.tint(colourForGroup(group))
+						}
+					}
+				} label: {
+					HStack(spacing: 6) {
+						Image(systemName: "chevron.up.chevron.down")
+						if let group = selectedGroup {
+							Text("Group \(group)")
+						} else {
+							Text("Group")
+						}
+					}
+
+					.padding(.horizontal, 12)
+					.padding(.vertical, 8)
+					.glassEffect(.clear.tint(selectedGroup != nil ? colourForGroup(selectedGroup!) : nil))
+				}
+
+				Menu {
+					Button("All") { selectedPeriod = nil }
+					ForEach(1 ... 7, id: \.self) { period in
+						Button {
+							selectedPeriod = period
+						} label: {
+							Label(
+								period.description,
+								systemImage: period.description + ".circle"
+							)
+							.tint(colourForPeriod(period))
+						}
+					}
+				} label: {
+					HStack(spacing: 6) {
+						Image(systemName: "chevron.left.chevron.right")
+						if let period = selectedPeriod {
+							Text("Period \(period)")
+						} else {
+							Text("Period")
+						}
+					}
+
+					.padding(.horizontal, 12)
+					.padding(.vertical, 8)
+					.glassEffect(.clear.tint(selectedPeriod != nil ? colourForPeriod(selectedPeriod!) : nil))
+				}
+
+				Menu {
+					Button("All") { selectedBlock = nil }
+					ForEach(Block.allCases, id: \.self) { block in
+						Button {
+							selectedBlock = block
+						} label: {
+							Label(block.name.capitalized, systemImage: blockSymbol(block))
+								.tint(blockColor(block))
+						}
+					}
+				} label: {
+					HStack(spacing: 6) {
+						if let block = selectedBlock {
+							Image(systemName: blockSymbol(block))
+							Text(block.name.capitalized)
+						} else {
+							Image(systemName: "square.grid.2x2")
+							Text("Block")
+						}
+					}
+
+					.padding(.horizontal, 12)
+					.padding(.vertical, 8)
+					.glassEffect(.clear.tint(selectedBlock != nil ? blockColor(selectedBlock!) : nil))
+				}
+			}
+		}
+		.padding(.leading)
+		.scrollIndicators(.hidden)
+		.frame(height: 25)
+		.foregroundStyle(.primary)
+	}
+
 	var body: some View {
 		NavigationStack {
 			main
 				.searchable(
 					text: $searchText,
-					placement: .navigationBarDrawer,
 					prompt: "Search names, series, numbers, and more"
 				)
-				.safeAreaBar(edge: .top, alignment: .leading) {
-					HStack(spacing: 15) {
-						
-					}
-					.padding()
+				.safeAreaBar(edge: .bottom) {
+					filters
+						.padding(.bottom)
 				}
 				.onChange(of: filteredElements) { _, _ in
 					if filteredElements.count == 1 {
@@ -114,6 +262,46 @@ struct ListView: View {
 				.sheet(item: $selectedElement) { element in
 					ElementDetailView(element: element)
 				}
+		}
+	}
+
+	func categorySymbol(_ category: Category) -> String {
+		switch category {
+		case .alkalineEarthMetal: "leaf"
+		case .metalloid: "triangle.lefthalf.filled"
+		case .nonmetal: "leaf.arrow.triangle.circlepath"
+		case .nobleGas: "seal"
+		case .alkaliMetal: "flame"
+		case .postTransitionMetal: "cube"
+		case .transitionMetal: "gearshape"
+		case .lanthanide: "sun.min"
+		case .actinide: "atom"
+		}
+	}
+
+	func phaseColor(_ phase: ElementPhase) -> Color {
+		switch phase {
+		case .solid: Color(red: 0.8, green: 0.8, blue: 0.8)
+		case .liquid: Color(red: 0.6, green: 0.8, blue: 1.0)
+		case .gas: Color(red: 1.0, green: 1.0, blue: 0.7)
+		}
+	}
+
+	func blockSymbol(_ block: Block) -> String {
+		switch block {
+		case .sBlock: "s.square"
+		case .pBlock: "p.square"
+		case .dBlock: "d.square"
+		case .fBlock: "f.square"
+		}
+	}
+
+	func blockColor(_ block: Block) -> Color {
+		switch block {
+		case .sBlock: Color(red: 1.0, green: 0.8, blue: 0.6)
+		case .pBlock: Color(red: 0.7, green: 0.9, blue: 0.7)
+		case .dBlock: Color(red: 0.6, green: 0.8, blue: 1.0)
+		case .fBlock: Color(red: 1.0, green: 0.75, blue: 0.5)
 		}
 	}
 }
