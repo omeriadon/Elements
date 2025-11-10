@@ -218,7 +218,7 @@ struct Element: Decodable, Identifiable, Equatable {
 
 // MARK: - Enums
 
-enum Block: String, Codable, CaseIterable {
+enum Block: String, Codable, CaseIterable, Equatable {
 	case sBlock = "s-block"
 	case pBlock = "p-block"
 	case dBlock = "d-block"
@@ -237,6 +237,28 @@ enum Block: String, Codable, CaseIterable {
 
 		case .fBlock:
 			"f block"
+		}
+	}
+
+	var symbol: String {
+		switch self {
+		case .sBlock:
+			"s.square"
+		case .pBlock:
+			"p.square"
+		case .dBlock:
+			"d.square"
+		case .fBlock:
+			"f.square"
+		}
+	}
+
+	var colour: Color {
+		switch self {
+		case .sBlock: Color(red: 1.0, green: 0.8, blue: 0.6)
+		case .pBlock: Color(red: 0.7, green: 0.9, blue: 0.7)
+		case .dBlock: Color(red: 0.6, green: 0.8, blue: 1.0)
+		case .fBlock: Color(red: 1.0, green: 0.75, blue: 0.5)
 		}
 	}
 }
@@ -513,7 +535,7 @@ struct Radius: Codable {
 	let vanderwaals: Double?
 }
 
-enum ElementPhase: String, Codable, CaseIterable {
+enum ElementPhase: String, Codable, CaseIterable, Equatable {
 	case solid = "Solid"
 	case liquid = "Liquid"
 	case gas = "Gas"
@@ -528,9 +550,17 @@ enum ElementPhase: String, Codable, CaseIterable {
 			"bubbles.and.sparkles"
 		}
 	}
+
+	var colour: Color {
+		switch self {
+		case .solid: .brown
+		case .liquid: .blue
+		case .gas: .yellow
+		}
+	}
 }
 
-enum Category: String, Codable, CaseIterable {
+enum Category: String, Codable, CaseIterable, Equatable {
 	case alkalineEarthMetal = "alkaline earth metal"
 	case metalloid
 	case nonmetal
@@ -561,6 +591,20 @@ enum Category: String, Codable, CaseIterable {
 			return Color(red: 1.0, green: 209 / 255, blue: 102 / 255)
 		case .actinide:
 			return Color(red: 1.0, green: 143 / 255, blue: 163 / 255)
+		}
+	}
+
+	var symbol: String {
+		switch self {
+		case .alkalineEarthMetal: "leaf"
+		case .metalloid: "triangle.lefthalf.filled"
+		case .nonmetal: "leaf.arrow.triangle.circlepath"
+		case .nobleGas: "seal"
+		case .alkaliMetal: "flame"
+		case .postTransitionMetal: "cube"
+		case .transitionMetal: "gearshape"
+		case .lanthanide: "sun.min"
+		case .actinide: "atom"
 		}
 	}
 }

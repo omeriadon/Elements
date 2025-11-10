@@ -60,36 +60,38 @@ struct ListView: View {
 	}
 
 	var main: some View {
-		ScrollView {
-			LazyVStack(spacing: 8) {
-				ForEach(filteredElements) { element in
-					Button {
-						selectedElement = element
-					} label: {
-						HStack {
-							Text(element.symbol)
-								.font(.title2)
-								.foregroundStyle(element.series.themeColor)
-								.fontDesign(.monospaced)
-								.bold()
-								.padding(.trailing)
-							Text(element.atomicNumber.description)
-								.foregroundStyle(.tertiary)
-								.fontDesign(.monospaced)
-							Spacer()
-							Text(element.name)
-								.font(.title3)
+		GlassEffectContainer {
+			ScrollView {
+				LazyVStack(spacing: 8) {
+					ForEach(filteredElements) { element in
+						Button {
+							selectedElement = element
+						} label: {
+							HStack {
+								Text(element.symbol)
+									.font(.title2)
+									.foregroundStyle(element.series.themeColor)
+									.fontDesign(.monospaced)
+									.bold()
+									.padding(.trailing)
+								Text(element.atomicNumber.description)
+									.foregroundStyle(.tertiary)
+									.fontDesign(.monospaced)
+								Spacer()
+								Text(element.name)
+									.font(.title3)
+							}
+							.padding()
+							.background(.ultraThickMaterial)
+							.clipShape(Capsule())
 						}
-						.padding()
-						.background(.ultraThickMaterial)
-						.clipShape(Capsule())
+						.buttonStyle(.plain)
+						.transition(.blurReplace)
 					}
-					.buttonStyle(.plain)
-					.transition(.blurReplace)
 				}
+				.animation(.spring(response: 0.35, dampingFraction: 0.8), value: filteredElements)
+				.padding(.horizontal)
 			}
-			.animation(.spring(response: 0.35, dampingFraction: 0.8), value: filteredElements)
-			.padding(.horizontal)
 		}
 	}
 
@@ -99,21 +101,22 @@ struct ListView: View {
 				Picker(selection: $selectedCategory) {
 					Text("All").tag(nil as Category?)
 					ForEach(Category.allCases, id: \.self) { category in
-						Label(category.rawValue.capitalized, systemImage: categorySymbol(category))
+						Label(category.rawValue.capitalized, systemImage: category.symbol)
 							.foregroundStyle(category.themeColor)
 							.tag(category as Category?)
 					}
 				} label: {
-					if selectedGroup == nil {
+					if selectedCategory == nil {
 						Label("Category", systemImage: "line.3.horizontal.decrease.circle")
 					}
 				}
+				.animation(.easeInOut, value: selectedCategory)
 
 				Picker(selection: $selectedPhase) {
 					Text("All").tag(nil as ElementPhase?)
 					ForEach(ElementPhase.allCases, id: \.self) { phase in
 						Label(phase.rawValue, systemImage: phase.symbol)
-							.foregroundStyle(phaseColor(phase))
+							.foregroundStyle(phase.colour)
 							.tag(phase as ElementPhase?)
 					}
 				} label: {
@@ -121,11 +124,13 @@ struct ListView: View {
 						Label("Phase", systemImage: "circle.dotted")
 					}
 				}
+				.animation(.easeInOut, value: selectedPhase)
 
 				Picker(selection: $selectedGroup) {
 					Text("All").tag(nil as Int?)
 					ForEach(1 ... 18, id: \.self) { group in
-						Text("Group \(group)")
+						Label("Group \(group)",
+						      systemImage: group.description + ".circle")
 							.foregroundStyle(colourForGroup(group))
 							.tag(group as Int?)
 					}
@@ -134,25 +139,30 @@ struct ListView: View {
 						Label("Group", systemImage: "chevron.up.chevron.down")
 					}
 				}
+				.animation(.easeInOut, value: selectedGroup)
 
 				Picker(selection: $selectedPeriod) {
 					Text("All").tag(nil as Int?)
 					ForEach(1 ... 7, id: \.self) { period in
-						Text("Period \(period)")
-							.foregroundStyle(colourForPeriod(period))
-							.tag(period as Int?)
+						Label(
+							"Period \(period)",
+							systemImage: period.description + ".square"
+						)
+						.foregroundStyle(colourForPeriod(period))
+						.tag(period as Int?)
 					}
 				} label: {
 					if selectedPeriod == nil {
 						Label("Period", systemImage: "chevron.left.chevron.right")
 					}
 				}
+				.animation(.easeInOut, value: selectedPeriod)
 
 				Picker(selection: $selectedBlock) {
 					Text("All").tag(nil as Block?)
 					ForEach(Block.allCases, id: \.self) { block in
-						Label(block.name.capitalized, systemImage: blockSymbol(block))
-							.foregroundStyle(blockColor(block))
+						Label(block.name.capitalized, systemImage: block.symbol)
+							.foregroundStyle(block.colour)
 							.tag(block as Block?)
 					}
 				} label: {
@@ -160,11 +170,13 @@ struct ListView: View {
 						Label("Block", systemImage: "square.grid.2x2")
 					}
 				}
+				.animation(.easeInOut, value: selectedBlock)
 			}
 			.pickerStyle(.navigationLink)
 			.padding(10)
 			.glassEffect(.regular.interactive())
 			.fixedSize()
+			.contentShape(Rectangle())
 		}
 		.foregroundStyle(.primary)
 	}
@@ -191,50 +203,26 @@ struct ListView: View {
 						Text("List")
 							.monospaced()
 					}
+
+					ToolbarItem(placement: .primaryAction) {
+						Button {
+							selectedCategory = nil
+
+							selectedPhase = nil
+
+							selectedGroup = nil
+
+							selectedPeriod = nil
+
+							selectedBlock = nil
+						} label: {
+							Label("Reset Filters", systemImage: "arrow.circlepath")
+						}
+					}
 				}
 				.sheet(item: $selectedElement) { element in
 					ElementDetailView(element: element)
 				}
-		}
-	}
-
-	func categorySymbol(_ category: Category) -> String {
-		switch category {
-		case .alkalineEarthMetal: "leaf"
-		case .metalloid: "triangle.lefthalf.filled"
-		case .nonmetal: "leaf.arrow.triangle.circlepath"
-		case .nobleGas: "seal"
-		case .alkaliMetal: "flame"
-		case .postTransitionMetal: "cube"
-		case .transitionMetal: "gearshape"
-		case .lanthanide: "sun.min"
-		case .actinide: "atom"
-		}
-	}
-
-	func phaseColor(_ phase: ElementPhase) -> Color {
-		switch phase {
-		case .solid: .brown
-		case .liquid: .blue
-		case .gas: .yellow
-		}
-	}
-
-	func blockSymbol(_ block: Block) -> String {
-		switch block {
-		case .sBlock: "s.square"
-		case .pBlock: "p.square"
-		case .dBlock: "d.square"
-		case .fBlock: "f.square"
-		}
-	}
-
-	func blockColor(_ block: Block) -> Color {
-		switch block {
-		case .sBlock: Color(red: 1.0, green: 0.8, blue: 0.6)
-		case .pBlock: Color(red: 0.7, green: 0.9, blue: 0.7)
-		case .dBlock: Color(red: 0.6, green: 0.8, blue: 1.0)
-		case .fBlock: Color(red: 1.0, green: 0.75, blue: 0.5)
 		}
 	}
 }
