@@ -5,7 +5,6 @@
 //  Created by Adon Omeri on 8/11/2025.
 //
 import Portal
-import PortalFlowingHeader
 import SwiftUI
 
 struct ListView: View {
@@ -16,8 +15,6 @@ struct ListView: View {
 	var body: some View {
 		NavigationStack {
 			ScrollView {
-				FlowingHeaderView()
-
 				ForEach(elements, id: \.name) { element in
 					Button {
 						selectedElement = element
@@ -45,7 +42,12 @@ struct ListView: View {
 					.padding(.horizontal)
 				}
 			}
-			.flowingHeaderDestination(displays: [.title, .accessory])
+			.toolbar {
+				ToolbarItem(placement: .title) {
+					Text("List")
+						.monospaced()
+				}
+			}
 			.sheet(item: $selectedElement) { element in
 				ElementDetailView(element: element)
 			}
@@ -55,16 +57,10 @@ struct ListView: View {
 			) { element in
 				Text(element.symbol)
 					.font(.title2)
-					.fontDesign(.monospaced)
 					.foregroundStyle(element.series.themeColor)
+					.fontDesign(.monospaced)
+					.bold()
 			}
-		}
-		.flowingHeader(
-			title: "List",
-			subtitle: "",
-			displays: [.title, .accessory]
-		) {
-			Image(systemName: "list.bullet")
 		}
 	}
 }

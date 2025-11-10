@@ -161,6 +161,11 @@ struct TableView: View {
 						.bold()
 				}
 				.toolbar {
+					ToolbarItem(placement: .title) {
+						Text("Table")
+							.monospaced()
+					}
+
 					ToolbarItem(placement: .primaryAction) {
 						Button {
 							withAnimation(.spring()) {
