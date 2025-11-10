@@ -16,7 +16,7 @@ struct ElementDetailView: View {
 
 	var body: some View {
 		NavigationStack {
-			ScrollView {
+			ScrollView(.vertical) {
 				FlowingHeaderView()
 				VStack(spacing: 30) {
 					general

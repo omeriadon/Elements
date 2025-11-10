@@ -5,7 +5,7 @@
 	<key>AppSettings</key>
 	<dict>
 		<key>appIconPlaceholderGlyphName</key>
-		<string>open-book</string>
+		<string>beachball</string>
 		<key>appSettingsVersion</key>
 		<integer>1</integer>
 	</dict>

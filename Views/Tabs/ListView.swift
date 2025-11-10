@@ -38,7 +38,10 @@ struct ListView: View {
 						}
 						.padding(5)
 					}
-					.buttonStyle(.glass)
+					.tint(.primary)
+					.padding()
+					.background(.ultraThinMaterial)
+					.clipShape(RoundedRectangle(cornerRadius: 25))
 					.padding(.horizontal)
 				}
 			}

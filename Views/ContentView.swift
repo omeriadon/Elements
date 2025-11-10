@@ -23,12 +23,12 @@ struct ContentView: View {
 		),
 		TabItem(
 			name: "Quiz",
-			symbol: "questionmark.bubble",
+			symbol: "questionmark.circle",
 			view: AnyView(QuizView(elements: elements))
 		),
 		TabItem(
 			name: "Help",
-			symbol: "questionmark.square",
+			symbol: "info.circle",
 			view: AnyView(Text("help here"))
 		),
 		TabItem(
@@ -56,6 +56,7 @@ struct TabItem {
 	let symbol: String
 	let view: AnyView
 }
+
 
 #Preview {
 	ContentView(elements: loadElements())
