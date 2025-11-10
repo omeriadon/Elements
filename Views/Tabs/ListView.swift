@@ -94,92 +94,77 @@ struct ListView: View {
 	}
 
 	var filters: some View {
-		GlassEffectContainer {
-			VStack(alignment: .trailing, spacing: 8) {
-				Group {
-					Picker(selection: $selectedCategory) {
-						Text("All").tag(nil as Category?)
-						ForEach(Category.allCases, id: \.self) { category in
-							Label(category.rawValue.capitalized, systemImage: categorySymbol(category))
-								.foregroundStyle(category.themeColor)
-								.tag(category as Category?)
-						}
-					} label: {
-						Label(
-							selectedCategory?.rawValue.capitalized ?? "Category",
-							systemImage: selectedCategory.map { categorySymbol($0) } ?? "line.3.horizontal.decrease.circle"
-						)
+		VStack(alignment: .trailing, spacing: 8) {
+			Group {
+				Picker(selection: $selectedCategory) {
+					Text("All").tag(nil as Category?)
+					ForEach(Category.allCases, id: \.self) { category in
+						Label(category.rawValue.capitalized, systemImage: categorySymbol(category))
+							.foregroundStyle(category.themeColor)
+							.tag(category as Category?)
 					}
-					.padding(10)
-					.glassEffect(
-						.regular.tint(selectedCategory?.themeColor).interactive()
-					)
-
-					Picker(selection: $selectedPhase) {
-						Text("All").tag(nil as ElementPhase?)
-						ForEach(ElementPhase.allCases, id: \.self) { phase in
-							Label(phase.rawValue, systemImage: phase.symbol)
-								.foregroundStyle(phaseColor(phase))
-								.tag(phase as ElementPhase?)
-						}
-					} label: {
-						Label(
-							selectedPhase?.rawValue ?? "Phase",
-							systemImage: selectedPhase?.symbol ?? "circle.dotted"
-						)
-					}
-					.padding(10).glassEffect(.regular.tint(selectedPhase.map { phaseColor($0) }).interactive())
-
-					Picker(selection: $selectedGroup) {
-						Text("All").tag(nil as Int?)
-						ForEach(1 ... 18, id: \.self) { group in
-							Text("Group \(group)")
-								.foregroundStyle(colourForGroup(group))
-								.tag(group as Int?)
-						}
-					} label: {
-						Label(
-							selectedGroup.map { "Group \($0)" } ?? "Group",
-							systemImage: "chevron.up.chevron.down"
-						)
-					}
-					.padding(10).glassEffect(.regular.tint(selectedGroup.map { colourForGroup($0) }).interactive())
-
-					Picker(selection: $selectedPeriod) {
-						Text("All").tag(nil as Int?)
-						ForEach(1 ... 7, id: \.self) { period in
-							Text("Period \(period)")
-								.foregroundStyle(colourForPeriod(period))
-								.tag(period as Int?)
-						}
-					} label: {
-						Label(
-							selectedPeriod.map { "Period \($0)" } ?? "Period",
-							systemImage: "chevron.left.chevron.right"
-						)
-						.padding(10)
-						.glassEffect(.regular.tint(selectedPeriod.map { colourForPeriod($0) }).interactive())
-					}
-
-					Picker(selection: $selectedBlock) {
-						Text("All").tag(nil as Block?)
-						ForEach(Block.allCases, id: \.self) { block in
-							Label(block.name.capitalized, systemImage: blockSymbol(block))
-								.foregroundStyle(blockColor(block))
-								.tag(block as Block?)
-						}
-					} label: {
-						Label(
-							selectedBlock?.name.capitalized ?? "Block",
-							systemImage: selectedBlock.map { blockSymbol($0) } ?? "square.grid.2x2"
-						)
-						.padding(10)
-						.glassEffect(.regular.tint(selectedBlock.map { blockColor($0) }).interactive())
+				} label: {
+					if selectedGroup == nil {
+						Label("Category", systemImage: "line.3.horizontal.decrease.circle")
 					}
 				}
-				.pickerStyle(.navigationLink)
-				.fixedSize()
+
+				Picker(selection: $selectedPhase) {
+					Text("All").tag(nil as ElementPhase?)
+					ForEach(ElementPhase.allCases, id: \.self) { phase in
+						Label(phase.rawValue, systemImage: phase.symbol)
+							.foregroundStyle(phaseColor(phase))
+							.tag(phase as ElementPhase?)
+					}
+				} label: {
+					if selectedPhase == nil {
+						Label("Phase", systemImage: "circle.dotted")
+					}
+				}
+
+				Picker(selection: $selectedGroup) {
+					Text("All").tag(nil as Int?)
+					ForEach(1 ... 18, id: \.self) { group in
+						Text("Group \(group)")
+							.foregroundStyle(colourForGroup(group))
+							.tag(group as Int?)
+					}
+				} label: {
+					if selectedGroup == nil {
+						Label("Group", systemImage: "chevron.up.chevron.down")
+					}
+				}
+
+				Picker(selection: $selectedPeriod) {
+					Text("All").tag(nil as Int?)
+					ForEach(1 ... 7, id: \.self) { period in
+						Text("Period \(period)")
+							.foregroundStyle(colourForPeriod(period))
+							.tag(period as Int?)
+					}
+				} label: {
+					if selectedPeriod == nil {
+						Label("Period", systemImage: "chevron.left.chevron.right")
+					}
+				}
+
+				Picker(selection: $selectedBlock) {
+					Text("All").tag(nil as Block?)
+					ForEach(Block.allCases, id: \.self) { block in
+						Label(block.name.capitalized, systemImage: blockSymbol(block))
+							.foregroundStyle(blockColor(block))
+							.tag(block as Block?)
+					}
+				} label: {
+					if selectedBlock == nil {
+						Label("Block", systemImage: "square.grid.2x2")
+					}
+				}
 			}
+			.pickerStyle(.navigationLink)
+			.padding(10)
+			.glassEffect(.regular.interactive())
+			.fixedSize()
 		}
 		.foregroundStyle(.primary)
 	}
