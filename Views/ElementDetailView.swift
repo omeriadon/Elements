@@ -14,57 +14,134 @@ struct ElementDetailView: View {
 
 	@State var isCopied = false
 
+	// Section-level toggles
+	@AppStorage("show_section_shells") private var showSectionShells: Bool = true
+	@AppStorage("show_section_atomicStructure") private var showSectionAtomic: Bool = true
+	@AppStorage("show_section_thermoDynamic") private var showSectionThermo: Bool = true
+	@AppStorage("show_section_classification") private var showSectionClassification: Bool = true
+	@AppStorage("show_section_mechanical") private var showSectionMechanical: Bool = true
+	@AppStorage("show_section_magnetic") private var showSectionMagnetic: Bool = true
+	@AppStorage("show_section_electrical") private var showSectionElectrical: Bool = true
+	@AppStorage("show_section_crystal") private var showSectionCrystal: Bool = true
+	@AppStorage("show_section_nuclear") private var showSectionNuclear: Bool = true
+	@AppStorage("show_section_other") private var showSectionOther: Bool = true
+	@AppStorage("show_section_info") private var showSectionInfo: Bool = true
+
+	// Atomic Structure rows
+	@AppStorage("show_atomic_mass") private var showAtomicMass: Bool = true
+	@AppStorage("show_valence_electrons") private var showValenceElectrons: Bool = true
+	@AppStorage("show_electron_configuration") private var showElectronConfiguration: Bool = true
+	@AppStorage("show_electron_configuration_semantic") private var showElectronConfigurationSemantic: Bool = true
+	@AppStorage("show_quantum_numbers") private var showQuantumNumbers: Bool = true
+	@AppStorage("show_oxidation_states") private var showOxidationStates: Bool = true
+
+	// Thermo rows
+	@AppStorage("show_melting_point") private var showMeltingPoint: Bool = true
+	@AppStorage("show_boiling_point") private var showBoilingPoint: Bool = true
+	@AppStorage("show_critical_temperature") private var showCriticalTemperature: Bool = true
+	@AppStorage("show_critical_pressure") private var showCriticalPressure: Bool = true
+	@AppStorage("show_curie_point") private var showCuriePoint: Bool = true
+	@AppStorage("show_neel_point") private var showNeelPoint: Bool = true
+	@AppStorage("show_superconducting_point") private var showSuperconductingPoint: Bool = true
+	@AppStorage("show_thermal_expansion") private var showThermalExpansion: Bool = true
+	@AppStorage("show_specific_heat") private var showSpecificHeat: Bool = true
+	@AppStorage("show_heat_of_fusion") private var showHeatOfFusion: Bool = true
+	@AppStorage("show_heat_of_vaporization") private var showHeatOfVaporization: Bool = true
+	@AppStorage("show_molar_heat_capacity") private var showMolarHeatCapacity: Bool = true
+
+	// Classification rows
+	@AppStorage("show_block") private var showBlock: Bool = true
+	@AppStorage("show_group") private var showGroupRow: Bool = true
+	@AppStorage("show_period") private var showPeriod: Bool = true
+	@AppStorage("show_cas_number") private var showCasNumber: Bool = true
+	@AppStorage("show_cid_number") private var showCidNumber: Bool = true
+	@AppStorage("show_rtecs_number") private var showRtecsNumber: Bool = true
+	@AppStorage("show_dot_numbers") private var showDotNumbers: Bool = true
+	@AppStorage("show_dot_hazard_class") private var showDotHazardClass: Bool = true
+
+	// Mechanical rows
+	@AppStorage("show_shear_modulus") private var showShearModulus: Bool = true
+	@AppStorage("show_young_modulus") private var showYoungModulus: Bool = true
+	@AppStorage("show_standard_density") private var showStandardDensity: Bool = true
+	@AppStorage("show_liquid_density") private var showLiquidDensity: Bool = true
+	@AppStorage("show_atomic_ionic_radius") private var showAtomicIonicRadius: Bool = true
+	@AppStorage("show_vickers_hardness") private var showVickersHardness: Bool = true
+	@AppStorage("show_mohs_calculated") private var showMohsCalculated: Bool = true
+	@AppStorage("show_mohs_mpa") private var showMohsMPA: Bool = true
+	@AppStorage("show_brinell_hardness") private var showBrinellHardness: Bool = true
+	@AppStorage("show_bulk_modulus") private var showBulkModulus: Bool = true
+	@AppStorage("show_poisson_ratio") private var showPoissonRatio: Bool = true
+	@AppStorage("show_speed_of_sound") private var showSpeedOfSound: Bool = true
+
+	// Magnetic rows
+	@AppStorage("show_magnetic_type") private var showMagneticType: Bool = true
+	@AppStorage("show_magnetic_susceptibility_mass") private var showMagSusMass: Bool = true
+	@AppStorage("show_magnetic_susceptibility_molar") private var showMagSusMolar: Bool = true
+	@AppStorage("show_magnetic_susceptibility_volume") private var showMagSusVolume: Bool = true
+
+	// Electrical rows
+	@AppStorage("show_thermal_conductivity") private var showThermalConductivity: Bool = true
+	@AppStorage("show_electrical_conductivity") private var showElectricalConductivity: Bool = true
+	@AppStorage("show_resistivity") private var showResistivity: Bool = true
+	@AppStorage("show_electrical_type") private var showElectricalType: Bool = true
+	@AppStorage("show_electron_affinity") private var showElectronAffinity: Bool = true
+	@AppStorage("show_electronegativity_pauling") private var showElectronegativityPauling: Bool = true
+	@AppStorage("show_ionization_energies") private var showIonizationEnergies: Bool = true
+
+	// Crystal rows
+	@AppStorage("show_crystal_structure") private var showCrystalStructure: Bool = true
+	@AppStorage("show_lattice_angles") private var showLatticeAngles: Bool = true
+	@AppStorage("show_lattice_constants") private var showLatticeConstants: Bool = true
+	@AppStorage("show_space_group_name") private var showSpaceGroupName: Bool = true
+	@AppStorage("show_space_group_number") private var showSpaceGroupNumber: Bool = true
+
+	// Nuclear rows
+	@AppStorage("show_known_isotopes") private var showKnownIsotopes: Bool = true
+	@AppStorage("show_isotopic_abundances") private var showIsotopicAbundances: Bool = true
+	@AppStorage("show_half_life") private var showHalfLife: Bool = true
+	@AppStorage("show_lifetime") private var showLifetime: Bool = true
+	@AppStorage("show_decay_mode") private var showDecayMode: Bool = true
+	@AppStorage("show_neutron_cross_section") private var showNeutronCrossSection: Bool = true
+	@AppStorage("show_neutron_mass_absorption") private var showNeutronMassAbsorption: Bool = true
+
+	// Other rows
+	@AppStorage("show_abundance") private var showAbundance: Bool = true
+	@AppStorage("show_adiabatic_index") private var showAdiabaticIndex: Bool = true
+	@AppStorage("show_energy_levels") private var showEnergyLevels: Bool = true
+	@AppStorage("show_gas_phase") private var showGasPhase: Bool = true
+	@AppStorage("show_molar_volume") private var showMolarVolume: Bool = true
+	@AppStorage("show_radius_calculated") private var showRadiusCalculated: Bool = true
+	@AppStorage("show_radius_empirical") private var showRadiusEmpirical: Bool = true
+	@AppStorage("show_radius_covalent") private var showRadiusCovalent: Bool = true
+	@AppStorage("show_radius_vanderwaals") private var showRadiusVanderwaals: Bool = true
+	@AppStorage("show_refractive_index") private var showRefractiveIndex: Bool = true
+	@AppStorage("show_allotropes") private var showAllotropes: Bool = true
+
+	// Info rows
+	@AppStorage("show_summary") private var showSummary: Bool = true
+	@AppStorage("show_source") private var showSourceRow: Bool = true
+
 	var body: some View {
 		NavigationStack {
 			GeometryReader { geometry in
 				ScrollView(.vertical) {
 					VStack(alignment: .center, spacing: 30) {
-						general
+						// Header always shown
+						header
 
-						Divider()
+						// Build visible sections and place dividers correctly
+						let sections = visibleSectionViews()
 
-						shells
-							.padding(.horizontal, -16)
+						if !sections.isEmpty {
+							Divider()
+						}
 
-						Divider()
-
-						atomicStructure
-
-						Divider()
-
-						thermoDynamic
-
-						Divider()
-
-						classification
-
-						Divider()
-
-						mechanical
-
-						Divider()
-
-						magnetic
-
-						Divider()
-
-						electrical
-
-						Divider()
-
-						crystal
-
-						Divider()
-
-						nuclear
-
-						Divider()
-
-						other
-
-						Divider()
-
-						info
+						ForEach(Array(sections.enumerated()), id: \.offset) { idx, view in
+							view
+							if idx < sections.count - 1 {
+								Divider()
+							}
+						}
 					}
 					.padding(.horizontal)
 				}
@@ -104,7 +181,186 @@ struct ElementDetailView: View {
 		}
 	}
 
-	var general: some View {
+	// MARK: - Build visible sections array (only put sections with content)
+
+	private func visibleSectionViews() -> [AnyView] {
+		var result: [AnyView] = []
+
+		// shells
+		if showSectionShells {
+			// shells has content (no per-row toggles inside it)
+			result.append(AnyView(shells))
+		}
+
+		// atomic
+		if showSectionAtomic && atomicStructureHasVisibleRow {
+			result.append(AnyView(atomicStructure))
+		}
+
+		// thermo
+		if showSectionThermo && thermoDynamicHasVisibleRow {
+			result.append(AnyView(thermoDynamic))
+		}
+
+		// classification
+		if showSectionClassification && classificationHasVisibleRow {
+			result.append(AnyView(classification))
+		}
+
+		// mechanical
+		if showSectionMechanical && mechanicalHasVisibleRow {
+			result.append(AnyView(mechanical))
+		}
+
+		// magnetic
+		if showSectionMagnetic && magneticHasVisibleRow {
+			result.append(AnyView(magnetic))
+		}
+
+		// electrical
+		if showSectionElectrical && electricalHasVisibleRow {
+			result.append(AnyView(electrical))
+		}
+
+		// crystal
+		if showSectionCrystal && crystalHasVisibleRow {
+			result.append(AnyView(crystal))
+		}
+
+		// nuclear
+		if showSectionNuclear && nuclearHasVisibleRow {
+			result.append(AnyView(nuclear))
+		}
+
+		// other
+		if showSectionOther && otherHasVisibleRow {
+			result.append(AnyView(other))
+		}
+
+		// info
+		if showSectionInfo && infoHasVisibleRow {
+			result.append(AnyView(info))
+		}
+
+		return result
+	}
+
+	// MARK: - Section visibility checks (ensure at least one row exists & is allowed)
+
+	private var atomicStructureHasVisibleRow: Bool {
+		return showAtomicMass ||
+			(showValenceElectrons && element.valenceElectrons != nil) ||
+			showElectronConfiguration ||
+			showElectronConfigurationSemantic ||
+			showQuantumNumbers ||
+			(showOxidationStates && element.oxidationStates != nil)
+	}
+
+	private var thermoDynamicHasVisibleRow: Bool {
+		return (showMeltingPoint && element.meltingPoint != nil) ||
+			(showBoilingPoint && element.boilingPoint != nil) ||
+			(showCriticalTemperature && element.criticalTemperature != nil) ||
+			(showCriticalPressure && element.criticalPressure != nil) ||
+			(showCuriePoint && element.curiePoint != nil) ||
+			(showNeelPoint && element.neelPoint != nil) ||
+			(showSuperconductingPoint && element.superconductingPoint != nil) ||
+			(showThermalExpansion && element.thermalExpansion != nil) ||
+			(showSpecificHeat && element.heat?.specific != nil) ||
+			(showHeatOfFusion && element.heat?.fusion != nil) ||
+			(showHeatOfVaporization && element.heat?.vaporization != nil) ||
+			(showMolarHeatCapacity && element.heat?.molar != nil)
+	}
+
+	private var classificationHasVisibleRow: Bool {
+		return showBlock ||
+			showGroupRow ||
+			showPeriod ||
+			showCasNumber ||
+			(showCidNumber && element.classifications.cidNumber != nil) ||
+			(showRtecsNumber && element.classifications.rtecsNumber != nil) ||
+			(showDotNumbers && element.classifications.dotNumbers != nil) ||
+			(showDotHazardClass && element.classifications.dotHazardClass != nil)
+	}
+
+	private var mechanicalHasVisibleRow: Bool {
+		return (showShearModulus && element.density?.shear != nil) ||
+			(showYoungModulus && element.density?.young != nil) ||
+			(showStandardDensity && element.density?.stp != nil) ||
+			(showLiquidDensity && element.density?.liquid != nil) ||
+			(showAtomicIonicRadius && element.hardness?.radius != nil) ||
+			(showVickersHardness && element.hardness?.vickers != nil) ||
+			(showMohsCalculated && element.hardness?.vickers != nil) ||
+			(showMohsMPA && element.hardness?.mohs != nil) ||
+			(showBrinellHardness && element.hardness?.brinell != nil) ||
+			(showBulkModulus && element.modulus?.bulk != nil) ||
+			(showPoissonRatio && element.poissonRatio != nil) ||
+			(showSpeedOfSound && element.speedOfSound != nil)
+	}
+
+	private var magneticHasVisibleRow: Bool {
+		return (showMagneticType && element.magneticType != nil) ||
+			(showMagSusMass && element.magneticSusceptibility?.mass != nil) ||
+			(showMagSusMolar && element.magneticSusceptibility?.molar != nil) ||
+			(showMagSusVolume && element.magneticSusceptibility?.volume != nil)
+	}
+
+	private var electricalHasVisibleRow: Bool {
+		return (showThermalConductivity && element.conductivity != nil) ||
+			(showElectricalConductivity && element.conductivity != nil) ||
+			(showResistivity && element.resistivity != nil) ||
+			(showElectricalType && element.electricalType != nil) ||
+			(showElectronAffinity && element.electronAffinity != nil) ||
+			(showElectronegativityPauling && element.electronegativityPauling != nil) ||
+			(showIonizationEnergies && element.ionizationEnergies != nil)
+	}
+
+	private var crystalHasVisibleRow: Bool {
+		return (showCrystalStructure && element.crystalStructure != nil) ||
+			(showLatticeAngles && element.latticeAngles != nil) ||
+			(showLatticeConstants && element.latticeConstants != nil) ||
+			(showSpaceGroupName && element.spaceGroupName != nil) ||
+			(showSpaceGroupNumber && element.spaceGroupNumber != nil)
+	}
+
+	private var nuclearHasVisibleRow: Bool {
+		return (showKnownIsotopes && element.isotopesKnown != nil) ||
+			(showIsotopicAbundances && element.isotopicAbundances != nil) ||
+			(showHalfLife && {
+				if case .stable = element.halfLife { return true }
+				if case .unstable = element.halfLife { return true }
+				return false
+			}()) ||
+			(showLifetime && {
+				if case .unstable = element.lifetime { return true }
+				return false
+			}()) ||
+			(showDecayMode && element.decayMode != nil) ||
+			(showNeutronCrossSection && element.neutronCrossSection != nil) ||
+			(showNeutronMassAbsorption && element.neutronMassAbsorption != nil)
+	}
+
+	private var otherHasVisibleRow: Bool {
+		// abundance always exists as enum; but hide if user disabled
+		return showAbundance ||
+			(showAdiabaticIndex && element.adiabaticIndex != nil) ||
+			showEnergyLevels ||
+			(showGasPhase && element.gasPhase != nil) ||
+			(showMolarVolume && element.molarVolume != nil) ||
+			(showRadiusCalculated && element.radius?.calculated != nil) ||
+			(showRadiusEmpirical && element.radius?.empirical != nil) ||
+			(showRadiusCovalent && element.radius?.covalent != nil) ||
+			(showRadiusVanderwaals && element.radius?.vanderwaals != nil) ||
+			(showRefractiveIndex && element.refractiveIndex != nil) ||
+			(showAllotropes && element.allotropes != nil)
+	}
+
+	private var infoHasVisibleRow: Bool {
+		return (showSummary && !element.summary.isEmpty) || (showSourceRow && !element.source.isEmpty)
+	}
+
+	// MARK: - The original subviews (rows inside are gated by their @AppStorage flags)
+
+	var header: some View {
 		VStack(spacing: 15) {
 			HStack {
 				Text(element.symbol)
@@ -193,17 +449,19 @@ struct ElementDetailView: View {
 
 	var atomicStructure: some View {
 		VStack(spacing: 20) {
-			LeftRight {
-				Text("Atomic Mass")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showAtomicMass {
+				LeftRight {
+					Text("Atomic Mass")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(String(format: "%.3f", element.atomicMass) + " amu")
-					.fontDesign(.monospaced)
+				} right: {
+					Text(String(format: "%.3f", element.atomicMass) + " amu")
+						.fontDesign(.monospaced)
+				}
 			}
 
-			if let valenceElectrons = element.valenceElectrons {
+			if showValenceElectrons, let valenceElectrons = element.valenceElectrons {
 				LeftRight {
 					Text("Valence Electrons")
 						.font(.caption)
@@ -215,37 +473,43 @@ struct ElementDetailView: View {
 				}
 			}
 
-			LeftRight {
-				Text("Electron Configuration")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showElectronConfiguration {
+				LeftRight {
+					Text("Electron Configuration")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.electronConfiguration)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.electronConfiguration)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			LeftRight {
-				Text("Semantic Electron Configuration")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showElectronConfigurationSemantic {
+				LeftRight {
+					Text("Semantic Electron Configuration")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.electronConfigurationSemantic)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.electronConfigurationSemantic)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			LeftRight {
-				Text("Quantum Numbers")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showQuantumNumbers {
+				LeftRight {
+					Text("Quantum Numbers")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.quantumNumbers)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.quantumNumbers)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			if let oxidationStates = element.oxidationStates {
+			if showOxidationStates, let oxidationStates = element.oxidationStates {
 				LeftRight {
 					Text("Oxidation States")
 						.font(.caption)
@@ -261,7 +525,7 @@ struct ElementDetailView: View {
 
 	var thermoDynamic: some View {
 		VStack(spacing: 20) {
-			if let meltingPoint = element.meltingPoint {
+			if showMeltingPoint, let meltingPoint = element.meltingPoint {
 				LeftRight {
 					Text("Melting Point")
 						.font(.caption)
@@ -273,7 +537,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let boilingPoint = element.boilingPoint {
+			if showBoilingPoint, let boilingPoint = element.boilingPoint {
 				LeftRight {
 					Text("Boiling Point")
 						.font(.caption)
@@ -285,7 +549,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let criticalTemperature = element.criticalTemperature {
+			if showCriticalTemperature, let criticalTemperature = element.criticalTemperature {
 				LeftRight {
 					Text("Critical Temperature")
 						.font(.caption)
@@ -297,7 +561,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let criticalPressure = element.criticalPressure {
+			if showCriticalPressure, let criticalPressure = element.criticalPressure {
 				LeftRight {
 					Text("Critical Pressure")
 						.font(.caption)
@@ -309,7 +573,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let curiePoint = element.curiePoint {
+			if showCuriePoint, let curiePoint = element.curiePoint {
 				LeftRight {
 					Text("Curie Point")
 						.font(.caption)
@@ -321,7 +585,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let neelPoint = element.neelPoint {
+			if showNeelPoint, let neelPoint = element.neelPoint {
 				LeftRight {
 					Text("Neel Point")
 						.font(.caption)
@@ -333,7 +597,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let superconductingPoint = element.superconductingPoint {
+			if showSuperconductingPoint, let superconductingPoint = element.superconductingPoint {
 				LeftRight {
 					Text("Superconducting Point")
 						.font(.caption)
@@ -345,7 +609,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let thermalExpansion = element.thermalExpansion {
+			if showThermalExpansion, let thermalExpansion = element.thermalExpansion {
 				LeftRight {
 					Text("Thermal Expansion")
 						.font(.caption)
@@ -358,7 +622,7 @@ struct ElementDetailView: View {
 			}
 
 			if let heat = element.heat {
-				if let specific = heat.specific {
+				if showSpecificHeat, let specific = heat.specific {
 					LeftRight {
 						Text("Specific Heat")
 							.font(.caption)
@@ -370,7 +634,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let fusion = heat.fusion {
+				if showHeatOfFusion, let fusion = heat.fusion {
 					LeftRight {
 						Text("Heat of Fusion")
 							.font(.caption)
@@ -381,7 +645,7 @@ struct ElementDetailView: View {
 							.fontDesign(.monospaced)
 					}
 				}
-				if let vaporization = heat.vaporization {
+				if showHeatOfVaporization, let vaporization = heat.vaporization {
 					LeftRight {
 						Text("Heat of vaporization")
 							.font(.caption)
@@ -393,7 +657,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let molar = heat.molar {
+				if showMolarHeatCapacity, let molar = heat.molar {
 					LeftRight {
 						Text("Molar heat capacity")
 							.font(.caption)
@@ -410,47 +674,55 @@ struct ElementDetailView: View {
 
 	var classification: some View {
 		VStack(spacing: 20) {
-			LeftRight {
-				Text("Block")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showBlock {
+				LeftRight {
+					Text("Block")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.block.name)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.block.name)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			LeftRight {
-				Text("Group")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showGroupRow {
+				LeftRight {
+					Text("Group")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.group.description)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.group.description)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			LeftRight {
-				Text("Period")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showPeriod {
+				LeftRight {
+					Text("Period")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.period.description)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.period.description)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			LeftRight {
-				Text("CAS Number")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showCasNumber {
+				LeftRight {
+					Text("CAS Number")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.classifications.casNumber)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.classifications.casNumber)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			if let cidNumber = element.classifications.cidNumber {
+			if showCidNumber, let cidNumber = element.classifications.cidNumber {
 				LeftRight {
 					Text("CID Number")
 						.font(.caption)
@@ -462,7 +734,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let rtecsNumber = element.classifications.rtecsNumber {
+			if showRtecsNumber, let rtecsNumber = element.classifications.rtecsNumber {
 				LeftRight {
 					Text("RTECS Number")
 						.font(.caption)
@@ -474,7 +746,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let dotNumbers = element.classifications.dotNumbers {
+			if showDotNumbers, let dotNumbers = element.classifications.dotNumbers {
 				LeftRight {
 					Text("DOT Number")
 						.font(.caption)
@@ -486,7 +758,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let dotHazardClass = element.classifications.dotHazardClass {
+			if showDotHazardClass, let dotHazardClass = element.classifications.dotHazardClass {
 				LeftRight {
 					Text("Dot Hazard Class")
 						.font(.caption)
@@ -503,7 +775,7 @@ struct ElementDetailView: View {
 	var mechanical: some View {
 		VStack(spacing: 20) {
 			if let density = element.density {
-				if let shear = density.shear {
+				if showShearModulus, let shear = density.shear {
 					LeftRight {
 						Text("Shear modulus")
 							.font(.caption)
@@ -515,7 +787,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let young = density.young {
+				if showYoungModulus, let young = density.young {
 					LeftRight {
 						Text("Young modulus")
 							.font(.caption)
@@ -527,7 +799,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let stp = density.stp {
+				if showStandardDensity, let stp = density.stp {
 					LeftRight {
 						Text("Standard density")
 							.font(.caption)
@@ -539,7 +811,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let liquid = density.liquid {
+				if showLiquidDensity, let liquid = density.liquid {
 					LeftRight {
 						Text("Liquid Density")
 							.font(.caption)
@@ -553,7 +825,7 @@ struct ElementDetailView: View {
 			}
 
 			if let hardness = element.hardness {
-				if let radius = hardness.radius {
+				if showAtomicIonicRadius, let radius = hardness.radius {
 					LeftRight {
 						Text("Atomic/ionic radius hardness")
 							.font(.caption)
@@ -564,7 +836,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let vickers = hardness.vickers {
+				if showVickersHardness, let vickers = hardness.vickers {
 					LeftRight {
 						Text("Vickers hardness")
 							.font(.caption)
@@ -590,17 +862,19 @@ struct ElementDetailView: View {
 						}
 					}()
 
-					LeftRight {
-						Text("Mohs (1–10)")
-							.font(.caption)
-							.foregroundStyle(.tertiary)
-					} right: {
-						Text(mohsValue.description)
-							.fontDesign(.monospaced)
+					if showMohsCalculated {
+						LeftRight {
+							Text("Mohs (1–10)")
+								.font(.caption)
+								.foregroundStyle(.tertiary)
+						} right: {
+							Text(mohsValue.description)
+								.fontDesign(.monospaced)
+						}
 					}
 				}
 
-				if let mohs = hardness.mohs {
+				if showMohsMPA, let mohs = hardness.mohs {
 					LeftRight {
 						Text("Mohs hardness (MPa)")
 							.font(.caption)
@@ -611,7 +885,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let brinell = hardness.brinell {
+				if showBrinellHardness, let brinell = hardness.brinell {
 					LeftRight {
 						Text("Brinell hardness")
 							.font(.caption)
@@ -623,7 +897,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let modulus = element.modulus, let bulk = modulus.bulk {
+			if let modulus = element.modulus, let bulk = modulus.bulk, showBulkModulus {
 				LeftRight {
 					Text("Bulk modulus")
 						.font(.caption)
@@ -634,7 +908,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let poisson = element.poissonRatio {
+			if showPoissonRatio, let poisson = element.poissonRatio {
 				LeftRight {
 					Text("Poisson ratio")
 						.font(.caption)
@@ -645,7 +919,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let sos = element.speedOfSound {
+			if showSpeedOfSound, let sos = element.speedOfSound {
 				LeftRight {
 					Text("Speed of sound")
 						.font(.caption)
@@ -660,7 +934,7 @@ struct ElementDetailView: View {
 
 	var magnetic: some View {
 		VStack(spacing: 20) {
-			if let magneticType = element.magneticType {
+			if showMagneticType, let magneticType = element.magneticType {
 				LeftRight {
 					Text("Magnetic Type")
 						.font(.caption)
@@ -673,40 +947,46 @@ struct ElementDetailView: View {
 			}
 
 			if let magneticSusceptibility = element.magneticSusceptibility {
-				LeftRight {
-					Text("Magnetic Susceptibility - Mass")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
+				if showMagSusMass {
+					LeftRight {
+						Text("Magnetic Susceptibility - Mass")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
 
-				} right: {
-					Text(String(format: "%.3f", magneticSusceptibility.mass) + " m³/Kg")
-						.fontDesign(.monospaced)
+					} right: {
+						Text(String(format: "%.3f", magneticSusceptibility.mass) + " m³/Kg")
+							.fontDesign(.monospaced)
+					}
 				}
 
-				LeftRight {
-					Text("Magnetic Susceptibility - Molar")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
+				if showMagSusMolar {
+					LeftRight {
+						Text("Magnetic Susceptibility - Molar")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
 
-				} right: {
-					Text(
-						String(
-							format: "%.3f",
-							magneticSusceptibility
-								.molar
-						) + " m³/mol"
-					)
-					.fontDesign(.monospaced)
+					} right: {
+						Text(
+							String(
+								format: "%.3f",
+								magneticSusceptibility
+									.molar
+							) + " m³/mol"
+						)
+						.fontDesign(.monospaced)
+					}
 				}
 
-				LeftRight {
-					Text("Magnetic Susceptibility - Volume")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
+				if showMagSusVolume {
+					LeftRight {
+						Text("Magnetic Susceptibility - Volume")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
 
-				} right: {
-					Text(String(format: "%.3f", magneticSusceptibility.volume))
-						.fontDesign(.monospaced)
+					} right: {
+						Text(String(format: "%.3f", magneticSusceptibility.volume))
+							.fontDesign(.monospaced)
+					}
 				}
 			}
 		}
@@ -715,28 +995,32 @@ struct ElementDetailView: View {
 	var electrical: some View {
 		VStack(spacing: 20) {
 			if let conductivity = element.conductivity {
-				LeftRight {
-					Text("Thermal Conductivity")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
+				if showThermalConductivity {
+					LeftRight {
+						Text("Thermal Conductivity")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
 
-				} right: {
-					Text(String(format: "%.3f", conductivity.thermal))
-						.fontDesign(.monospaced)
+					} right: {
+						Text(String(format: "%.3f", conductivity.thermal))
+							.fontDesign(.monospaced)
+					}
 				}
 
-				LeftRight {
-					Text("Electrical Conductivity")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
+				if showElectricalConductivity {
+					LeftRight {
+						Text("Electrical Conductivity")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
 
-				} right: {
-					Text(String(format: "%.3f", conductivity.electric))
-						.fontDesign(.monospaced)
+					} right: {
+						Text(String(format: "%.3f", conductivity.electric))
+							.fontDesign(.monospaced)
+					}
 				}
 			}
 
-			if let resistivity = element.resistivity {
+			if showResistivity, let resistivity = element.resistivity {
 				LeftRight {
 					Text("Thermal Conductivity")
 						.font(.caption)
@@ -748,7 +1032,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let electricalType = element.electricalType {
+			if showElectricalType, let electricalType = element.electricalType {
 				LeftRight {
 					Text("Electrical Type")
 						.font(.caption)
@@ -760,7 +1044,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let electronAffinity = element.electronAffinity {
+			if showElectronAffinity, let electronAffinity = element.electronAffinity {
 				LeftRight {
 					Text("Electron Affinity")
 						.font(.caption)
@@ -771,7 +1055,7 @@ struct ElementDetailView: View {
 						.fontDesign(.monospaced)
 				}
 			}
-			if let electronegativityPauling = element.electronegativityPauling {
+			if showElectronegativityPauling, let electronegativityPauling = element.electronegativityPauling {
 				LeftRight {
 					Text("Pauling Electronegativity")
 						.font(.caption)
@@ -783,7 +1067,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let ionizationEnergies = element.ionizationEnergies {
+			if showIonizationEnergies, let ionizationEnergies = element.ionizationEnergies {
 				LeftRight {
 					Text("Ionization Energies (kJ/mol)")
 						.font(.caption)
@@ -799,7 +1083,7 @@ struct ElementDetailView: View {
 
 	var crystal: some View {
 		VStack(spacing: 20) {
-			if let crystalStructure = element.crystalStructure {
+			if showCrystalStructure, let crystalStructure = element.crystalStructure {
 				LeftRight {
 					Text("Crystal Structure")
 						.font(.caption)
@@ -811,7 +1095,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let latticeAngles = element.latticeAngles {
+			if showLatticeAngles, let latticeAngles = element.latticeAngles {
 				LeftRight {
 					Text("Lattice Angles")
 						.font(.caption)
@@ -823,7 +1107,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let latticeConstants = element.latticeConstants {
+			if showLatticeConstants, let latticeConstants = element.latticeConstants {
 				LeftRight {
 					Text("Lattice Constants")
 						.font(.caption)
@@ -835,7 +1119,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let spaceGroupName = element.spaceGroupName {
+			if showSpaceGroupName, let spaceGroupName = element.spaceGroupName {
 				LeftRight {
 					Text("Space Group Name")
 						.font(.caption)
@@ -847,7 +1131,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let spaceGroupNumber = element.spaceGroupNumber {
+			if showSpaceGroupNumber, let spaceGroupNumber = element.spaceGroupNumber {
 				LeftRight {
 					Text("Space Group Number")
 						.font(.caption)
@@ -863,7 +1147,7 @@ struct ElementDetailView: View {
 
 	var nuclear: some View {
 		VStack(spacing: 20) {
-			if let isotopesKnown = element.isotopesKnown {
+			if showKnownIsotopes, let isotopesKnown = element.isotopesKnown {
 				LeftRight {
 					Text("Known Isotopes")
 						.font(.caption)
@@ -875,7 +1159,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let isotopicAbundances = element.isotopicAbundances {
+			if showIsotopicAbundances, let isotopicAbundances = element.isotopicAbundances {
 				LeftRight {
 					Text("Isotope Abundances")
 						.font(.caption)
@@ -887,39 +1171,43 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if case .stable = element.halfLife {
-				LeftRight {
-					Text("Radioactivity")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
-				} right: {
-					Text("Stable")
-						.fontDesign(.monospaced)
-				}
-			} else if case let .unstable(halfLife) = element.halfLife {
-				LeftRight {
-					Text("Half Life")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
-				} right: {
-					Text(String(format: "%.3f", halfLife) + " years")
-						.fontDesign(.monospaced)
-				}
-			}
-
-			if case let .unstable(lifetime) = element.lifetime {
-				LeftRight {
-					Text("Lifetime")
-						.font(.caption)
-						.foregroundStyle(.tertiary)
-
-				} right: {
-					Text(String(format: "%.3f", lifetime) + " years")
-						.fontDesign(.monospaced)
+			if showHalfLife {
+				if case .stable = element.halfLife {
+					LeftRight {
+						Text("Radioactivity")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+					} right: {
+						Text("Stable")
+							.fontDesign(.monospaced)
+					}
+				} else if case let .unstable(halfLife) = element.halfLife {
+					LeftRight {
+						Text("Half Life")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+					} right: {
+						Text(String(format: "%.3f", halfLife) + " years")
+							.fontDesign(.monospaced)
+					}
 				}
 			}
 
-			if let decayMode = element.decayMode {
+			if showLifetime {
+				if case let .unstable(lifetime) = element.lifetime {
+					LeftRight {
+						Text("Lifetime")
+							.font(.caption)
+							.foregroundStyle(.tertiary)
+
+					} right: {
+						Text(String(format: "%.3f", lifetime) + " years")
+							.fontDesign(.monospaced)
+					}
+				}
+			}
+
+			if showDecayMode, let decayMode = element.decayMode {
 				LeftRight {
 					Text("Decay Type")
 						.font(.caption)
@@ -931,7 +1219,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let neutronCrossSection = element.neutronCrossSection {
+			if showNeutronCrossSection, let neutronCrossSection = element.neutronCrossSection {
 				LeftRight {
 					Text("Neutron Cross Section")
 						.font(.caption)
@@ -943,7 +1231,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let neutronMassAbsorption = element.neutronMassAbsorption {
+			if showNeutronMassAbsorption, let neutronMassAbsorption = element.neutronMassAbsorption {
 				LeftRight {
 					Text("Neutron Mass Absorption")
 						.font(.caption)
@@ -959,60 +1247,62 @@ struct ElementDetailView: View {
 
 	var other: some View {
 		VStack(spacing: 20) {
-			LeftRight {
-				Text("Abundance")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showAbundance {
+				LeftRight {
+					Text("Abundance")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Group {
-					if element.abundance == .synthetic {
-						Text("Synthetic")
-					} else {
-						VStack(alignment: .trailing) {
-							Text(
-								"Universe: " + String(
-									format: "%.3f",
-									element.abundance.universe
-								) + "%"
-							)
-							Text(
-								"Solar: " + String(
-									format: "%.3f",
-									element.abundance.solar
-								) + "%"
-							)
-							Text(
-								"Meteor: " + String(
-									format: "%.3f",
-									element.abundance.meteor
-								) + "%"
-							)
-							Text(
-								"Crust: " + String(
-									format: "%.3f",
-									element.abundance.crust
-								) + "%"
-							)
-							Text(
-								"Ocean: " + String(
-									format: "%.3f",
-									element.abundance.ocean
-								) + "%"
-							)
-							Text(
-								"Human: " + String(
-									format: "%.3f",
-									element.abundance.human
-								) + "%"
-							)
+				} right: {
+					Group {
+						if element.abundance == .synthetic {
+							Text("Synthetic")
+						} else {
+							VStack(alignment: .trailing) {
+								Text(
+									"Universe: " + String(
+										format: "%.3f",
+										element.abundance.universe
+									) + "%"
+								)
+								Text(
+									"Solar: " + String(
+										format: "%.3f",
+										element.abundance.solar
+									) + "%"
+								)
+								Text(
+									"Meteor: " + String(
+										format: "%.3f",
+										element.abundance.meteor
+									) + "%"
+								)
+								Text(
+									"Crust: " + String(
+										format: "%.3f",
+										element.abundance.crust
+									) + "%"
+								)
+								Text(
+									"Ocean: " + String(
+										format: "%.3f",
+										element.abundance.ocean
+									) + "%"
+								)
+								Text(
+									"Human: " + String(
+										format: "%.3f",
+										element.abundance.human
+									) + "%"
+								)
+							}
+							.fontDesign(.monospaced)
 						}
-						.fontDesign(.monospaced)
 					}
 				}
 			}
 
-			if let adiabaticIndex = element.adiabaticIndex {
+			if showAdiabaticIndex, let adiabaticIndex = element.adiabaticIndex {
 				LeftRight {
 					Text("Adiabatic Index")
 						.font(.caption)
@@ -1024,17 +1314,19 @@ struct ElementDetailView: View {
 				}
 			}
 
-			LeftRight {
-				Text("Energy Levels")
-					.font(.caption)
-					.foregroundStyle(.tertiary)
+			if showEnergyLevels {
+				LeftRight {
+					Text("Energy Levels")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-			} right: {
-				Text(element.energyLevels)
-					.fontDesign(.monospaced)
+				} right: {
+					Text(element.energyLevels)
+						.fontDesign(.monospaced)
+				}
 			}
 
-			if let gasPhase = element.gasPhase {
+			if showGasPhase, let gasPhase = element.gasPhase {
 				LeftRight {
 					Text("Gas Phase")
 						.font(.caption)
@@ -1046,7 +1338,7 @@ struct ElementDetailView: View {
 				}
 			}
 
-			if let molarVolume = element.molarVolume {
+			if showMolarVolume, let molarVolume = element.molarVolume {
 				LeftRight {
 					Text("Molar Volume")
 						.font(.caption)
@@ -1059,7 +1351,7 @@ struct ElementDetailView: View {
 			}
 
 			if let radius = element.radius {
-				if let calculated = radius.calculated {
+				if showRadiusCalculated, let calculated = radius.calculated {
 					LeftRight {
 						Text("Calculated Radius")
 							.font(.caption)
@@ -1071,7 +1363,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let empirical = radius.empirical {
+				if showRadiusEmpirical, let empirical = radius.empirical {
 					LeftRight {
 						Text("Empirical Radius")
 							.font(.caption)
@@ -1083,7 +1375,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let covalent = radius.covalent {
+				if showRadiusCovalent, let covalent = radius.covalent {
 					LeftRight {
 						Text("Covalent Radius")
 							.font(.caption)
@@ -1095,7 +1387,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let vanderwaals = radius.vanderwaals {
+				if showRadiusVanderwaals, let vanderwaals = radius.vanderwaals {
 					LeftRight {
 						Text("Vanderwaals Radius")
 							.font(.caption)
@@ -1107,7 +1399,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let refractiveIndex = element.refractiveIndex {
+				if showRefractiveIndex, let refractiveIndex = element.refractiveIndex {
 					LeftRight {
 						Text("Refractive Index")
 							.font(.caption)
@@ -1119,7 +1411,7 @@ struct ElementDetailView: View {
 					}
 				}
 
-				if let allotropes = element.allotropes {
+				if showAllotropes, let allotropes = element.allotropes {
 					LeftRight {
 						Text("Allotropes")
 							.font(.caption)
@@ -1136,19 +1428,23 @@ struct ElementDetailView: View {
 
 	var info: some View {
 		VStack(alignment: .leading) {
-			Text(element.summary)
-				.padding(.bottom, 20)
-				.fontDesign(.serif)
-				.textSelection(.enabled)
+			if showSummary {
+				Text(element.summary)
+					.padding(.bottom, 20)
+					.fontDesign(.serif)
+					.textSelection(.enabled)
+			}
 
-			if let link = URL(string: element.source) {
-				Link(destination: link) {
-					Label("Source: \(element.source)", systemImage: "link")
-				}
-				.foregroundStyle(.tertiary)
-			} else {
-				Text("Source: \(element.source)")
+			if showSourceRow {
+				if let link = URL(string: element.source) {
+					Link(destination: link) {
+						Label("Source: \(element.source)", systemImage: "link")
+					}
 					.foregroundStyle(.tertiary)
+				} else {
+					Text("Source: \(element.source)")
+						.foregroundStyle(.tertiary)
+				}
 			}
 		}
 		.padding(15)

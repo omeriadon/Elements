@@ -29,7 +29,7 @@ struct ContentView: View {
 		TabItem(
 			name: "Settings",
 			symbol: "gear",
-			view: AnyView(Text("settings here"))
+			view: AnyView(SettingsView())
 		),
 	] }
 

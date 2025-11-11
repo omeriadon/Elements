@@ -220,7 +220,7 @@ struct ListView: View {
 				}
 				.toolbar {
 					ToolbarItem(placement: .title) {
-						Text("List")
+						Label("List", systemImage: "list.bullet")
 							.monospaced()
 					}
 
