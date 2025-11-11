@@ -5,7 +5,6 @@
 //  Created by Adon Omeri on 8/11/2025.
 //
 
-
 import SwiftUI
 
 let elementCellHeight = 80
@@ -126,11 +125,6 @@ struct TableView: View {
 					}
 			}
 			.toolbar {
-				ToolbarItem(placement: .title) {
-					Text("Table")
-						.monospaced()
-				}
-
 				ToolbarItem(placement: .topBarTrailing) {
 					Slider(
 						value: $scale,
@@ -154,7 +148,6 @@ struct TableView: View {
 								.font(.caption)
 						}
 					)
-					.frame(width: 250)
 				}
 				.sharedBackgroundVisibility(.hidden)
 			}

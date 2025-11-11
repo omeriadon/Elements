@@ -25,6 +25,12 @@ struct ListView: View {
 
 	@State private var keyboardVisible = false
 
+	@Environment(\.colorScheme) private var scheme
+
+	var adaptiveColor: Color {
+		scheme == .dark ? .black : .white
+	}
+
 	var filteredElements: [Element] {
 		var result = elements
 
@@ -176,7 +182,11 @@ struct ListView: View {
 			}
 			.pickerStyle(.navigationLink)
 			.padding(10)
-			.glassEffect(.regular.interactive())
+			.glassEffect(
+				.regular
+//					.tint(adaptiveColor.opacity(0.5))
+					.interactive()
+			)
 			.fixedSize()
 			.contentShape(Rectangle())
 			.foregroundStyle(.primary)
@@ -190,7 +200,7 @@ struct ListView: View {
 			main
 				.searchable(
 					text: $searchText,
-					prompt: "Search names, series, numbers, and more"
+					prompt: "Names, series, and more"
 				)
 				.overlay(alignment: .bottomTrailing) {
 					filters
