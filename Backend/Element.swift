@@ -604,7 +604,7 @@ enum Category: String, Codable, CaseIterable, Equatable {
 		case .postTransitionMetal: "cube"
 		case .transitionMetal: "gearshape"
 		case .lanthanide: "sun.min"
-		case .actinide: "atom"
+		case .actinide: "sun.max"
 		}
 	}
 }

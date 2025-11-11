@@ -88,8 +88,10 @@ struct ListView: View {
 								Spacer()
 								Text(element.name)
 									.font(.title3)
+									.fontDesign(.monospaced)
 							}
-							.padding()
+							.padding(.horizontal)
+							.padding(.vertical, 10)
 							.background(.ultraThickMaterial)
 							.clipShape(Capsule())
 						}
@@ -116,6 +118,7 @@ struct ListView: View {
 				} label: {
 					if selectedCategory == nil {
 						Label("Category", systemImage: "line.3.horizontal.decrease.circle")
+							.foregroundStyle(.secondary)
 					}
 				}
 				.animation(.easeInOut, value: selectedCategory)
@@ -130,6 +133,7 @@ struct ListView: View {
 				} label: {
 					if selectedPhase == nil {
 						Label("Phase", systemImage: "circle.dotted")
+							.foregroundStyle(.secondary)
 					}
 				}
 				.animation(.easeInOut, value: selectedPhase)
@@ -145,6 +149,7 @@ struct ListView: View {
 				} label: {
 					if selectedGroup == nil {
 						Label("Group", systemImage: "chevron.up.chevron.down")
+							.foregroundStyle(.secondary)
 					}
 				}
 				.animation(.easeInOut, value: selectedGroup)
@@ -162,6 +167,7 @@ struct ListView: View {
 				} label: {
 					if selectedPeriod == nil {
 						Label("Period", systemImage: "chevron.left.chevron.right")
+							.foregroundStyle(.secondary)
 					}
 				}
 				.animation(.easeInOut, value: selectedPeriod)
@@ -176,6 +182,7 @@ struct ListView: View {
 				} label: {
 					if selectedBlock == nil {
 						Label("Block", systemImage: "square.grid.2x2")
+							.foregroundStyle(.secondary)
 					}
 				}
 				.animation(.easeInOut, value: selectedBlock)
@@ -184,7 +191,6 @@ struct ListView: View {
 			.padding(10)
 			.glassEffect(
 				.regular
-//					.tint(adaptiveColor.opacity(0.5))
 					.interactive()
 			)
 			.fixedSize()
