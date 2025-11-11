@@ -23,6 +23,8 @@ struct ListView: View {
 	@State var selectedPeriod: Int?
 	@State var selectedBlock: Block?
 
+	@State private var keyboardVisible = false
+
 	var filteredElements: [Element] {
 		var result = elements
 
@@ -190,7 +192,7 @@ struct ListView: View {
 				)
 				.overlay(alignment: .bottomTrailing) {
 					filters
-						.padding(.bottom, 60)
+						.padding(.bottom, keyboardVisible ? 60 : 16)
 						.padding(.trailing)
 				}
 				.onChange(of: filteredElements) {
@@ -227,6 +229,21 @@ struct ListView: View {
 				}
 				.sheet(item: $selectedElement) { element in
 					ElementDetailView(element: element)
+				}
+				.onAppear {
+					NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
+						Task { @MainActor in
+							withAnimation(.easeInOut) { keyboardVisible = true }
+						}
+					}
+					NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+						Task { @MainActor in
+							withAnimation(.easeInOut) { keyboardVisible = false }
+						}
+					}
+				}
+				.onDisappear {
+					NotificationCenter.default.removeObserver(self)
 				}
 		}
 	}
