@@ -181,6 +181,8 @@ struct ListView: View {
 			.contentShape(Rectangle())
 			.foregroundStyle(.primary)
 		}
+		.background(Color.clear)
+		.contentShape(Rectangle())
 	}
 
 	var body: some View {
