@@ -7,8 +7,33 @@
 
 import SwiftUI
 
+struct RowSetting: Identifiable {
+	let id: String
+	let name: String
+	var binding: Binding<Bool>
+
+	init(name: String, binding: Binding<Bool>) {
+		id = name
+		self.name = name
+		self.binding = binding
+	}
+}
+
+struct SectionSetting: Identifiable {
+	let id: String
+	let header: String
+	var sectionBinding: Binding<Bool>?
+	var rows: [RowSetting]
+
+	init(header: String, sectionBinding: Binding<Bool>? = nil, rows: [RowSetting] = []) {
+		id = header
+		self.header = header
+		self.sectionBinding = sectionBinding
+		self.rows = rows
+	}
+}
+
 struct SettingsView: View {
-	// Section-level toggles
 	@AppStorage("show_section_shells") private var showSectionShells: Bool = true
 	@AppStorage("show_section_atomicStructure") private var showSectionAtomic: Bool = true
 	@AppStorage("show_section_thermoDynamic") private var showSectionThermo: Bool = true
@@ -21,7 +46,6 @@ struct SettingsView: View {
 	@AppStorage("show_section_other") private var showSectionOther: Bool = true
 	@AppStorage("show_section_info") private var showSectionInfo: Bool = true
 
-	// (All row-level keys repeated here so the settings and the detail view share the same storage)
 	@AppStorage("show_atomic_mass") private var showAtomicMass: Bool = true
 	@AppStorage("show_valence_electrons") private var showValenceElectrons: Bool = true
 	@AppStorage("show_electron_configuration") private var showElectronConfiguration: Bool = true
@@ -106,6 +130,183 @@ struct SettingsView: View {
 	@AppStorage("show_summary") private var showSummary: Bool = true
 	@AppStorage("show_source") private var showSourceRow: Bool = true
 
+	private var settingsSections: [SectionSetting] {
+		[
+			SectionSetting(
+				header: "Shells",
+				sectionBinding: $showSectionShells,
+				rows: [
+				]
+			),
+
+			SectionSetting(
+				header: "Atomic Structure",
+				sectionBinding: $showSectionAtomic,
+				rows: [
+					RowSetting(name: "Atomic Mass", binding: $showAtomicMass),
+					RowSetting(name: "Valence Electrons", binding: $showValenceElectrons),
+					RowSetting(name: "Electron Configuration", binding: $showElectronConfiguration),
+					RowSetting(name: "Semantic Electron Configuration", binding: $showElectronConfigurationSemantic),
+					RowSetting(name: "Quantum Numbers", binding: $showQuantumNumbers),
+					RowSetting(name: "Oxidation States", binding: $showOxidationStates),
+				]
+			),
+
+			SectionSetting(
+				header: "Thermodynamics",
+				sectionBinding: $showSectionThermo,
+				rows: [
+					RowSetting(name: "Melting Point", binding: $showMeltingPoint),
+					RowSetting(name: "Boiling Point", binding: $showBoilingPoint),
+					RowSetting(name: "Critical Temperature", binding: $showCriticalTemperature),
+					RowSetting(name: "Critical Pressure", binding: $showCriticalPressure),
+					RowSetting(name: "Curie Point", binding: $showCuriePoint),
+					RowSetting(name: "Neel Point", binding: $showNeelPoint),
+					RowSetting(name: "Superconducting Point", binding: $showSuperconductingPoint),
+					RowSetting(name: "Thermal Expansion", binding: $showThermalExpansion),
+					RowSetting(name: "Specific Heat", binding: $showSpecificHeat),
+					RowSetting(name: "Heat of Fusion", binding: $showHeatOfFusion),
+					RowSetting(name: "Heat of Vaporization", binding: $showHeatOfVaporization),
+					RowSetting(name: "Molar Heat Capacity", binding: $showMolarHeatCapacity),
+				]
+			),
+
+			SectionSetting(
+				header: "Classification",
+				sectionBinding: $showSectionClassification,
+				rows: [
+					RowSetting(name: "Block", binding: $showBlock),
+					RowSetting(name: "Group", binding: $showGroupRow),
+					RowSetting(name: "Period", binding: $showPeriod),
+					RowSetting(name: "CAS Number", binding: $showCasNumber),
+					RowSetting(name: "CID Number", binding: $showCidNumber),
+					RowSetting(name: "RTECS Number", binding: $showRtecsNumber),
+					RowSetting(name: "DOT Number", binding: $showDotNumbers),
+					RowSetting(name: "DOT Hazard Class", binding: $showDotHazardClass),
+				]
+			),
+
+			SectionSetting(
+				header: "Mechanical",
+				sectionBinding: $showSectionMechanical,
+				rows: [
+					RowSetting(name: "Shear modulus", binding: $showShearModulus),
+					RowSetting(name: "Young modulus", binding: $showYoungModulus),
+					RowSetting(name: "Standard density", binding: $showStandardDensity),
+					RowSetting(name: "Liquid density", binding: $showLiquidDensity),
+					RowSetting(name: "Atomic/ionic radius", binding: $showAtomicIonicRadius),
+					RowSetting(name: "Vickers hardness", binding: $showVickersHardness),
+					RowSetting(name: "Mohs (calculated)", binding: $showMohsCalculated),
+					RowSetting(name: "Mohs (MPa)", binding: $showMohsMPA),
+					RowSetting(name: "Brinell hardness", binding: $showBrinellHardness),
+					RowSetting(name: "Bulk modulus", binding: $showBulkModulus),
+					RowSetting(name: "Poisson ratio", binding: $showPoissonRatio),
+					RowSetting(name: "Speed of sound", binding: $showSpeedOfSound),
+				]
+			),
+
+			SectionSetting(
+				header: "Magnetic",
+				sectionBinding: $showSectionMagnetic,
+				rows: [
+					RowSetting(name: "Magnetic Type", binding: $showMagneticType),
+					RowSetting(name: "Magnetic Susceptibility - Mass", binding: $showMagSusMass),
+					RowSetting(name: "Magnetic Susceptibility - Molar", binding: $showMagSusMolar),
+					RowSetting(name: "Magnetic Susceptibility - Volume", binding: $showMagSusVolume),
+				]
+			),
+
+			SectionSetting(
+				header: "Electrical",
+				sectionBinding: $showSectionElectrical,
+				rows: [
+					RowSetting(name: "Thermal Conductivity", binding: $showThermalConductivity),
+					RowSetting(name: "Electrical Conductivity", binding: $showElectricalConductivity),
+					RowSetting(name: "Resistivity", binding: $showResistivity),
+					RowSetting(name: "Electrical Type", binding: $showElectricalType),
+					RowSetting(name: "Electron Affinity", binding: $showElectronAffinity),
+					RowSetting(name: "Electronegativity (Pauling)", binding: $showElectronegativityPauling),
+					RowSetting(name: "Ionization Energies", binding: $showIonizationEnergies),
+				]
+			),
+
+			SectionSetting(
+				header: "Crystal",
+				sectionBinding: $showSectionCrystal,
+				rows: [
+					RowSetting(name: "Crystal Structure", binding: $showCrystalStructure),
+					RowSetting(name: "Lattice Angles", binding: $showLatticeAngles),
+					RowSetting(name: "Lattice Constants", binding: $showLatticeConstants),
+					RowSetting(name: "Space Group Name", binding: $showSpaceGroupName),
+					RowSetting(name: "Space Group Number", binding: $showSpaceGroupNumber),
+				]
+			),
+
+			SectionSetting(
+				header: "Nuclear",
+				sectionBinding: $showSectionNuclear,
+				rows: [
+					RowSetting(name: "Known Isotopes", binding: $showKnownIsotopes),
+					RowSetting(name: "Isotopic Abundances", binding: $showIsotopicAbundances),
+					RowSetting(name: "Half Life / Radioactivity", binding: $showHalfLife),
+					RowSetting(name: "Lifetime", binding: $showLifetime),
+					RowSetting(name: "Decay Type", binding: $showDecayMode),
+					RowSetting(name: "Neutron Cross Section", binding: $showNeutronCrossSection),
+					RowSetting(name: "Neutron Mass Absorption", binding: $showNeutronMassAbsorption),
+				]
+			),
+
+			SectionSetting(
+				header: "Other",
+				sectionBinding: $showSectionOther,
+				rows: [
+					RowSetting(name: "Abundance", binding: $showAbundance),
+					RowSetting(name: "Adiabatic Index", binding: $showAdiabaticIndex),
+					RowSetting(name: "Energy Levels", binding: $showEnergyLevels),
+					RowSetting(name: "Gas Phase", binding: $showGasPhase),
+					RowSetting(name: "Molar Volume", binding: $showMolarVolume),
+					RowSetting(name: "Radius - Calculated", binding: $showRadiusCalculated),
+					RowSetting(name: "Radius - Empirical", binding: $showRadiusEmpirical),
+					RowSetting(name: "Radius - Covalent", binding: $showRadiusCovalent),
+					RowSetting(name: "Radius - Vanderwaals", binding: $showRadiusVanderwaals),
+					RowSetting(name: "Refractive Index", binding: $showRefractiveIndex),
+					RowSetting(name: "Allotropes", binding: $showAllotropes),
+				]
+			),
+
+			SectionSetting(
+				header: "Info",
+				sectionBinding: $showSectionInfo,
+				rows: [
+					RowSetting(name: "Summary", binding: $showSummary),
+					RowSetting(name: "Source", binding: $showSourceRow),
+				]
+			),
+		]
+	}
+
+	private var allBindings: [Binding<Bool>] {
+		var all: [Binding<Bool>] = []
+		for section in settingsSections {
+			if let sb = section.sectionBinding {
+				all.append(sb)
+			}
+			for row in section.rows {
+				all.append(row.binding)
+			}
+		}
+		return all
+	}
+
+	func setAll(_ value: Bool) {
+		allBindings.forEach { $0.wrappedValue = value }
+	}
+
+	func toggleAll() {
+		let anyOff = allBindings.contains { !$0.wrappedValue }
+		setAll(anyOff)
+	}
+
 	var body: some View {
 		NavigationStack {
 			List {
@@ -117,11 +318,20 @@ struct SettingsView: View {
 									.labelStyle(.titleAndIcon)
 									.monospaced()
 							}
+							ToolbarItem(placement: .primaryAction) {
+								Button(action: {
+									setAll(!allEnabled)
+								}) {
+									Label(allEnabled ? "Disable All" : "Enable All",
+									      systemImage: allEnabled ? "eye.slash" : "eye")
+								}
+							}
 						}
 				} label: {
-					Label("isibility", systemImage: "circle.lefthalf.filled")
+					Label("Visibility", systemImage: "circle.lefthalf.filled")
 				}
 			}
+			.listStyle(.sidebar)
 			.toolbar {
 				ToolbarItem(placement: .title) {
 					Label("Settings", systemImage: "gearshape")
@@ -132,15 +342,19 @@ struct SettingsView: View {
 		}
 	}
 
+	private var allEnabled: Bool {
+		allBindings.allSatisfy { $0.wrappedValue }
+	}
+
 	var visibility: some View {
 		List {
-			Section {
+			// Shells
+			Section(header: Text("Shells")) {
 				Toggle("Shells (graphic)", isOn: $showSectionShells)
-			} header: {
-				Text("Shells")
 			}
 
-			Section {
+			// Atomic Structure
+			Section(header: Text("Atomic Structure")) {
 				Toggle("Atomic Structure", isOn: $showSectionAtomic)
 				DisclosureGroup("Rows") {
 					Toggle("Atomic Mass", isOn: $showAtomicMass)
@@ -150,11 +364,10 @@ struct SettingsView: View {
 					Toggle("Quantum Numbers", isOn: $showQuantumNumbers)
 					Toggle("Oxidation States", isOn: $showOxidationStates)
 				}
-			} header: {
-				Text("Atomic Structure")
 			}
 
-			Section {
+			// Thermodynamics
+			Section(header: Text("Thermodynamics")) {
 				Toggle("Thermodynamics", isOn: $showSectionThermo)
 				DisclosureGroup("Rows") {
 					Toggle("Melting Point", isOn: $showMeltingPoint)
@@ -170,11 +383,10 @@ struct SettingsView: View {
 					Toggle("Heat of Vaporization", isOn: $showHeatOfVaporization)
 					Toggle("Molar Heat Capacity", isOn: $showMolarHeatCapacity)
 				}
-			} header: {
-				Text("Thermodynamics")
 			}
 
-			Section {
+			// Classification
+			Section(header: Text("Classification")) {
 				Toggle("Classification", isOn: $showSectionClassification)
 				DisclosureGroup("Rows") {
 					Toggle("Block", isOn: $showBlock)
@@ -183,46 +395,43 @@ struct SettingsView: View {
 					Toggle("CAS Number", isOn: $showCasNumber)
 					Toggle("CID Number", isOn: $showCidNumber)
 					Toggle("RTECS Number", isOn: $showRtecsNumber)
-					Toggle("DOT Number", isOn: $showDotNumbers)
+					Toggle("DOT Numbers", isOn: $showDotNumbers)
 					Toggle("DOT Hazard Class", isOn: $showDotHazardClass)
 				}
-			} header: {
-				Text("Classification")
 			}
 
-			Section {
+			// Mechanical
+			Section(header: Text("Mechanical")) {
 				Toggle("Mechanical", isOn: $showSectionMechanical)
 				DisclosureGroup("Rows") {
-					Toggle("Shear modulus", isOn: $showShearModulus)
-					Toggle("Young modulus", isOn: $showYoungModulus)
-					Toggle("Standard density", isOn: $showStandardDensity)
-					Toggle("Liquid density", isOn: $showLiquidDensity)
-					Toggle("Atomic/ionic radius", isOn: $showAtomicIonicRadius)
-					Toggle("Vickers hardness", isOn: $showVickersHardness)
-					Toggle("Mohs (calculated)", isOn: $showMohsCalculated)
-					Toggle("Mohs (MPa)", isOn: $showMohsMPA)
-					Toggle("Brinell hardness", isOn: $showBrinellHardness)
-					Toggle("Bulk modulus", isOn: $showBulkModulus)
-					Toggle("Poisson ratio", isOn: $showPoissonRatio)
-					Toggle("Speed of sound", isOn: $showSpeedOfSound)
+					Toggle("Shear Modulus", isOn: $showShearModulus)
+					Toggle("Young Modulus", isOn: $showYoungModulus)
+					Toggle("Standard Density", isOn: $showStandardDensity)
+					Toggle("Liquid Density", isOn: $showLiquidDensity)
+					Toggle("Atomic Ionic Radius", isOn: $showAtomicIonicRadius)
+					Toggle("Vickers Hardness", isOn: $showVickersHardness)
+					Toggle("Mohs Calculated", isOn: $showMohsCalculated)
+					Toggle("Mohs MPA", isOn: $showMohsMPA)
+					Toggle("Brinell Hardness", isOn: $showBrinellHardness)
+					Toggle("Bulk Modulus", isOn: $showBulkModulus)
+					Toggle("Poisson Ratio", isOn: $showPoissonRatio)
+					Toggle("Speed of Sound", isOn: $showSpeedOfSound)
 				}
-			} header: {
-				Text("Mechanical")
 			}
 
-			Section {
+			// Magnetic
+			Section(header: Text("Magnetic")) {
 				Toggle("Magnetic", isOn: $showSectionMagnetic)
 				DisclosureGroup("Rows") {
 					Toggle("Magnetic Type", isOn: $showMagneticType)
-					Toggle("Magnetic Susceptibility - Mass", isOn: $showMagSusMass)
-					Toggle("Magnetic Susceptibility - Molar", isOn: $showMagSusMolar)
-					Toggle("Magnetic Susceptibility - Volume", isOn: $showMagSusVolume)
+					Toggle("Magnetic Susceptibility Mass", isOn: $showMagSusMass)
+					Toggle("Magnetic Susceptibility Molar", isOn: $showMagSusMolar)
+					Toggle("Magnetic Susceptibility Volume", isOn: $showMagSusVolume)
 				}
-			} header: {
-				Text("Magnetic")
 			}
 
-			Section {
+			// Electrical
+			Section(header: Text("Electrical")) {
 				Toggle("Electrical", isOn: $showSectionElectrical)
 				DisclosureGroup("Rows") {
 					Toggle("Thermal Conductivity", isOn: $showThermalConductivity)
@@ -230,14 +439,13 @@ struct SettingsView: View {
 					Toggle("Resistivity", isOn: $showResistivity)
 					Toggle("Electrical Type", isOn: $showElectricalType)
 					Toggle("Electron Affinity", isOn: $showElectronAffinity)
-					Toggle("Electronegativity (Pauling)", isOn: $showElectronegativityPauling)
+					Toggle("Electronegativity Pauling", isOn: $showElectronegativityPauling)
 					Toggle("Ionization Energies", isOn: $showIonizationEnergies)
 				}
-			} header: {
-				Text("Electrical")
 			}
 
-			Section {
+			// Crystal
+			Section(header: Text("Crystal")) {
 				Toggle("Crystal", isOn: $showSectionCrystal)
 				DisclosureGroup("Rows") {
 					Toggle("Crystal Structure", isOn: $showCrystalStructure)
@@ -246,11 +454,10 @@ struct SettingsView: View {
 					Toggle("Space Group Name", isOn: $showSpaceGroupName)
 					Toggle("Space Group Number", isOn: $showSpaceGroupNumber)
 				}
-			} header: {
-				Text("Crystal")
 			}
 
-			Section {
+			// Nuclear
+			Section(header: Text("Nuclear")) {
 				Toggle("Nuclear", isOn: $showSectionNuclear)
 				DisclosureGroup("Rows") {
 					Toggle("Known Isotopes", isOn: $showKnownIsotopes)
@@ -261,11 +468,10 @@ struct SettingsView: View {
 					Toggle("Neutron Cross Section", isOn: $showNeutronCrossSection)
 					Toggle("Neutron Mass Absorption", isOn: $showNeutronMassAbsorption)
 				}
-			} header: {
-				Text("Nuclear")
 			}
 
-			Section {
+			// Other
+			Section(header: Text("Other")) {
 				Toggle("Other", isOn: $showSectionOther)
 				DisclosureGroup("Rows") {
 					Toggle("Abundance", isOn: $showAbundance)
@@ -280,19 +486,17 @@ struct SettingsView: View {
 					Toggle("Refractive Index", isOn: $showRefractiveIndex)
 					Toggle("Allotropes", isOn: $showAllotropes)
 				}
-			} header: {
-				Text("Other")
 			}
 
-			Section {
+			// Info
+			Section(header: Text("Info")) {
 				Toggle("Info", isOn: $showSectionInfo)
 				DisclosureGroup("Rows") {
 					Toggle("Summary", isOn: $showSummary)
 					Toggle("Source", isOn: $showSourceRow)
 				}
-			} header: {
-				Text("Info")
 			}
 		}
+		.listStyle(.sidebar)
 	}
 }
