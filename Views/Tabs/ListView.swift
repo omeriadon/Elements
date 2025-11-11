@@ -23,14 +23,6 @@ struct ListView: View {
 	@State var selectedPeriod: Int?
 	@State var selectedBlock: Block?
 
-	@State var hasBeenReset = false
-
-	@Environment(\.colorScheme) private var scheme
-
-	var adaptiveColor: Color {
-		scheme == .dark ? .black : .white
-	}
-
 	var filteredElements: [Element] {
 		var result = elements
 
@@ -182,23 +174,10 @@ struct ListView: View {
 			}
 			.pickerStyle(.navigationLink)
 			.padding(10)
-			.glassEffect(.clear.interactive())
+			.glassEffect(.regular.interactive())
 			.fixedSize()
 			.contentShape(Rectangle())
-		}
-		.foregroundStyle(.primary)
-		.background {
-			adaptiveColor
-				.clipShape(
-					UnevenRoundedRectangle(
-						topLeadingRadius: 40,
-						bottomLeadingRadius: 40,
-						bottomTrailingRadius: 0,
-						topTrailingRadius: 0
-					)
-				)
-				.offset(x: 10)
-				.blur(radius: 30)
+			.foregroundStyle(.primary)
 		}
 	}
 
@@ -211,7 +190,7 @@ struct ListView: View {
 				)
 				.overlay(alignment: .bottomTrailing) {
 					filters
-						.padding(.bottom)
+						.padding(.bottom, 60)
 						.padding(.trailing)
 				}
 				.onChange(of: filteredElements) {
@@ -226,40 +205,22 @@ struct ListView: View {
 					}
 
 					ToolbarItem(placement: .topBarTrailing) {
-						Button {
-							selectedCategory = nil
-							selectedPhase = nil
-							selectedGroup = nil
-							selectedPeriod = nil
-							selectedBlock = nil
+						if
+							(selectedCategory != nil) ||
+							(selectedPhase != nil) ||
+							(selectedGroup != nil) ||
+							(selectedPeriod != nil) ||
+							(selectedBlock != nil)
+						{
+							Button {
+								selectedCategory = nil
+								selectedPhase = nil
+								selectedGroup = nil
+								selectedPeriod = nil
+								selectedBlock = nil
 
-							withAnimation {
-								hasBeenReset = true
-							}
-						} label: {
-							Group {
-								if !hasBeenReset {
-									Label("Reset", systemImage: "arrow.circlepath")
-										.animation(
-											.easeInOut,
-											value: hasBeenReset
-										)
-								} else {
-									Label("Filters Reset", systemImage: "checkmark")
-										.animation(
-											.easeInOut,
-											value: hasBeenReset
-										)
-								}
-							}
-							.transition(.blurReplace)
-							.onChange(of: hasBeenReset) {
-								DispatchQueue.main
-									.asyncAfter(deadline: .now() + 4) {
-										withAnimation {
-											hasBeenReset = false
-										}
-									}
+							} label: {
+								Label("Reset", systemImage: "arrow.circlepath")
 							}
 						}
 					}
