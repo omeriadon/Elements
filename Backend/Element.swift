@@ -609,12 +609,12 @@ enum Category: String, Codable, CaseIterable, Equatable {
 	}
 }
 
-func loadElements() -> [Element] {
+func loadElements() -> [Element]? {
 	do {
 		let data = Data(elementsString.utf8)
 		let decoder = JSONDecoder()
 		return try decoder.decode([Element].self, from: data)
 	} catch {
-		fatalError("Failed to decode elements.json: \(error)")
+		return nil
 	}
 }

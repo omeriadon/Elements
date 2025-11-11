@@ -7,17 +7,20 @@
 
 import SwiftUI
 
-
 @main
 struct ElementsApp: App {
-
-	let elements: [Element] = loadElements()
+	let elements: [Element]? = loadElements()
 
 	var body: some Scene {
 		WindowGroup {
-
-				ContentView(elements: elements)
-			
+			if let elementsSafe = elements {
+				ContentView(elements: elementsSafe)
+			} else {
+				ContentUnavailableView("Corrupted Data", systemImage: "exclamationmark.triangle.fill", description:
+					Text("Please reinstall the app.")
+						.foregroundStyle(.secondary))
+					.foregroundStyle(.red)
+			}
 		}
 	}
 }

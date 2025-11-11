@@ -128,7 +128,7 @@ struct TableView: View {
 				ToolbarItem(placement: .topBarTrailing) {
 					Slider(
 						value: $scale,
-						in: 0.5 ... 2.0,
+						in: 0.5 ... 1.5,
 						neutralValue: 1,
 						label: {
 							Text("Zoom")
@@ -143,7 +143,7 @@ struct TableView: View {
 
 						},
 						maximumValueLabel: {
-							Text("2.0×")
+							Text("1.5×")
 								.monospaced()
 								.font(.caption)
 						}

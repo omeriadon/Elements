@@ -56,7 +56,3 @@ struct TabItem {
 	let symbol: String
 	let view: AnyView
 }
-
-#Preview {
-	ContentView(elements: loadElements())
-}
