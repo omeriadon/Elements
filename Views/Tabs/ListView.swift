@@ -23,6 +23,14 @@ struct ListView: View {
 	@State var selectedPeriod: Int?
 	@State var selectedBlock: Block?
 
+	@State var hasBeenReset = false
+
+	@Environment(\.colorScheme) private var scheme
+
+	var adaptiveColor: Color {
+		scheme == .dark ? .black : .white
+	}
+
 	var filteredElements: [Element] {
 		var result = elements
 
@@ -174,11 +182,24 @@ struct ListView: View {
 			}
 			.pickerStyle(.navigationLink)
 			.padding(10)
-			.glassEffect(.regular.interactive())
+			.glassEffect(.clear.interactive())
 			.fixedSize()
 			.contentShape(Rectangle())
 		}
 		.foregroundStyle(.primary)
+		.background {
+			adaptiveColor
+				.clipShape(
+					UnevenRoundedRectangle(
+						topLeadingRadius: 40,
+						bottomLeadingRadius: 40,
+						bottomTrailingRadius: 0,
+						topTrailingRadius: 0
+					)
+				)
+				.offset(x: 10)
+				.blur(radius: 30)
+		}
 	}
 
 	var body: some View {
@@ -193,7 +214,7 @@ struct ListView: View {
 						.padding(.bottom)
 						.padding(.trailing)
 				}
-				.onChange(of: filteredElements) { _, _ in
+				.onChange(of: filteredElements) {
 					if filteredElements.count == 1 {
 						selectedElement = filteredElements.first
 					}
@@ -204,19 +225,42 @@ struct ListView: View {
 							.monospaced()
 					}
 
-					ToolbarItem(placement: .primaryAction) {
+					ToolbarItem(placement: .topBarTrailing) {
 						Button {
 							selectedCategory = nil
-
 							selectedPhase = nil
-
 							selectedGroup = nil
-
 							selectedPeriod = nil
-
 							selectedBlock = nil
+
+							withAnimation {
+								hasBeenReset = true
+							}
 						} label: {
-							Label("Reset Filters", systemImage: "arrow.circlepath")
+							Group {
+								if !hasBeenReset {
+									Label("Reset", systemImage: "arrow.circlepath")
+										.animation(
+											.easeInOut,
+											value: hasBeenReset
+										)
+								} else {
+									Label("Filters Reset", systemImage: "checkmark")
+										.animation(
+											.easeInOut,
+											value: hasBeenReset
+										)
+								}
+							}
+							.transition(.blurReplace)
+							.onChange(of: hasBeenReset) {
+								DispatchQueue.main
+									.asyncAfter(deadline: .now() + 4) {
+										withAnimation {
+											hasBeenReset = false
+										}
+									}
+							}
 						}
 					}
 				}

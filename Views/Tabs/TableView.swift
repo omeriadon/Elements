@@ -113,6 +113,7 @@ struct TableView: View {
 			}
 			.scaleEffect(scale)
 		}
+		.scrollIndicators(.hidden)
 	}
 
 	var body: some View {
