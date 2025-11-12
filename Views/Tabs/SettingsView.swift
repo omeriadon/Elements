@@ -331,7 +331,7 @@ struct SettingsView: View {
 					Label("Visibility", systemImage: "circle.lefthalf.filled")
 				}
 			}
-			.listStyle(.sidebar)
+
 			.toolbar {
 				ToolbarItem(placement: .title) {
 					Label("Settings", systemImage: "gearshape")
@@ -348,12 +348,10 @@ struct SettingsView: View {
 
 	var visibility: some View {
 		List {
-			// Shells
 			Section(header: Text("Shells")) {
 				Toggle("Shells (graphic)", isOn: $showSectionShells)
 			}
 
-			// Atomic Structure
 			Section(header: Text("Atomic Structure")) {
 				Toggle("Atomic Structure", isOn: $showSectionAtomic)
 				DisclosureGroup("Rows") {
@@ -366,7 +364,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Thermodynamics
 			Section(header: Text("Thermodynamics")) {
 				Toggle("Thermodynamics", isOn: $showSectionThermo)
 				DisclosureGroup("Rows") {
@@ -385,7 +382,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Classification
 			Section(header: Text("Classification")) {
 				Toggle("Classification", isOn: $showSectionClassification)
 				DisclosureGroup("Rows") {
@@ -400,7 +396,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Mechanical
 			Section(header: Text("Mechanical")) {
 				Toggle("Mechanical", isOn: $showSectionMechanical)
 				DisclosureGroup("Rows") {
@@ -419,7 +414,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Magnetic
 			Section(header: Text("Magnetic")) {
 				Toggle("Magnetic", isOn: $showSectionMagnetic)
 				DisclosureGroup("Rows") {
@@ -430,7 +424,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Electrical
 			Section(header: Text("Electrical")) {
 				Toggle("Electrical", isOn: $showSectionElectrical)
 				DisclosureGroup("Rows") {
@@ -444,7 +437,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Crystal
 			Section(header: Text("Crystal")) {
 				Toggle("Crystal", isOn: $showSectionCrystal)
 				DisclosureGroup("Rows") {
@@ -456,7 +448,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Nuclear
 			Section(header: Text("Nuclear")) {
 				Toggle("Nuclear", isOn: $showSectionNuclear)
 				DisclosureGroup("Rows") {
@@ -470,7 +461,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Other
 			Section(header: Text("Other")) {
 				Toggle("Other", isOn: $showSectionOther)
 				DisclosureGroup("Rows") {
@@ -488,7 +478,6 @@ struct SettingsView: View {
 				}
 			}
 
-			// Info
 			Section(header: Text("Info")) {
 				Toggle("Info", isOn: $showSectionInfo)
 				DisclosureGroup("Rows") {
@@ -497,6 +486,5 @@ struct SettingsView: View {
 				}
 			}
 		}
-		.listStyle(.sidebar)
 	}
 }

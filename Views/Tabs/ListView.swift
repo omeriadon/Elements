@@ -68,134 +68,134 @@ struct ListView: View {
 	}
 
 	var main: some View {
-		GlassEffectContainer {
-			ScrollView {
-				LazyVStack(spacing: 8) {
-					ForEach(filteredElements) { element in
-						Button {
-							selectedElement = element
-						} label: {
-							HStack {
-								Text(element.symbol)
-									.font(.title2)
-									.foregroundStyle(element.series.themeColor)
-									.fontDesign(.monospaced)
-									.bold()
-									.padding(.trailing)
-								Text(element.atomicNumber.description)
-									.foregroundStyle(.tertiary)
-									.fontDesign(.monospaced)
-								Spacer()
-								Text(element.name)
-									.font(.title3)
-									.fontDesign(.monospaced)
-							}
-							.padding(.horizontal)
-							.padding(.vertical, 10)
-							.background(.ultraThickMaterial)
-							.clipShape(Capsule())
+		ScrollView {
+			LazyVStack(spacing: 8) {
+				ForEach(filteredElements) { element in
+					Button {
+						selectedElement = element
+					} label: {
+						HStack {
+							Text(element.symbol)
+								.font(.title2)
+								.foregroundStyle(element.series.themeColor)
+								.fontDesign(.monospaced)
+								.bold()
+								.padding(.trailing)
+							Text(element.atomicNumber.description)
+								.foregroundStyle(.tertiary)
+								.fontDesign(.monospaced)
+							Spacer()
+							Text(element.name)
+								.font(.title3)
+								.fontDesign(.monospaced)
 						}
-						.buttonStyle(.plain)
-						.transition(.blurReplace)
+						.padding(.horizontal)
+						.padding(.vertical, 10)
+						.background(.ultraThickMaterial)
+						.clipShape(Capsule())
 					}
+					.buttonStyle(.plain)
+					.transition(.blurReplace)
 				}
-				.animation(.spring(response: 0.35, dampingFraction: 0.8), value: filteredElements)
-				.padding(.horizontal)
 			}
+			.animation(.spring(response: 0.35, dampingFraction: 0.8), value: filteredElements)
+			.padding(.horizontal)
 		}
 	}
 
 	var filters: some View {
 		VStack(alignment: .trailing, spacing: 8) {
-			Group {
-				Picker(selection: $selectedCategory) {
-					Text("All").tag(nil as Category?)
-					ForEach(Category.allCases, id: \.self) { category in
-						Label(category.rawValue.capitalized, systemImage: category.symbol)
-							.foregroundStyle(category.themeColor)
-							.tag(category as Category?)
+			GlassEffectContainer {
+				Group {
+					Picker(selection: $selectedCategory) {
+						Text("All").tag(nil as Category?)
+						ForEach(Category.allCases, id: \.self) { category in
+							Label(category.rawValue.capitalized, systemImage: category.symbol)
+								.foregroundStyle(category.themeColor)
+								.tag(category as Category?)
+						}
+					} label: {
+						if selectedCategory == nil {
+							Label("Category", systemImage: "line.3.horizontal.decrease.circle")
+								.foregroundStyle(.secondary)
+						}
 					}
-				} label: {
-					if selectedCategory == nil {
-						Label("Category", systemImage: "line.3.horizontal.decrease.circle")
-							.foregroundStyle(.secondary)
-					}
-				}
-				.animation(.easeInOut, value: selectedCategory)
+					.animation(.easeInOut, value: selectedCategory)
 
-				Picker(selection: $selectedPhase) {
-					Text("All").tag(nil as ElementPhase?)
-					ForEach(ElementPhase.allCases, id: \.self) { phase in
-						Label(phase.rawValue, systemImage: phase.symbol)
-							.foregroundStyle(phase.colour)
-							.tag(phase as ElementPhase?)
+					Picker(selection: $selectedPhase) {
+						Text("All").tag(nil as ElementPhase?)
+						ForEach(ElementPhase.allCases, id: \.self) { phase in
+							Label(phase.rawValue, systemImage: phase.symbol)
+								.foregroundStyle(phase.colour)
+								.tag(phase as ElementPhase?)
+						}
+					} label: {
+						if selectedPhase == nil {
+							Label("Phase", systemImage: "circle.dotted")
+								.foregroundStyle(.secondary)
+						}
 					}
-				} label: {
-					if selectedPhase == nil {
-						Label("Phase", systemImage: "circle.dotted")
-							.foregroundStyle(.secondary)
-					}
-				}
-				.animation(.easeInOut, value: selectedPhase)
+					.animation(.easeInOut, value: selectedPhase)
 
-				Picker(selection: $selectedGroup) {
-					Text("All").tag(nil as Int?)
-					ForEach(1 ... 18, id: \.self) { group in
-						Label("Group \(group)",
-						      systemImage: group.description + ".circle")
-							.foregroundStyle(colourForGroup(group))
-							.tag(group as Int?)
+					Picker(selection: $selectedGroup) {
+						Text("All").tag(nil as Int?)
+						ForEach(1 ... 18, id: \.self) { group in
+							Label("Group \(group)",
+							      systemImage: group.description + ".circle")
+								.foregroundStyle(colourForGroup(group))
+								.tag(group as Int?)
+						}
+					} label: {
+						if selectedGroup == nil {
+							Label("Group", systemImage: "chevron.up.chevron.down")
+								.foregroundStyle(.secondary)
+						}
 					}
-				} label: {
-					if selectedGroup == nil {
-						Label("Group", systemImage: "chevron.up.chevron.down")
-							.foregroundStyle(.secondary)
-					}
-				}
-				.animation(.easeInOut, value: selectedGroup)
+					.animation(.easeInOut, value: selectedGroup)
 
-				Picker(selection: $selectedPeriod) {
-					Text("All").tag(nil as Int?)
-					ForEach(1 ... 7, id: \.self) { period in
-						Label(
-							"Period \(period)",
-							systemImage: period.description + ".square"
-						)
-						.foregroundStyle(colourForPeriod(period))
-						.tag(period as Int?)
+					Picker(selection: $selectedPeriod) {
+						Text("All").tag(nil as Int?)
+						ForEach(1 ... 7, id: \.self) { period in
+							Label(
+								"Period \(period)",
+								systemImage: period.description + ".square"
+							)
+							.foregroundStyle(colourForPeriod(period))
+							.tag(period as Int?)
+						}
+					} label: {
+						if selectedPeriod == nil {
+							Label("Period", systemImage: "chevron.left.chevron.right")
+								.foregroundStyle(.secondary)
+						}
 					}
-				} label: {
-					if selectedPeriod == nil {
-						Label("Period", systemImage: "chevron.left.chevron.right")
-							.foregroundStyle(.secondary)
-					}
-				}
-				.animation(.easeInOut, value: selectedPeriod)
+					.animation(.easeInOut, value: selectedPeriod)
 
-				Picker(selection: $selectedBlock) {
-					Text("All").tag(nil as Block?)
-					ForEach(Block.allCases, id: \.self) { block in
-						Label(block.name.capitalized, systemImage: block.symbol)
-							.foregroundStyle(block.colour)
-							.tag(block as Block?)
+					Picker(selection: $selectedBlock) {
+						Text("All").tag(nil as Block?)
+						ForEach(Block.allCases, id: \.self) { block in
+							Label(block.name.capitalized, systemImage: block.symbol)
+								.foregroundStyle(block.colour)
+								.tag(block as Block?)
+						}
+					} label: {
+						if selectedBlock == nil {
+							Label("Block", systemImage: "square.grid.2x2")
+								.foregroundStyle(.secondary)
+						}
 					}
-				} label: {
-					if selectedBlock == nil {
-						Label("Block", systemImage: "square.grid.2x2")
-							.foregroundStyle(.secondary)
-					}
+					.animation(.easeInOut, value: selectedBlock)
 				}
-				.animation(.easeInOut, value: selectedBlock)
+				.pickerStyle(.navigationLink)
+				.padding(10)
+				.glassEffect(
+					.regular
+						.interactive()
+				)
+				.fixedSize()
+				.contentShape(Rectangle())
+				.foregroundStyle(.primary)
 			}
-			.pickerStyle(.navigationLink)
-			.padding(10)
-			.glassEffect(
-				.regular
-					.interactive()
-			)
-			.fixedSize()
-			.contentShape(Rectangle())
-			.foregroundStyle(.primary)
 		}
 		.background(Color.clear)
 		.contentShape(Rectangle())

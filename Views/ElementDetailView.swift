@@ -14,7 +14,6 @@ struct ElementDetailView: View {
 
 	@State var isCopied = false
 
-	// Section-level toggles
 	@AppStorage("show_section_shells") private var showSectionShells: Bool = true
 	@AppStorage("show_section_atomicStructure") private var showSectionAtomic: Bool = true
 	@AppStorage("show_section_thermoDynamic") private var showSectionThermo: Bool = true
@@ -27,7 +26,7 @@ struct ElementDetailView: View {
 	@AppStorage("show_section_other") private var showSectionOther: Bool = true
 	@AppStorage("show_section_info") private var showSectionInfo: Bool = true
 
-	// Atomic Structure rows
+	// Atomic
 	@AppStorage("show_atomic_mass") private var showAtomicMass: Bool = true
 	@AppStorage("show_valence_electrons") private var showValenceElectrons: Bool = true
 	@AppStorage("show_electron_configuration") private var showElectronConfiguration: Bool = true
@@ -35,7 +34,7 @@ struct ElementDetailView: View {
 	@AppStorage("show_quantum_numbers") private var showQuantumNumbers: Bool = true
 	@AppStorage("show_oxidation_states") private var showOxidationStates: Bool = true
 
-	// Thermo rows
+	// Thermal
 	@AppStorage("show_melting_point") private var showMeltingPoint: Bool = true
 	@AppStorage("show_boiling_point") private var showBoilingPoint: Bool = true
 	@AppStorage("show_critical_temperature") private var showCriticalTemperature: Bool = true
@@ -49,7 +48,7 @@ struct ElementDetailView: View {
 	@AppStorage("show_heat_of_vaporization") private var showHeatOfVaporization: Bool = true
 	@AppStorage("show_molar_heat_capacity") private var showMolarHeatCapacity: Bool = true
 
-	// Classification rows
+	// Classification
 	@AppStorage("show_block") private var showBlock: Bool = true
 	@AppStorage("show_group") private var showGroupRow: Bool = true
 	@AppStorage("show_period") private var showPeriod: Bool = true
@@ -59,7 +58,7 @@ struct ElementDetailView: View {
 	@AppStorage("show_dot_numbers") private var showDotNumbers: Bool = true
 	@AppStorage("show_dot_hazard_class") private var showDotHazardClass: Bool = true
 
-	// Mechanical rows
+	// Mechanical
 	@AppStorage("show_shear_modulus") private var showShearModulus: Bool = true
 	@AppStorage("show_young_modulus") private var showYoungModulus: Bool = true
 	@AppStorage("show_standard_density") private var showStandardDensity: Bool = true
@@ -73,13 +72,13 @@ struct ElementDetailView: View {
 	@AppStorage("show_poisson_ratio") private var showPoissonRatio: Bool = true
 	@AppStorage("show_speed_of_sound") private var showSpeedOfSound: Bool = true
 
-	// Magnetic rows
+	// Magnetic
 	@AppStorage("show_magnetic_type") private var showMagneticType: Bool = true
 	@AppStorage("show_magnetic_susceptibility_mass") private var showMagSusMass: Bool = true
 	@AppStorage("show_magnetic_susceptibility_molar") private var showMagSusMolar: Bool = true
 	@AppStorage("show_magnetic_susceptibility_volume") private var showMagSusVolume: Bool = true
 
-	// Electrical rows
+	// Electrical
 	@AppStorage("show_thermal_conductivity") private var showThermalConductivity: Bool = true
 	@AppStorage("show_electrical_conductivity") private var showElectricalConductivity: Bool = true
 	@AppStorage("show_resistivity") private var showResistivity: Bool = true
@@ -88,14 +87,14 @@ struct ElementDetailView: View {
 	@AppStorage("show_electronegativity_pauling") private var showElectronegativityPauling: Bool = true
 	@AppStorage("show_ionization_energies") private var showIonizationEnergies: Bool = true
 
-	// Crystal rows
+	// Crystal
 	@AppStorage("show_crystal_structure") private var showCrystalStructure: Bool = true
 	@AppStorage("show_lattice_angles") private var showLatticeAngles: Bool = true
 	@AppStorage("show_lattice_constants") private var showLatticeConstants: Bool = true
 	@AppStorage("show_space_group_name") private var showSpaceGroupName: Bool = true
 	@AppStorage("show_space_group_number") private var showSpaceGroupNumber: Bool = true
 
-	// Nuclear rows
+	// Nuclear
 	@AppStorage("show_known_isotopes") private var showKnownIsotopes: Bool = true
 	@AppStorage("show_isotopic_abundances") private var showIsotopicAbundances: Bool = true
 	@AppStorage("show_half_life") private var showHalfLife: Bool = true
@@ -104,7 +103,7 @@ struct ElementDetailView: View {
 	@AppStorage("show_neutron_cross_section") private var showNeutronCrossSection: Bool = true
 	@AppStorage("show_neutron_mass_absorption") private var showNeutronMassAbsorption: Bool = true
 
-	// Other rows
+	// Other
 	@AppStorage("show_abundance") private var showAbundance: Bool = true
 	@AppStorage("show_adiabatic_index") private var showAdiabaticIndex: Bool = true
 	@AppStorage("show_energy_levels") private var showEnergyLevels: Bool = true
@@ -117,7 +116,7 @@ struct ElementDetailView: View {
 	@AppStorage("show_refractive_index") private var showRefractiveIndex: Bool = true
 	@AppStorage("show_allotropes") private var showAllotropes: Bool = true
 
-	// Info rows
+	// Info
 	@AppStorage("show_summary") private var showSummary: Bool = true
 	@AppStorage("show_source") private var showSourceRow: Bool = true
 
@@ -126,10 +125,8 @@ struct ElementDetailView: View {
 			GeometryReader { geometry in
 				ScrollView(.vertical) {
 					VStack(alignment: .center, spacing: 30) {
-						// Header always shown
 						header
 
-						// Build visible sections and place dividers correctly
 						let sections = visibleSectionViews()
 
 						if !sections.isEmpty {
@@ -181,14 +178,11 @@ struct ElementDetailView: View {
 		}
 	}
 
-	// MARK: - Build visible sections array (only put sections with content)
-
 	private func visibleSectionViews() -> [AnyView] {
 		var result: [AnyView] = []
 
 		// shells
 		if showSectionShells {
-			// shells has content (no per-row toggles inside it)
 			result.append(AnyView(shells))
 		}
 
@@ -244,8 +238,6 @@ struct ElementDetailView: View {
 
 		return result
 	}
-
-	// MARK: - Section visibility checks (ensure at least one row exists & is allowed)
 
 	private var atomicStructureHasVisibleRow: Bool {
 		return showAtomicMass ||
@@ -340,7 +332,6 @@ struct ElementDetailView: View {
 	}
 
 	private var otherHasVisibleRow: Bool {
-		// abundance always exists as enum; but hide if user disabled
 		return showAbundance ||
 			(showAdiabaticIndex && element.adiabaticIndex != nil) ||
 			showEnergyLevels ||
@@ -357,8 +348,6 @@ struct ElementDetailView: View {
 	private var infoHasVisibleRow: Bool {
 		return (showSummary && !element.summary.isEmpty) || (showSourceRow && !element.source.isEmpty)
 	}
-
-	// MARK: - The original subviews (rows inside are gated by their @AppStorage flags)
 
 	var header: some View {
 		VStack(spacing: 15) {
