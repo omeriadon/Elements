@@ -10,8 +10,8 @@ import SwiftUI
 enum OnboardingPage: String, Identifiable, CaseIterable {
 	case welcome
 	case tableView
-	case settingsView
 	case listView
+	case settingsView
 
 	var id: String { rawValue }
 
@@ -31,7 +31,7 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 	var symbol: String {
 		switch self {
 		case .welcome:
-			""
+			"figure.wave"
 		case .tableView:
 			"atom"
 		case .settingsView:
@@ -45,6 +45,8 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 }
 
 struct IntroWelcomeView: View {
+	var onContinue: () -> Void
+
 	@Environment(\.colorScheme) var colorScheme
 
 	var appIcon: String {
@@ -57,33 +59,92 @@ struct IntroWelcomeView: View {
 	}
 
 	var body: some View {
-		Image(appIcon)
-			.resizable()
-			.frame(width: 200, height: 200)
+		VStack(spacing: 15) {
+			Image(appIcon)
+				.resizable()
+				.frame(width: 200, height: 200)
+			Text("Elements")
+				.font(.largeTitle.bold().monospaced())
+				.padding(.bottom, 7)
+				.foregroundStyle(.tint)
+			Text("Detailed interactive periodic table in your pocket.")
+			Spacer()
+
+			Button {
+				onContinue()
+			} label: {
+				Label("Go", systemImage: "arrow.right")
+			}
+			.font(.title)
+			.padding()
+			.labelStyle(.titleAndIcon)
+			.glassEffect(.clear.tint(.accentColor).interactive())
+			.foregroundStyle(.white)
+		}
 	}
 }
 
 struct IntroTableView: View {
-	var body: some View {
-		Image("icon")
-			.resizable()
-			.frame(width: 200, height: 200)
-	}
-}
+	var onContinue: () -> Void
 
-struct IntroSettingsView: View {
 	var body: some View {
-		Image("icon")
-			.resizable()
-			.frame(width: 200, height: 200)
+		VStack {
+			Text("view of table")
+			Spacer()
+			Button {
+				onContinue()
+			} label: {
+				Label("Continue", systemImage: "arrow.right")
+			}
+			.font(.title)
+			.padding()
+			.labelStyle(.titleAndIcon)
+			.glassEffect(.clear.tint(.accentColor).interactive())
+			.foregroundStyle(.white)
+		}
 	}
 }
 
 struct IntroListView: View {
+	var onContinue: () -> Void
+
 	var body: some View {
-		Image("icon")
-			.resizable()
-			.frame(width: 200, height: 200)
+		VStack {
+			Text("list view here")
+
+			Spacer()
+			Button {
+				onContinue()
+			} label: {
+				Label("Continue", systemImage: "arrow.right")
+			}
+			.font(.title)
+			.padding()
+			.labelStyle(.titleAndIcon)
+			.glassEffect(.clear.tint(.accentColor).interactive())
+			.foregroundStyle(.white)
+		}
+	}
+}
+
+struct IntroSettingsView: View {
+	var onContinue: () -> Void
+
+	var body: some View {
+		VStack {
+			Text("settings view here")
+			Spacer()
+			Button {
+				onContinue()
+			} label: {
+				Label("Done", systemImage: "checkmark")
+			}
+			.font(.title)
+			.padding()
+			.labelStyle(.titleAndIcon)
+			.glassEffect(.clear.tint(.accentColor).interactive())
+			.foregroundStyle(.white)
+		}
 	}
 }
 
@@ -91,87 +152,102 @@ struct IntroView: View {
 	private let pages = OnboardingPage.allCases
 	@State private var currentPage: OnboardingPage = .welcome
 
-	@State private var position: ScrollPosition = .init(idType: OnboardingPage.ID.self)
-
-	@State private var showButton = false
-
 	private func scrollToPage(_ page: OnboardingPage, proxy: ScrollViewProxy?) {
 		withAnimation {
 			proxy?.scrollTo(page.id, anchor: .center)
 			currentPage = page
-			showButton = false
-			DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-				withAnimation { showButton = true }
-			}
 		}
 	}
 
+	@Binding var appHasOpenedBefore: Bool
+
 	var body: some View {
-		NavigationStack {
-			ScrollView([.horizontal]) {
+		GeometryReader { geometry in
+			ScrollView(.horizontal) {
 				ScrollViewReader { proxy in
-					ForEach(pages) { page in
-						GeometryReader { geometry in
-							Group {
+					HStack(spacing: 0) {
+						ForEach(pages) { page in
+							VStack {
 								switch page {
 								case .welcome:
-									IntroWelcomeView()
+									NavigationStack {
+										IntroWelcomeView {
+											withAnimation { proxy.scrollTo(OnboardingPage.tableView.id, anchor: .center) }
+										}
+										.toolbar {
+											ToolbarItem(placement: .title) {
+												Label(
+													page.name,
+													systemImage: page.symbol
+												)
+												.monospaced()
+												.labelStyle(.titleAndIcon)
+												.font(.title)
+											}
+										}
+									}
 
 								case .tableView:
-									IntroTableView()
-
-								case .settingsView:
-									IntroSettingsView()
+									NavigationStack {
+										IntroTableView {
+											withAnimation { proxy.scrollTo(OnboardingPage.listView.id, anchor: .center) }
+										}
+										.toolbar {
+											ToolbarItem(placement: .title) {
+												Label(
+													page.name,
+													systemImage: page.symbol
+												)
+												.monospaced()
+												.labelStyle(.titleAndIcon)
+												.font(.title)
+											}
+										}
+									}
 
 								case .listView:
-									IntroListView()
-								}
-							}
-							.id(page.id)
-							.frame(width: geometry.size.width)
-						}
-						.toolbar {
-							ToolbarItem(placement: .title) {
-								Label(page.name, systemImage: page.symbol)
-									.monospaced()
-									.labelStyle(.titleAndIcon)
-							}
-
-							ToolbarItem(placement: .topBarTrailing) {
-								Group {
-									if showButton {
-										switch currentPage {
-										case .welcome:
-											Button { scrollToPage(.tableView, proxy: proxy) } label: {
-												Image(systemName: "arrow.right")
+									NavigationStack {
+										IntroListView {
+											withAnimation { proxy.scrollTo(OnboardingPage.settingsView.id, anchor: .center) }
+										}
+										.toolbar {
+											ToolbarItem(placement: .title) {
+												Label(
+													page.name,
+													systemImage: page.symbol
+												)
+												.monospaced()
+												.labelStyle(.titleAndIcon)
+												.font(.title)
 											}
+										}
+									}
 
-										case .tableView:
-											Button { scrollToPage(.listView, proxy: proxy) } label: {
-												Image(systemName: "arrow.right")
-											}
-
-										case .listView:
-											Button { scrollToPage(.settingsView, proxy: proxy) } label: {
-												Image(systemName: "arrow.right")
-											}
-
-										case .settingsView:
-											Button { scrollToPage(.welcome, proxy: proxy) } label: {
-												Image(systemName: "arrow.right")
+								case .settingsView:
+									NavigationStack {
+										IntroSettingsView {
+											appHasOpenedBefore = true
+										}
+										.toolbar {
+											ToolbarItem(placement: .title) {
+												Label(
+													page.name,
+													systemImage: page.symbol
+												)
+												.monospaced()
+												.labelStyle(.titleAndIcon)
+												.font(.title)
 											}
 										}
 									}
 								}
-								.foregroundStyle(.primary)
 							}
+							.frame(width: geometry.size.width)
 						}
 					}
-					.containerRelativeFrame([.horizontal])
 					.scrollTargetLayout()
 				}
 			}
-			.scrollPosition($position)
 			.scrollTargetBehavior(.viewAligned)
 			.scrollIndicators(.hidden)
 			.scrollDisabled(true)

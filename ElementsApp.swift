@@ -22,9 +22,16 @@ struct ElementsApp: App {
 			if let elementsSafe = elements {
 				ContentView(elements: elementsSafe)
 					.sheet(isPresented: .constant(showSheet)) {
-						IntroView()
-							.interactiveDismissDisabled()
-							.presentationDragIndicator(.hidden)
+						IntroView(appHasOpenedBefore: Binding(
+							get: {
+								appHasOpenedBefore
+							},
+							set: {
+								appHasOpenedBefore = $0
+							}
+						))
+						.interactiveDismissDisabled()
+						.presentationDragIndicator(.hidden)
 					}
 			} else {
 				ContentUnavailableView("Corrupted Data", systemImage: "exclamationmark.triangle.fill", description:

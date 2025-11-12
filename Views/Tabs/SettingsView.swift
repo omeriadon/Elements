@@ -130,6 +130,8 @@ struct SettingsView: View {
 	@AppStorage("show_summary") private var showSummary: Bool = true
 	@AppStorage("show_source") private var showSourceRow: Bool = true
 
+	@AppStorage("appHasOpenedBefore") var appHasOpenedBefore: Bool = false
+
 	private var settingsSections: [SectionSetting] {
 		[
 			SectionSetting(
@@ -312,23 +314,13 @@ struct SettingsView: View {
 			List {
 				NavigationLink {
 					visibility
-						.toolbar {
-							ToolbarItem(placement: .title) {
-								Label("Visibility", systemImage: "circle.lefthalf.filled")
-									.labelStyle(.titleAndIcon)
-									.monospaced()
-							}
-							ToolbarItem(placement: .primaryAction) {
-								Button(action: {
-									setAll(!allEnabled)
-								}) {
-									Label(allEnabled ? "Disable All" : "Enable All",
-									      systemImage: allEnabled ? "eye.slash" : "eye")
-								}
-							}
-						}
 				} label: {
 					Label("Visibility", systemImage: "circle.lefthalf.filled")
+				}
+				NavigationLink {
+					onboarding
+				} label: {
+					Label("Onboarding", systemImage: "figure.wave")
 				}
 			}
 
@@ -344,6 +336,23 @@ struct SettingsView: View {
 
 	private var allEnabled: Bool {
 		allBindings.allSatisfy { $0.wrappedValue }
+	}
+
+	var onboarding: some View {
+		List {
+			Button {
+				appHasOpenedBefore = false
+			} label: {
+				Label("Reopen Onboarding", systemImage: "hand.wave")
+			}
+			.toolbar {
+				ToolbarItem(placement: .title) {
+					Label("Onboarding", systemImage: "figure.wave")
+						.labelStyle(.titleAndIcon)
+						.monospaced()
+				}
+			}
+		}
 	}
 
 	var visibility: some View {
@@ -483,6 +492,21 @@ struct SettingsView: View {
 				DisclosureGroup("Rows") {
 					Toggle("Summary", isOn: $showSummary)
 					Toggle("Source", isOn: $showSourceRow)
+				}
+			}
+		}
+		.toolbar {
+			ToolbarItem(placement: .title) {
+				Label("Visibility", systemImage: "circle.lefthalf.filled")
+					.labelStyle(.titleAndIcon)
+					.monospaced()
+			}
+			ToolbarItem(placement: .primaryAction) {
+				Button(action: {
+					setAll(!allEnabled)
+				}) {
+					Label(allEnabled ? "Disable All" : "Enable All",
+					      systemImage: allEnabled ? "eye.slash" : "eye")
 				}
 			}
 		}
