@@ -11,10 +11,21 @@ import SwiftUI
 struct ElementsApp: App {
 	let elements: [Element]? = loadElements()
 
+	@AppStorage("appHasOpenedBefore") var appHasOpenedBefore: Bool = false
+
+	var showSheet: Bool {
+		!appHasOpenedBefore
+	}
+
 	var body: some Scene {
 		WindowGroup {
 			if let elementsSafe = elements {
 				ContentView(elements: elementsSafe)
+					.sheet(isPresented: .constant(showSheet)) {
+						IntroView()
+							.interactiveDismissDisabled()
+							.presentationDragIndicator(.hidden)
+					}
 			} else {
 				ContentUnavailableView("Corrupted Data", systemImage: "exclamationmark.triangle.fill", description:
 					Text("Please reinstall the app.")
