@@ -104,8 +104,8 @@ struct ListView: View {
 	}
 
 	var filters: some View {
-		VStack(alignment: .trailing, spacing: 8) {
-			GlassEffectContainer {
+		GlassEffectContainer {
+			VStack(alignment: .trailing, spacing: 8) {
 				Group {
 					Picker(selection: $selectedCategory) {
 						Text("All").tag(nil as Category?)
@@ -222,6 +222,7 @@ struct ListView: View {
 					ToolbarItem(placement: .title) {
 						Label("List", systemImage: "list.bullet")
 							.monospaced()
+							.labelStyle(.titleAndIcon)
 					}
 
 					ToolbarItem(placement: .topBarTrailing) {
