@@ -645,17 +645,15 @@ struct ElementDetailView: View {
 
 	var electrical: some View {
 		VStack(spacing: 20) {
-			if let conductivity = element.conductivity {
-				if showElectricalType, let electricalType = element.electricalType {
-					LeftRight {
-						Text("Electrical Type")
-							.font(.caption)
-							.foregroundStyle(.tertiary)
+			if showElectricalType, let electricalType = element.electricalType {
+				LeftRight {
+					Text("Electrical Type")
+						.font(.caption)
+						.foregroundStyle(.tertiary)
 
-					} right: {
-						Text(electricalType.rawValue.capitalized)
-							.fontDesign(.monospaced)
-					}
+				} right: {
+					Text(electricalType.rawValue.capitalized)
+						.fontDesign(.monospaced)
 				}
 			}
 		}
