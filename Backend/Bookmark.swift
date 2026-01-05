@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Bookmark: Identifiable {
-    var id = UUID()
+	var id = UUID()
 	var elementID: Int
 	var dateAdded: Date
 

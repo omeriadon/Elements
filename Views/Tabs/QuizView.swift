@@ -9,7 +9,7 @@ import SwiftUI
 
 struct QuizView: View {
 	let elements: [Element]
-    var body: some View {
+	var body: some View {
 		Text("Hello, Quiz!")
-    }
+	}
 }

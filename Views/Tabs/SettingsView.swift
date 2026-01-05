@@ -345,23 +345,23 @@ struct SettingsView: View {
 			} label: {
 				Label("Reopen Onboarding", systemImage: "hand.wave")
 			}
-			.toolbar {
-				ToolbarItem(placement: .title) {
-					Label("Onboarding", systemImage: "figure.wave")
-						.labelStyle(.titleAndIcon)
-						.monospaced()
-				}
+		}
+		.toolbar {
+			ToolbarItem(placement: .title) {
+				Label("Onboarding", systemImage: "figure.wave")
+					.labelStyle(.titleAndIcon)
+					.monospaced()
 			}
 		}
 	}
 
 	var visibility: some View {
 		List {
-			Section(header: Text("Shells")) {
+			Section {
 				Toggle("Shells (graphic)", isOn: $showSectionShells)
 			}
 
-			Section(header: Text("Atomic Structure")) {
+			Section {
 				Toggle("Atomic Structure", isOn: $showSectionAtomic)
 				DisclosureGroup("Rows") {
 					Toggle("Atomic Mass", isOn: $showAtomicMass)
@@ -373,7 +373,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Thermodynamics")) {
+			Section {
 				Toggle("Thermodynamics", isOn: $showSectionThermo)
 				DisclosureGroup("Rows") {
 					Toggle("Melting Point", isOn: $showMeltingPoint)
@@ -391,7 +391,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Classification")) {
+			Section {
 				Toggle("Classification", isOn: $showSectionClassification)
 				DisclosureGroup("Rows") {
 					Toggle("Block", isOn: $showBlock)
@@ -405,7 +405,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Mechanical")) {
+			Section {
 				Toggle("Mechanical", isOn: $showSectionMechanical)
 				DisclosureGroup("Rows") {
 					Toggle("Shear Modulus", isOn: $showShearModulus)
@@ -423,7 +423,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Magnetic")) {
+			Section {
 				Toggle("Magnetic", isOn: $showSectionMagnetic)
 				DisclosureGroup("Rows") {
 					Toggle("Magnetic Type", isOn: $showMagneticType)
@@ -433,7 +433,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Electrical")) {
+			Section {
 				Toggle("Electrical", isOn: $showSectionElectrical)
 				DisclosureGroup("Rows") {
 					Toggle("Thermal Conductivity", isOn: $showThermalConductivity)
@@ -446,7 +446,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Crystal")) {
+			Section {
 				Toggle("Crystal", isOn: $showSectionCrystal)
 				DisclosureGroup("Rows") {
 					Toggle("Crystal Structure", isOn: $showCrystalStructure)
@@ -457,7 +457,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Nuclear")) {
+			Section {
 				Toggle("Nuclear", isOn: $showSectionNuclear)
 				DisclosureGroup("Rows") {
 					Toggle("Known Isotopes", isOn: $showKnownIsotopes)
@@ -470,7 +470,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Other")) {
+			Section {
 				Toggle("Other", isOn: $showSectionOther)
 				DisclosureGroup("Rows") {
 					Toggle("Abundance", isOn: $showAbundance)
@@ -487,7 +487,7 @@ struct SettingsView: View {
 				}
 			}
 
-			Section(header: Text("Info")) {
+			Section {
 				Toggle("Info", isOn: $showSectionInfo)
 				DisclosureGroup("Rows") {
 					Toggle("Summary", isOn: $showSummary)

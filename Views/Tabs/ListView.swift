@@ -81,6 +81,7 @@ struct ListView: View {
 								.fontDesign(.monospaced)
 								.bold()
 								.padding(.trailing)
+								.frame(width: 30)
 							Text(element.atomicNumber.description)
 								.foregroundStyle(.tertiary)
 								.fontDesign(.monospaced)

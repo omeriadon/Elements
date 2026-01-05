@@ -5,6 +5,7 @@
 //  Created by Adon Omeri on 12/11/2025.
 //
 
+import ColorfulX
 import SwiftUI
 
 enum OnboardingPage: String, Identifiable, CaseIterable {
@@ -17,27 +18,27 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 
 	var name: String {
 		switch self {
-		case .welcome:
-			"Welcome"
-		case .tableView:
-			"Table"
-		case .settingsView:
-			"Settings"
-		case .listView:
-			"List"
+			case .welcome:
+				"Welcome"
+			case .tableView:
+				"Table"
+			case .settingsView:
+				"Settings"
+			case .listView:
+				"List"
 		}
 	}
 
 	var symbol: String {
 		switch self {
-		case .welcome:
-			"figure.wave"
-		case .tableView:
-			"atom"
-		case .settingsView:
-			"gearshape"
-		case .listView:
-			"list.bullet"
+			case .welcome:
+				"figure.wave"
+			case .tableView:
+				"atom"
+			case .settingsView:
+				"gearshape"
+			case .listView:
+				"list.bullet"
 		}
 	}
 
@@ -51,10 +52,10 @@ struct IntroWelcomeView: View {
 
 	var appIcon: String {
 		switch colorScheme {
-		case .dark:
-			"icon-dark"
-		default:
-			"icon-light"
+			case .dark:
+				"icon-dark"
+			default:
+				"icon-light"
 		}
 	}
 
@@ -64,7 +65,9 @@ struct IntroWelcomeView: View {
 				.resizable()
 				.frame(width: 200, height: 200)
 			Text("Elements")
-				.font(.largeTitle.bold().monospaced())
+				.font(.system(size: 50))
+				.monospaced()
+				.fontWeight(.black)
 				.padding(.bottom, 7)
 				.foregroundStyle(.tint)
 			Text("Detailed interactive periodic table in your pocket.")
@@ -169,77 +172,77 @@ struct IntroView: View {
 						ForEach(pages) { page in
 							VStack {
 								switch page {
-								case .welcome:
-									NavigationStack {
-										IntroWelcomeView {
-											withAnimation { proxy.scrollTo(OnboardingPage.tableView.id, anchor: .center) }
-										}
-										.toolbar {
-											ToolbarItem(placement: .title) {
-												Label(
-													page.name,
-													systemImage: page.symbol
-												)
-												.monospaced()
-												.labelStyle(.titleAndIcon)
-												.font(.title)
+									case .welcome:
+										NavigationStack {
+											IntroWelcomeView {
+												withAnimation { proxy.scrollTo(OnboardingPage.tableView.id, anchor: .center) }
+											}
+											.toolbar {
+												ToolbarItem(placement: .title) {
+													Label(
+														page.name,
+														systemImage: page.symbol
+													)
+													.monospaced()
+													.labelStyle(.titleAndIcon)
+													.font(.title)
+												}
 											}
 										}
-									}
 
-								case .tableView:
-									NavigationStack {
-										IntroTableView {
-											withAnimation { proxy.scrollTo(OnboardingPage.listView.id, anchor: .center) }
-										}
-										.toolbar {
-											ToolbarItem(placement: .title) {
-												Label(
-													page.name,
-													systemImage: page.symbol
-												)
-												.monospaced()
-												.labelStyle(.titleAndIcon)
-												.font(.title)
+									case .tableView:
+										NavigationStack {
+											IntroTableView {
+												withAnimation { proxy.scrollTo(OnboardingPage.listView.id, anchor: .center) }
+											}
+											.toolbar {
+												ToolbarItem(placement: .title) {
+													Label(
+														page.name,
+														systemImage: page.symbol
+													)
+													.monospaced()
+													.labelStyle(.titleAndIcon)
+													.font(.title)
+												}
 											}
 										}
-									}
 
-								case .listView:
-									NavigationStack {
-										IntroListView {
-											withAnimation { proxy.scrollTo(OnboardingPage.settingsView.id, anchor: .center) }
-										}
-										.toolbar {
-											ToolbarItem(placement: .title) {
-												Label(
-													page.name,
-													systemImage: page.symbol
-												)
-												.monospaced()
-												.labelStyle(.titleAndIcon)
-												.font(.title)
+									case .listView:
+										NavigationStack {
+											IntroListView {
+												withAnimation { proxy.scrollTo(OnboardingPage.settingsView.id, anchor: .center) }
+											}
+											.toolbar {
+												ToolbarItem(placement: .title) {
+													Label(
+														page.name,
+														systemImage: page.symbol
+													)
+													.monospaced()
+													.labelStyle(.titleAndIcon)
+													.font(.title)
+												}
 											}
 										}
-									}
 
-								case .settingsView:
-									NavigationStack {
-										IntroSettingsView {
-											appHasOpenedBefore = true
-										}
-										.toolbar {
-											ToolbarItem(placement: .title) {
-												Label(
-													page.name,
-													systemImage: page.symbol
-												)
-												.monospaced()
-												.labelStyle(.titleAndIcon)
-												.font(.title)
+									case .settingsView:
+										NavigationStack {
+											IntroSettingsView {
+												appHasOpenedBefore = true
+											}
+											.toolbar {
+												ToolbarItem(placement: .title) {
+													Label(
+														page.name,
+														systemImage: page.symbol
+													)
+													.monospaced()
+													.labelStyle(.titleAndIcon)
+													.font(.title)
+												}
 											}
 										}
-									}
 								}
 							}
 							.frame(width: geometry.size.width)
@@ -254,6 +257,11 @@ struct IntroView: View {
 			.onAppear {
 				scrollToPage(.welcome, proxy: nil)
 			}
+		}
+		.background {
+			ColorfulView(color: .lavandula)
+				.opacity(0.4)
+				.ignoresSafeArea()
 		}
 	}
 }

@@ -63,16 +63,16 @@ struct TableView: View {
 			var column = element.group - 1 + 2
 
 			switch element.series {
-			case .lanthanide:
-				row = 11
-				column = (element.atomicNumber - 57) + 4
+				case .lanthanide:
+					row = 11
+					column = (element.atomicNumber - 57) + 4
 
-			case .actinide:
-				row = 12
-				column = (element.atomicNumber - 89) + 4
+				case .actinide:
+					row = 12
+					column = (element.atomicNumber - 89) + 4
 
-			default:
-				break
+				default:
+					break
 			}
 
 			return PlacedElement(element: element, row: row, column: column)

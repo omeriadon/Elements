@@ -226,39 +226,39 @@ enum Block: String, Codable, CaseIterable, Equatable {
 
 	var name: String {
 		switch self {
-		case .sBlock:
-			"s block"
+			case .sBlock:
+				"s block"
 
-		case .pBlock:
-			"p block"
+			case .pBlock:
+				"p block"
 
-		case .dBlock:
-			"d block"
+			case .dBlock:
+				"d block"
 
-		case .fBlock:
-			"f block"
+			case .fBlock:
+				"f block"
 		}
 	}
 
 	var symbol: String {
 		switch self {
-		case .sBlock:
-			"s.square"
-		case .pBlock:
-			"p.square"
-		case .dBlock:
-			"d.square"
-		case .fBlock:
-			"f.square"
+			case .sBlock:
+				"s.square"
+			case .pBlock:
+				"p.square"
+			case .dBlock:
+				"d.square"
+			case .fBlock:
+				"f.square"
 		}
 	}
 
 	var colour: Color {
 		switch self {
-		case .sBlock: Color(red: 1.0, green: 0.8, blue: 0.6)
-		case .pBlock: Color(red: 0.7, green: 0.9, blue: 0.7)
-		case .dBlock: Color(red: 0.6, green: 0.8, blue: 1.0)
-		case .fBlock: Color(red: 1.0, green: 0.75, blue: 0.5)
+			case .sBlock: Color(red: 1.0, green: 0.8, blue: 0.6)
+			case .pBlock: Color(red: 0.7, green: 0.9, blue: 0.7)
+			case .dBlock: Color(red: 0.6, green: 0.8, blue: 1.0)
+			case .fBlock: Color(red: 1.0, green: 0.75, blue: 0.5)
 		}
 	}
 }
@@ -275,14 +275,14 @@ enum DecayMode: String, Codable {
 
 	var name: String {
 		switch self {
-		case .alphaEmission:
-			"AlphaEmission"
-		case .betaDecay:
-			"BetaDecay"
-		case .betaPlusDecay:
-			"BetaPlusDecay"
-		case .electronCapture:
-			"ElectronCapture"
+			case .alphaEmission:
+				"AlphaEmission"
+			case .betaDecay:
+				"BetaDecay"
+			case .betaPlusDecay:
+				"BetaPlusDecay"
+			case .electronCapture:
+				"ElectronCapture"
 		}
 	}
 }
@@ -304,32 +304,32 @@ enum CrystalStructure: String, Codable {
 
 	var name: String {
 		switch self {
-		case .simpleHexagonal:
-			"Simple Hexagonal"
-		case .simpleCubic:
-			"Simple Cubic"
-		case .bodycenteredCubic:
-			"Body-centered Cubic"
-		case .facecenteredCubic:
-			"Face-centered Cubic"
-		case .facecenteredOrthorhombic:
-			"Face-centered Orthorhombic"
-		case .baseOrthorhombic:
-			"Base Orthorhombic"
-		case .simpleOrthorhombic:
-			"Simple Orthorhombic"
-		case .basecenteredMonoclinic:
-			"Base-centered Monoclinic"
-		case .simpleMonoclinic:
-			"Simple Monoclinic"
-		case .simpleTriclinic:
-			"Simple Triclinic"
-		case .simpleTrigonal:
-			"Simple Trigonal"
-		case .centeredTetragonal:
-			"Centered Tetragonal"
-		case .tetrahedralPacking:
-			"Tetrahedral Packing"
+			case .simpleHexagonal:
+				"Simple Hexagonal"
+			case .simpleCubic:
+				"Simple Cubic"
+			case .bodycenteredCubic:
+				"Body-centered Cubic"
+			case .facecenteredCubic:
+				"Face-centered Cubic"
+			case .facecenteredOrthorhombic:
+				"Face-centered Orthorhombic"
+			case .baseOrthorhombic:
+				"Base Orthorhombic"
+			case .simpleOrthorhombic:
+				"Simple Orthorhombic"
+			case .basecenteredMonoclinic:
+				"Base-centered Monoclinic"
+			case .simpleMonoclinic:
+				"Simple Monoclinic"
+			case .simpleTriclinic:
+				"Simple Triclinic"
+			case .simpleTrigonal:
+				"Simple Trigonal"
+			case .centeredTetragonal:
+				"Centered Tetragonal"
+			case .tetrahedralPacking:
+				"Tetrahedral Packing"
 		}
 	}
 }
@@ -341,12 +341,12 @@ enum ElectricalType: String, Codable {
 
 	var symbol: String {
 		switch self {
-		case .conductor:
-			"bolt.fill"
-		case .insulator:
-			"bolt.slash"
-		case .semiconductor:
-			"bolt"
+			case .conductor:
+				"bolt.fill"
+			case .insulator:
+				"bolt.slash"
+			case .semiconductor:
+				"bolt"
 		}
 	}
 }
@@ -357,10 +357,10 @@ enum GasPhase: String, Codable {
 
 	var symbol: String {
 		switch self {
-		case .diatomic:
-			"circle.grid.2x1"
-		case .monoatomic:
-			"circle"
+			case .diatomic:
+				"circle.grid.2x1"
+			case .monoatomic:
+				"circle"
 		}
 	}
 }
@@ -373,14 +373,14 @@ enum MagneticType: String, Codable {
 
 	var symbol: String {
 		switch self {
-		case .diamagnetic:
-			"arrow.up.left.and.arrow.down.right"
-		case .paramagnetic:
-			"arrow.down.right.and.arrow.up.left"
-		case .ferromagnetic:
-			"arrow.down.right.and.arrow.up.left.square.fill"
-		case .antiferromagnetic:
-			"arrow.up.and.down.and.arrow.left.and.right"
+			case .diamagnetic:
+				"arrow.up.left.and.arrow.down.right"
+			case .paramagnetic:
+				"arrow.down.right.and.arrow.up.left"
+			case .ferromagnetic:
+				"arrow.down.right.and.arrow.up.left.square.fill"
+			case .antiferromagnetic:
+				"arrow.up.and.down.and.arrow.left.and.right"
 		}
 	}
 }
@@ -391,10 +391,10 @@ enum HalfLife: Decodable, Equatable {
 
 	var symbol: String {
 		switch self {
-		case .stable:
-			"checkmark.shield"
-		case .unstable:
-			"exclamationmark.shield"
+			case .stable:
+				"checkmark.shield"
+			case .unstable:
+				"exclamationmark.shield"
 		}
 	}
 
@@ -478,10 +478,10 @@ enum DotNumbers: Decodable {
 
 	var description: String {
 		switch self {
-		case let .single(value):
-			return String(value)
-		case let .multiple(value):
-			return value
+			case let .single(value):
+				return String(value)
+			case let .multiple(value):
+				return value
 		}
 	}
 }
@@ -542,20 +542,20 @@ enum ElementPhase: String, Codable, CaseIterable, Equatable {
 
 	var symbol: String {
 		switch self {
-		case .solid:
-			"cube"
-		case .liquid:
-			"drop"
-		case .gas:
-			"bubbles.and.sparkles"
+			case .solid:
+				"cube"
+			case .liquid:
+				"drop"
+			case .gas:
+				"bubbles.and.sparkles"
 		}
 	}
 
 	var colour: Color {
 		switch self {
-		case .solid: .brown
-		case .liquid: .blue
-		case .gas: .yellow
+			case .solid: .brown
+			case .liquid: .blue
+			case .gas: .yellow
 		}
 	}
 }
@@ -573,38 +573,38 @@ enum Category: String, Codable, CaseIterable, Equatable {
 
 	var themeColor: Color {
 		switch self {
-		case .alkaliMetal:
-			return Color(red: 1.0, green: 107 / 255, blue: 53 / 255)
-		case .alkalineEarthMetal:
-			return Color(red: 126 / 255, green: 217 / 255, blue: 87 / 255)
-		case .transitionMetal:
-			return Color(red: 108 / 255, green: 117 / 255, blue: 125 / 255)
-		case .postTransitionMetal:
-			return Color(red: 176 / 255, green: 183 / 255, blue: 189 / 255)
-		case .metalloid:
-			return Color(red: 155 / 255, green: 89 / 255, blue: 182 / 255)
-		case .nonmetal:
-			return Color(red: 23 / 255, green: 162 / 255, blue: 184 / 255)
-		case .nobleGas:
-			return Color(red: 93 / 255, green: 169 / 255, blue: 1.0)
-		case .lanthanide:
-			return Color(red: 1.0, green: 209 / 255, blue: 102 / 255)
-		case .actinide:
-			return Color(red: 1.0, green: 143 / 255, blue: 163 / 255)
+			case .alkaliMetal:
+				return Color(red: 1.0, green: 107 / 255, blue: 53 / 255)
+			case .alkalineEarthMetal:
+				return Color(red: 126 / 255, green: 217 / 255, blue: 87 / 255)
+			case .transitionMetal:
+				return Color(red: 108 / 255, green: 117 / 255, blue: 125 / 255)
+			case .postTransitionMetal:
+				return Color(red: 176 / 255, green: 183 / 255, blue: 189 / 255)
+			case .metalloid:
+				return Color(red: 155 / 255, green: 89 / 255, blue: 182 / 255)
+			case .nonmetal:
+				return Color(red: 23 / 255, green: 162 / 255, blue: 184 / 255)
+			case .nobleGas:
+				return Color(red: 93 / 255, green: 169 / 255, blue: 1.0)
+			case .lanthanide:
+				return Color(red: 1.0, green: 209 / 255, blue: 102 / 255)
+			case .actinide:
+				return Color(red: 1.0, green: 143 / 255, blue: 163 / 255)
 		}
 	}
 
 	var symbol: String {
 		switch self {
-		case .alkalineEarthMetal: "leaf"
-		case .metalloid: "triangle.lefthalf.filled"
-		case .nonmetal: "leaf.arrow.triangle.circlepath"
-		case .nobleGas: "seal"
-		case .alkaliMetal: "flame"
-		case .postTransitionMetal: "cube"
-		case .transitionMetal: "gearshape"
-		case .lanthanide: "sun.min"
-		case .actinide: "sun.max"
+			case .alkalineEarthMetal: "leaf"
+			case .metalloid: "triangle.lefthalf.filled"
+			case .nonmetal: "leaf.arrow.triangle.circlepath"
+			case .nobleGas: "seal"
+			case .alkaliMetal: "flame"
+			case .postTransitionMetal: "cube"
+			case .transitionMetal: "gearshape"
+			case .lanthanide: "sun.min"
+			case .actinide: "sun.max"
 		}
 	}
 }

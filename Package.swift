@@ -35,9 +35,15 @@ let package = Package(
             appCategory: .education
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/Lakr233/ColorfulX.git", "6.0.1"..<"7.0.0")
+    ],
     targets: [
         .executableTarget(
             name: "AppModule",
+            dependencies: [
+                .product(name: "ColorfulX", package: "colorfulx")
+            ],
             path: "."
         )
     ]
