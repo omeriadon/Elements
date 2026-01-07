@@ -42,72 +42,87 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 		}
 	}
 
+	var description: String {
+		switch self {
+			case .welcome:
+				"Detailed interactive periodic table in your pocket."
+			case .tableView:
+				"Use the table view to move around the periodic table and click on an element to view its details. The slider at the top allows you to zoom between set levels to navigate faster."
+			case .listView:
+				"Use the list view to quickly browse all elements filtered by element category, phase, group period, or block and sorted alphabetically or by atomic number."
+			case .settingsView:
+				"Choose what to show in teh detail view or come back to this intro in settings.."
+		}
+	}
+
+	var imageName: String {
+		switch self {
+			case .welcome:
+				"icon-light"
+			case .tableView:
+				"tableView"
+			case .listView:
+				"listView"
+			case .settingsView:
+				"settingsView"
+		}
+	}
+
 	static let first: Self = .welcome
 }
 
-struct IntroWelcomeView: View {
-	var onContinue: () -> Void
-
+struct IntroPageView: View {
 	@Environment(\.colorScheme) var colorScheme
+	let page: OnboardingPage
+	let onContinue: () -> Void
 
-	var appIcon: String {
-		switch colorScheme {
-			case .dark:
-				"icon-dark"
-			default:
-				"icon-light"
+	var buttonText: String {
+		page == OnboardingPage.allCases.last ? "Done" : (page == .welcome ? "Go" : "Continue")
+	}
+
+	var buttonIcon: String {
+		page == OnboardingPage.allCases.last ? "checkmark" : "arrow.right"
+	}
+
+	var displayImage: String {
+		if page == .welcome {
+			return colorScheme == .dark ? "icon-dark" : "icon-light"
 		}
+		return page.imageName
 	}
 
 	var body: some View {
-		VStack(spacing: 15) {
-			Image(appIcon)
-				.resizable()
-				.frame(width: 200, height: 200)
-			Text("Elements")
-				.font(.system(size: 50))
-				.monospaced()
-				.fontWeight(.black)
-				.padding(.bottom, 7)
-				.foregroundStyle(.tint)
-			Text("Detailed interactive periodic table in your pocket.")
-			Spacer()
+		VStack(spacing: 20) {
+			if page == .welcome {
+				Image(displayImage)
+					.resizable()
+					.aspectRatio(contentMode: .fit)
+					.padding(.horizontal, 40)
 
-			Button {
-				onContinue()
-			} label: {
-				Label("Go", systemImage: "arrow.right")
+				Text("Elements")
+					.font(.system(size: 50))
+					.monospaced()
+					.fontWeight(.black)
+					.padding(.bottom, 7)
+					.foregroundStyle(.tint)
+			} else {
+				Image(displayImage)
+					.resizable()
+					.aspectRatio(contentMode: .fit)
+					.clipShape(RoundedRectangle(cornerRadius: 27))
 			}
-			.font(.title)
-			.padding()
-			.labelStyle(.titleAndIcon)
-			.glassEffect(.clear.tint(.accentColor).interactive())
-			.foregroundStyle(.white)
-		}
-	}
-}
 
-struct IntroTableView: View {
-	var onContinue: () -> Void
-
-	var body: some View {
-		VStack {
-			Image("tableView")
-				.resizable()
-				.aspectRatio(contentMode: .fit)
-				.clipShape(RoundedRectangle(cornerRadius: 27))
-
-			Text("Use the table view to move around the periodic table and click on an element to view its details. The slider at the top allows you to zoom between set levels to navigate faster.")
+			Text(page.description)
 				.multilineTextAlignment(.center)
 				.fixedSize(horizontal: false, vertical: true)
-				.padding()
+				.padding(.horizontal)
 
 			Spacer()
 
 			Button {
 				onContinue()
 			} label: {
-				Label("Continue", systemImage: "arrow.right")
+				Label(buttonText, systemImage: buttonIcon)
 			}
 			.font(.title)
 			.padding()
@@ -115,48 +130,14 @@ struct IntroTableView: View {
 			.glassEffect(.clear.tint(.accentColor).interactive())
 			.foregroundStyle(.white)
 		}
-	}
-}
-
-struct IntroListView: View {
-	var onContinue: () -> Void
-
-	var body: some View {
-		VStack {
-			Spacer()
-			Button {
-				onContinue()
-			} label: {
-				Label("Continue", systemImage: "arrow.right")
+		.padding()
+		.toolbar {
+			ToolbarItem(placement: .title) {
+				Label(page.name, systemImage: page.symbol)
+					.monospaced()
+					.labelStyle(.titleAndIcon)
+					.font(.title)
 			}
-			.font(.title)
-			.padding()
-			.labelStyle(.titleAndIcon)
-			.glassEffect(.clear.tint(.accentColor).interactive())
-			.foregroundStyle(.white)
-		}
-	}
-}
-
-struct IntroSettingsView: View {
-	var onContinue: () -> Void
-
-	var body: some View {
-		VStack {
-			VStack {
-				Image("")
-			}
-			Spacer()
-			Button {
-				onContinue()
-			} label: {
-				Label("Done", systemImage: "checkmark")
-			}
-			.font(.title)
-			.padding()
-			.labelStyle(.titleAndIcon)
-			.glassEffect(.clear.tint(.accentColor).interactive())
-			.foregroundStyle(.white)
 		}
 	}
 }
@@ -164,14 +145,6 @@ struct IntroSettingsView: View {
 struct IntroView: View {
 	private let pages = OnboardingPage.allCases
 	@State private var currentPage: OnboardingPage = .welcome
-
-	private func scrollToPage(_ page: OnboardingPage, proxy: ScrollViewProxy?) {
-		withAnimation {
-			proxy?.scrollTo(page.id, anchor: .center)
-			currentPage = page
-		}
-	}
-
 	@Binding var appHasOpenedBefore: Bool
 
 	var body: some View {
@@ -180,82 +153,13 @@ struct IntroView: View {
 				ScrollViewReader { proxy in
 					HStack(spacing: 0) {
 						ForEach(pages) { page in
-							VStack {
-								switch page {
-									case .welcome:
-										NavigationStack {
-											IntroWelcomeView {
-												withAnimation { proxy.scrollTo(OnboardingPage.tableView.id, anchor: .center) }
-											}
-											.toolbar {
-												ToolbarItem(placement: .title) {
-													Label(
-														page.name,
-														systemImage: page.symbol
-													)
-													.monospaced()
-													.labelStyle(.titleAndIcon)
-													.font(.title)
-												}
-											}
-										}
-
-									case .tableView:
-										NavigationStack {
-											IntroTableView {
-												withAnimation { proxy.scrollTo(OnboardingPage.listView.id, anchor: .center) }
-											}
-											.toolbar {
-												ToolbarItem(placement: .title) {
-													Label(
-														page.name,
-														systemImage: page.symbol
-													)
-													.monospaced()
-													.labelStyle(.titleAndIcon)
-													.font(.title)
-												}
-											}
-										}
-
-									case .listView:
-										NavigationStack {
-											IntroListView {
-												withAnimation { proxy.scrollTo(OnboardingPage.settingsView.id, anchor: .center) }
-											}
-											.toolbar {
-												ToolbarItem(placement: .title) {
-													Label(
-														page.name,
-														systemImage: page.symbol
-													)
-													.monospaced()
-													.labelStyle(.titleAndIcon)
-													.font(.title)
-												}
-											}
-										}
-
-									case .settingsView:
-										NavigationStack {
-											IntroSettingsView {
-												appHasOpenedBefore = true
-											}
-											.toolbar {
-												ToolbarItem(placement: .title) {
-													Label(
-														page.name,
-														systemImage: page.symbol
-													)
-													.monospaced()
-													.labelStyle(.titleAndIcon)
-													.font(.title)
-												}
-											}
-										}
+							NavigationStack {
+								IntroPageView(page: page) {
+									handleNavigation(from: page, proxy: proxy)
 								}
 							}
 							.frame(width: geometry.size.width)
+							.id(page.id)
 						}
 					}
 					.scrollTargetLayout()
@@ -264,9 +168,6 @@ struct IntroView: View {
 			.scrollTargetBehavior(.viewAligned)
 			.scrollIndicators(.hidden)
 			.scrollDisabled(true)
-			.onAppear {
-				scrollToPage(.welcome, proxy: nil)
-			}
 		}
 		.presentationBackground(.background)
 		.background {
@@ -274,6 +175,18 @@ struct IntroView: View {
 				.saturation(2.5)
 				.opacity(0.2)
 				.ignoresSafeArea()
+		}
+	}
+
+	private func handleNavigation(from page: OnboardingPage, proxy: ScrollViewProxy) {
+		if let index = pages.firstIndex(of: page), index < pages.count - 1 {
+			let nextPage = pages[index + 1]
+			withAnimation {
+				proxy.scrollTo(nextPage.id, anchor: .center)
+				currentPage = nextPage
+			}
+		} else {
+			appHasOpenedBefore = true
 		}
 	}
 }

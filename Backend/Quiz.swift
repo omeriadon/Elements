@@ -6,30 +6,45 @@
 //
 
 import Foundation
+import FoundationModels
 
+@Generable
 struct QuizQuestion: Identifiable {
 	let id = UUID()
+
+	@Guide(description: "The question, in sentence question case.")
 	let question: String
+
+	@Guide(description: "the right answer")
 	let correctAnswer: String
-	let options: [String]? // nil for textfield type
+
+	@Guide(description: "the options, only one is correct, make it nil if its a textfield instead of multichoice.")
+	@Guide(.count(4))
+	let options: [String]?
+
 	let type: QuizType
+
 	let format: QuizFormat
+
+	@Guide(description: "easy for first 20 elements, medium for first 50 elements only, hard for all elements.")
 	let difficulty: Difficulty
+
 	let element: Element
 }
 
-enum QuizType: String, Codable {
+@Generable
+enum QuizType: String {
 	case symbolToName, nameToSymbol
 }
 
-enum QuizFormat: String, Codable {
+@Generable
+enum QuizFormat: String {
 	case multipleChoice, textField
 }
 
-enum Difficulty: String, Codable {
-	case easy, medium, hard
-}
-
-enum FilterType: String, Codable {
-	case elementType, stateAt25C, group, period
+@Generable
+enum Difficulty: String {
+	case easy // first 20 elements
+	case medium // first 50 elements
+	case hard // all
 }

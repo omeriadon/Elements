@@ -22,11 +22,6 @@ struct ContentView: View {
 			view: AnyView(QuizView(elements: elements))
 		),
 		TabItem(
-			name: "Help",
-			symbol: "info.circle",
-			view: AnyView(Text("help here"))
-		),
-		TabItem(
 			name: "Settings",
 			symbol: "gear",
 			view: AnyView(SettingsView())
