@@ -61,7 +61,7 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 			case .listView:
 				"Use the list view to quickly browse all elements filtered by element category, phase, group period, or block and sorted alphabetically or by atomic number."
 			case .settingsView:
-				"Choose what to show in teh detail view or come back to this intro in settings.."
+				"Choose what to show in the detail view or come back to this intro in settings.."
 			case .quizView:
 				"Generate and complete a quiz to get marked."
 			case .elementDetailView:
