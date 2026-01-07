@@ -59,17 +59,17 @@ struct TableView: View {
 
 	var positionedElements: [PlacedElement] {
 		elements.map { element in
-			var row = element.period - 1 + 3
-			var column = element.group - 1 + 2
+			var row = element.period + 2
+			var column = element.group + 1
 
 			switch element.series {
 				case .lanthanide:
 					row = 11
-					column = (element.atomicNumber - 57) + 4
+					column = element.atomicNumber - 53
 
 				case .actinide:
 					row = 12
-					column = (element.atomicNumber - 89) + 4
+					column = element.atomicNumber - 85
 
 				default:
 					break
@@ -126,28 +126,19 @@ struct TableView: View {
 			}
 			.toolbar {
 				ToolbarItem(placement: .topBarTrailing) {
-					Slider(
-						value: $scale,
-						in: 0.5 ... 1.5,
-						neutralValue: 1,
-						label: {
-							Text("Zoom")
-						},
-						currentValueLabel: {
-							Text(scale.description + "×")
-						},
-						minimumValueLabel: {
-							Text("0.5×")
-								.monospaced()
-								.font(.caption)
-
-						},
-						maximumValueLabel: {
-							Text("1.5×")
-								.monospaced()
-								.font(.caption)
-						}
-					)
+					Slider(value: $scale, in: 0.5 ... 1.5, step: 0.1, neutralValue: 1, label: {
+						Text("Zoom")
+					}, currentValueLabel: {
+						Text(scale.description + "×")
+					}, minimumValueLabel: {
+						Text("0.5×")
+							.monospaced()
+							.font(.caption)
+					}, maximumValueLabel: {
+						Text("1.5×")
+							.monospaced()
+							.font(.caption)
+					})
 				}
 				.sharedBackgroundVisibility(.hidden)
 			}

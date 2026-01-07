@@ -75,13 +75,15 @@ struct ListView: View {
 						selectedElement = element
 					} label: {
 						HStack {
-							Text(element.symbol)
-								.font(.title2)
-								.foregroundStyle(element.series.themeColor)
-								.fontDesign(.monospaced)
-								.bold()
-								.padding(.trailing)
-								.frame(width: 30)
+							VStack(alignment: .leading) {
+								Text(element.symbol)
+									.font(.title2)
+									.foregroundStyle(element.series.themeColor)
+									.fontDesign(.monospaced)
+									.bold()
+									.padding(.trailing)
+									.frame(width: 55)
+							}
 							Text(element.atomicNumber.description)
 								.foregroundStyle(.tertiary)
 								.fontDesign(.monospaced)
