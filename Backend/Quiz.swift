@@ -9,8 +9,16 @@ import Foundation
 import FoundationModels
 
 @Generable
+struct Quiz {
+	@Guide(.count(10))
+	let questions: [QuizQuestion]
+}
+
+@Generable
 struct QuizQuestion: Identifiable {
 	let id = UUID()
+
+	let format: QuizFormat
 
 	@Guide(description: "The question, in sentence question case.")
 	let question: String
@@ -21,20 +29,6 @@ struct QuizQuestion: Identifiable {
 	@Guide(description: "the options, only one is correct, make it nil if its a textfield instead of multichoice.")
 	@Guide(.count(4))
 	let options: [String]?
-
-	let type: QuizType
-
-	let format: QuizFormat
-
-	@Guide(description: "easy for first 20 elements, medium for first 50 elements only, hard for all elements.")
-	let difficulty: Difficulty
-
-	let element: Element
-}
-
-@Generable
-enum QuizType: String {
-	case symbolToName, nameToSymbol
 }
 
 @Generable
@@ -43,8 +37,23 @@ enum QuizFormat: String {
 }
 
 @Generable
-enum Difficulty: String {
+enum QuizDifficulty: String {
 	case easy // first 20 elements
 	case medium // first 50 elements
 	case hard // all
+
+	func randomFilteredElement(elements: [Element]) -> Element {
+		var filteredElements: [Element] = []
+
+		switch self {
+			case .easy:
+				filteredElements = elements.filter { $0.atomicNumber <= 20 }
+			case .medium:
+				filteredElements = elements.filter { $0.atomicNumber <= 50 }
+			case .hard:
+				filteredElements = elements
+		}
+
+		return filteredElements.randomElement()!
+	}
 }
