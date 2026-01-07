@@ -92,8 +92,18 @@ struct IntroTableView: View {
 
 	var body: some View {
 		VStack {
-			Text("view of table")
+			Image("tableView")
+				.resizable()
+				.aspectRatio(contentMode: .fit)
+				.clipShape(RoundedRectangle(cornerRadius: 27))
+
+			Text("Use the table view to move around the periodic table and click on an element to view its details. The slider at the top allows you to zoom between set levels to navigate faster.")
+				.multilineTextAlignment(.center)
+				.fixedSize(horizontal: false, vertical: true)
+				.padding()
+
 			Spacer()
+
 			Button {
 				onContinue()
 			} label: {
@@ -113,8 +123,6 @@ struct IntroListView: View {
 
 	var body: some View {
 		VStack {
-			Text("list view here")
-
 			Spacer()
 			Button {
 				onContinue()
@@ -135,7 +143,9 @@ struct IntroSettingsView: View {
 
 	var body: some View {
 		VStack {
-			Text("settings view here")
+			VStack {
+				Image("")
+			}
 			Spacer()
 			Button {
 				onContinue()
@@ -258,9 +268,11 @@ struct IntroView: View {
 				scrollToPage(.welcome, proxy: nil)
 			}
 		}
+		.presentationBackground(.background)
 		.background {
 			ColorfulView(color: .lavandula)
-				.opacity(0.4)
+				.saturation(2.5)
+				.opacity(0.2)
 				.ignoresSafeArea()
 		}
 	}
