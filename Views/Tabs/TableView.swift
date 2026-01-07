@@ -45,7 +45,7 @@ struct PlacedElement: Identifiable {
 struct TableView: View {
 	let elements: [Element]
 
-	@State private var scale: CGFloat = 1.0
+	@State private var scale: CGFloat = 0.9
 
 	@State var selectedElement: Element? = nil
 
@@ -111,8 +111,8 @@ struct TableView: View {
 				}
 			}
 			.scaleEffect(scale)
+			.animation(.interpolatingSpring(mass: 0.5, stiffness: 400, damping: 200), value: scale)
 		}
-		.scrollIndicators(.hidden)
 	}
 
 	var body: some View {
@@ -126,16 +126,16 @@ struct TableView: View {
 			}
 			.toolbar {
 				ToolbarItem(placement: .topBarTrailing) {
-					Slider(value: $scale, in: 0.5 ... 1.5, step: 0.1, neutralValue: 1, label: {
+					Slider(value: $scale, in: 0.2 ... 1.6, step: 0.35, neutralValue: 0.9, label: {
 						Text("Zoom")
 					}, currentValueLabel: {
 						Text(scale.description + "×")
 					}, minimumValueLabel: {
-						Text("0.5×")
+						Text("0.2×")
 							.monospaced()
 							.font(.caption)
 					}, maximumValueLabel: {
-						Text("1.5×")
+						Text("1.6×")
 							.monospaced()
 							.font(.caption)
 					})
