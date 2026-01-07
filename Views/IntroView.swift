@@ -12,6 +12,7 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 	case welcome
 	case tableView
 	case listView
+	case quizView
 	case settingsView
 
 	var id: String { rawValue }
@@ -26,6 +27,8 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 				"Settings"
 			case .listView:
 				"List"
+			case .quizView:
+				"Quiz"
 		}
 	}
 
@@ -39,6 +42,8 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 				"gearshape"
 			case .listView:
 				"list.bullet"
+			case .quizView:
+				"questionmark.circle"
 		}
 	}
 
@@ -52,6 +57,8 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 				"Use the list view to quickly browse all elements filtered by element category, phase, group period, or block and sorted alphabetically or by atomic number."
 			case .settingsView:
 				"Choose what to show in teh detail view or come back to this intro in settings.."
+			case .quizView:
+				"Generate and complete a quiz to get marked."
 		}
 	}
 
@@ -65,6 +72,8 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 				"listView"
 			case .settingsView:
 				"settingsView"
+			case .quizView:
+				"quizView"
 		}
 	}
 
