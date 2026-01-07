@@ -95,7 +95,7 @@ struct ListView: View {
 						}
 						.padding(.horizontal)
 						.padding(.vertical, 10)
-						.background(.background)
+						.background(.bar)
 						.clipShape(Capsule())
 					}
 					.buttonStyle(.plain)

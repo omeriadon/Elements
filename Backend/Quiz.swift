@@ -36,8 +36,8 @@ enum QuizFormat: String {
 	case multipleChoice, textField
 }
 
-@Generable
-enum QuizDifficulty: String {
+enum QuizDifficulty: String, CaseIterable, Identifiable {
+	var id: Self { self }
 	case easy // first 20 elements
 	case medium // first 50 elements
 	case hard // all
@@ -54,6 +54,6 @@ enum QuizDifficulty: String {
 				filteredElements = elements
 		}
 
-		return filteredElements.randomElement()!
+		return filteredElements.randomElement() ?? elements.first!
 	}
 }

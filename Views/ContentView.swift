@@ -10,27 +10,29 @@ import SwiftUI
 struct ContentView: View {
 	let elements: [Element]
 
-	var tabs: [TabItem] { [
-		TabItem(
-			name: "Table",
-			symbol: "atom",
-			view: AnyView(TableView(elements: elements))
-		),
-		TabItem(
-			name: "Quiz",
-			symbol: "questionmark.circle",
-			view: AnyView(QuizView(elements: elements))
-		),
-		TabItem(
-			name: "Settings",
-			symbol: "gear",
-			view: AnyView(SettingsView())
-		),
-	] }
+	var tabs: [AppTabItem] {
+		[
+			AppTabItem(
+				name: "Table",
+				symbol: "atom",
+				view: AnyView(TableView(elements: elements))
+			),
+			AppTabItem(
+				name: "Quiz",
+				symbol: "questionmark.circle",
+				view: AnyView(QuizView(elements: elements))
+			),
+			AppTabItem(
+				name: "Settings",
+				symbol: "gear",
+				view: AnyView(SettingsView())
+			),
+		]
+	}
 
 	var body: some View {
 		TabView {
-			ForEach(tabs, id: \.name) { tab in
+			ForEach(tabs) { tab in
 				Tab {
 					tab.view
 				} label: {
@@ -46,7 +48,8 @@ struct ContentView: View {
 	}
 }
 
-struct TabItem {
+struct AppTabItem: Identifiable {
+	var id: String { name }
 	let name: String
 	let symbol: String
 	let view: AnyView
