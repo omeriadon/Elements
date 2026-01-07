@@ -10,6 +10,12 @@ A light, simple, fast periodic table app in SwiftUI
 
 <br>
 
+# Demo
+
+https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
+
+<br>
+
 ## Features
 - Navigateable table
 - List view
