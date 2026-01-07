@@ -25,12 +25,6 @@ struct ListView: View {
 
 	@State private var keyboardVisible = false
 
-	@Environment(\.colorScheme) private var scheme
-
-	var adaptiveColor: Color {
-		scheme == .dark ? .black : .white
-	}
-
 	var filteredElements: [Element] {
 		var result = elements
 
@@ -95,7 +89,7 @@ struct ListView: View {
 						}
 						.padding(.horizontal)
 						.padding(.vertical, 10)
-						.background(.bar)
+						.background(.gray.opacity(0.2))
 						.clipShape(Capsule())
 					}
 					.buttonStyle(.plain)

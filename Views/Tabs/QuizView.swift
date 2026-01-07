@@ -67,9 +67,10 @@ struct QuizView: View {
 		}
 	}
 
+	@ViewBuilder
 	var main: some View {
-		List {
-			if let quiz, isGenerating == false {
+		if let quiz, isGenerating == false {
+			List {
 				ActiveQuizView(
 					quiz: quiz,
 					userAnswers: $userAnswers,
@@ -80,20 +81,25 @@ struct QuizView: View {
 					submitQuiz: submitQuiz,
 					resetQuiz: resetQuiz
 				)
-				.transition(.opacity)
-			} else if isGenerating {
-				VStack(alignment: .center) {
-					QuizLoadingView()
-						.listRowBackground(Color.clear)
-						.transition(.opacity)
-				}
-			} else {
-				VStack(alignment: .center) {
-					QuizSetupView(difficulty: $difficulty, generateQuiz: generateQuiz)
-						.listRowBackground(Color.clear)
-						.transition(.opacity)
-				}
+				Text("AI was used to create and mark these answers. It may not always be accurate.")
+					.font(.caption)
+					.listRowBackground(Color.clear)
 			}
+			.transition(.opacity)
+
+		} else if isGenerating {
+			VStack {
+				QuizLoadingView()
+				Spacer()
+			}
+			.transition(.opacity)
+
+		} else {
+			VStack {
+				QuizSetupView(difficulty: $difficulty, generateQuiz: generateQuiz)
+				Spacer()
+			}
+			.transition(.opacity)
 		}
 	}
 
@@ -245,24 +251,27 @@ struct QuizView: View {
 						.labelStyle(.titleAndIcon)
 				}
 			}
-			.safeAreaBar(edge: .bottom, alignment: .center, spacing: 0) {
-				if isReviewing {
-					Button(action: resetQuiz) {
-						Label("New Quiz", systemImage: "arrow.counterclockwise")
-					}
-					.buttonStyle(.glassProminent)
-					.controlSize(.extraLarge)
-				} else {
-					Button(action: submitQuiz) {
-						if isGrading {
-							Label("Grading...", systemImage: "pencil.and.scribble")
+			.safeAreaBar(edge: .bottom, alignment: .center) {
+				if quiz != nil, isGenerating == false {
+					Group {
+						if isReviewing {
+							Button(action: resetQuiz) {
+								Label("New Quiz", systemImage: "arrow.counterclockwise")
+							}
 						} else {
-							Text("Submit Answers")
+							Button(action: submitQuiz) {
+								if isGrading {
+									Label("Grading...", systemImage: "pencil.and.scribble")
+								} else {
+									Text("Submit Answers")
+								}
+							}
+							.disabled(isGrading || !allQuestionsAnswered)
 						}
 					}
 					.buttonStyle(.glassProminent)
 					.controlSize(.extraLarge)
-					.disabled(isGrading || !allQuestionsAnswered)
+					.padding(.bottom, 10)
 				}
 			}
 		}
@@ -291,6 +300,7 @@ private struct ActiveQuizView: View {
 						isReviewing: isReviewing,
 						isGrading: isGrading
 					)
+					.transition(.blurReplace)
 				}
 			}
 		}
@@ -307,12 +317,14 @@ private struct QuizQuestionView: View {
 	let isGrading: Bool
 
 	var body: some View {
-		Group {
+		Section {
 			if let q = question.question {
 				VStack {
 					HStack {
 						Text("\(index + 1)")
 							.foregroundStyle(.secondary)
+							.font(.title3)
+							.fontDesign(.monospaced)
 
 						Spacer()
 
@@ -327,8 +339,11 @@ private struct QuizQuestionView: View {
 							.font(.title2)
 						}
 					}
-					Text(q)
-						.font(.title3.bold())
+					HStack {
+						Text(q)
+							.font(.title3.bold())
+						Spacer(minLength: 0)
+					}
 				}
 			}
 
@@ -362,27 +377,19 @@ private struct QuizQuestionView: View {
 										.background {
 											if isReviewing {
 												if isCorrect {
-													Color.green.opacity(0.3)
+													Color.green
 												} else if isSelected && !isCorrect {
-													Color.red.opacity(0.3)
+													Color.red
 												} else {
-													Color.secondary.opacity(0.1)
+													Color.gray.opacity(0.2)
 												}
 											} else {
 												isSelected
 													? Color.accentColor
-													: Color.secondary.opacity(0.1)
+													: Color.gray.opacity(0.2)
 											}
 										}
 										.cornerRadius(12)
-										.overlay(
-											RoundedRectangle(cornerRadius: 12)
-												.stroke(
-													isReviewing && isCorrect
-														? Color.green : Color.clear,
-													lineWidth: 2
-												)
-										)
 									}
 									.buttonStyle(.plain)
 									.disabled(isReviewing)
@@ -399,7 +406,7 @@ private struct QuizQuestionView: View {
 						)
 						.textFieldStyle(.plain)
 						.padding()
-						.background(Color.secondary.opacity(0.1))
+						.background(.gray.opacity(0.2))
 						.cornerRadius(12)
 						.font(.body)
 						.disabled(isReviewing)
@@ -414,10 +421,6 @@ private struct QuizQuestionView: View {
 				}
 			}
 		}
-		.padding(20)
-		.background(.regularMaterial)
-		.cornerRadius(16)
-		.shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
 	}
 }
 
