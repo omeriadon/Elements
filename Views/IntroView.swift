@@ -201,6 +201,9 @@ struct IntroView: View {
         .ignoresSafeArea()
         .scrollIndicators(.visible)
         .scrollPosition(id: $scrollPosition)
+        .onAppear {
+            scrollPosition = OnboardingPage.first.id
+        }
         .background {
             ColorfulView(color: .lavandula)
                 .saturation(2.5)
