@@ -23,7 +23,17 @@ struct ListView: View {
 	@State var selectedPeriod: Int?
 	@State var selectedBlock: Block?
 
+	@State var sortBy: SortOption = .atomicNumber
+	@State var sortAscending = true
+
 	@State private var keyboardVisible = false
+
+	enum SortOption: String, CaseIterable {
+		case atomicNumber = "Atomic Number"
+		case name = "Name"
+		case symbol = "Symbol"
+		case atomicMass = "Mass"
+	}
 
 	var filteredElements: [Element] {
 		var result = elements
@@ -56,6 +66,20 @@ struct ListView: View {
 
 		if let block = selectedBlock {
 			result = result.filter { $0.block == block }
+		}
+
+		result.sort { lhs, rhs in
+			let comparison: Bool = switch sortBy {
+				case .atomicNumber:
+					lhs.atomicNumber < rhs.atomicNumber
+				case .name:
+					lhs.name < rhs.name
+				case .symbol:
+					lhs.symbol < rhs.symbol
+				case .atomicMass:
+					lhs.atomicMass < rhs.atomicMass
+			}
+			return sortAscending ? comparison : !comparison
 		}
 
 		return result
@@ -233,12 +257,35 @@ struct ListView: View {
 					}
 
 					ToolbarItem(placement: .topBarTrailing) {
+						Menu {
+							Picker("Sort By", selection: $sortBy) {
+								ForEach(SortOption.allCases, id: \.self) { option in
+									Text(option.rawValue)
+								}
+							}
+
+							Button {
+								sortAscending.toggle()
+							} label: {
+								Label(
+									sortAscending ? "Ascending" : "Descending",
+									systemImage: sortAscending ? "arrow.up" : "arrow.down"
+								)
+							}
+						} label: {
+							Label("Sort", systemImage: sortAscending ? "arrow.up" : "arrow.down")
+						}
+					}
+
+					ToolbarItem(placement: .topBarTrailing) {
 						if
 							(selectedCategory != nil) ||
 							(selectedPhase != nil) ||
 							(selectedGroup != nil) ||
 							(selectedPeriod != nil) ||
-							(selectedBlock != nil)
+							(selectedBlock != nil) ||
+							(sortBy != .atomicNumber) ||
+							!sortAscending
 						{
 							Button {
 								selectedCategory = nil
@@ -246,7 +293,8 @@ struct ListView: View {
 								selectedGroup = nil
 								selectedPeriod = nil
 								selectedBlock = nil
-
+								sortBy = .atomicNumber
+								sortAscending = true
 							} label: {
 								Label("Reset", systemImage: "arrow.circlepath")
 							}
