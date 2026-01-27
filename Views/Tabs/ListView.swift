@@ -69,24 +69,20 @@ struct ListView: View {
 						selectedElement = element
 					} label: {
 						HStack {
-							HStack {
-								Text(element.symbol)
-									.font(.title2)
-									.foregroundStyle(element.series.themeColor)
-									.fontDesign(.monospaced)
-									.bold()
-									.padding(.trailing)
-								Spacer()
-							}
-							.frame(width: 55)
 							Text(element.atomicNumber.description)
 								.foregroundStyle(.tertiary)
-								.fontDesign(.monospaced)
+
+							Text(element.symbol)
+								.foregroundStyle(element.series.themeColor)
+								.bold()
+								.padding(.trailing)
+
 							Spacer()
+
 							Text(element.name)
-								.font(.title3)
-								.fontDesign(.monospaced)
 						}
+						.font(.title3)
+						.monospaced()
 						.padding(.horizontal)
 						.padding(.vertical, 10)
 						.background(.gray.opacity(0.2))
@@ -106,7 +102,9 @@ struct ListView: View {
 			VStack(alignment: .trailing, spacing: 8) {
 				Group {
 					Picker(selection: $selectedCategory) {
-						Text("All").tag(nil as Category?)
+						Text("All")
+							.foregroundStyle(.secondary)
+							.tag(nil as Category?)
 						ForEach(Category.allCases, id: \.self) { category in
 							Label(category.rawValue.capitalized, systemImage: category.symbol)
 								.foregroundStyle(category.themeColor)
@@ -121,7 +119,9 @@ struct ListView: View {
 					.animation(.easeInOut, value: selectedCategory)
 
 					Picker(selection: $selectedPhase) {
-						Text("All").tag(nil as ElementPhase?)
+						Text("All")
+							.foregroundStyle(.secondary)
+							.tag(nil as ElementPhase?)
 						ForEach(ElementPhase.allCases, id: \.self) { phase in
 							Label(phase.rawValue, systemImage: phase.symbol)
 								.foregroundStyle(phase.colour)
@@ -136,7 +136,9 @@ struct ListView: View {
 					.animation(.easeInOut, value: selectedPhase)
 
 					Picker(selection: $selectedGroup) {
-						Text("All").tag(nil as Int?)
+						Text("All")
+							.foregroundStyle(.secondary)
+							.tag(nil as Int?)
 						ForEach(1 ... 18, id: \.self) { group in
 							Label("Group \(group)",
 							      systemImage: group.description + ".circle")
@@ -152,7 +154,9 @@ struct ListView: View {
 					.animation(.easeInOut, value: selectedGroup)
 
 					Picker(selection: $selectedPeriod) {
-						Text("All").tag(nil as Int?)
+						Text("All")
+							.foregroundStyle(.secondary)
+							.tag(nil as Int?)
 						ForEach(1 ... 7, id: \.self) { period in
 							Label(
 								"Period \(period)",
@@ -170,7 +174,9 @@ struct ListView: View {
 					.animation(.easeInOut, value: selectedPeriod)
 
 					Picker(selection: $selectedBlock) {
-						Text("All").tag(nil as Block?)
+						Text("All")
+							.foregroundStyle(.secondary)
+							.tag(nil as Block?)
 						ForEach(Block.allCases, id: \.self) { block in
 							Label(block.name.capitalized, systemImage: block.symbol)
 								.foregroundStyle(block.colour)
@@ -185,18 +191,21 @@ struct ListView: View {
 					.animation(.easeInOut, value: selectedBlock)
 				}
 				.pickerStyle(.navigationLink)
-				.padding(10)
-				.glassEffect(
-					.regular
-						.interactive()
-				)
+				.padding(.horizontal, 10)
+				.padding(.vertical, 7)
+				.glassEffect(.regular.interactive())
 				.fixedSize()
 				.contentShape(Rectangle())
-				.foregroundStyle(.primary)
+				.foregroundStyle(.secondary)
+			}
+			.background {
+				Rectangle()
+					.fill(.black)
+					.padding()
+					.opacity(0.7)
+					.blur(radius: 20)
 			}
 		}
-		.background(Color.clear)
-		.contentShape(Rectangle())
 	}
 
 	var body: some View {
@@ -208,7 +217,7 @@ struct ListView: View {
 				)
 				.overlay(alignment: .bottomTrailing) {
 					filters
-						.padding(.bottom, keyboardVisible ? 60 : 16)
+						.padding(.bottom, keyboardVisible ? 70 : 16)
 						.padding(.trailing)
 				}
 				.onChange(of: filteredElements) {
