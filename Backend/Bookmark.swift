@@ -10,12 +10,12 @@ import SwiftData
 
 @Model
 class Bookmark: Identifiable {
-    var id = UUID()
-    var elementID: Int
-    var dateAdded: Date
+	var id = UUID()
+	var elementID: Int
+	var dateAdded: Date
 
-    init(elementID: Int, dateAdded: Date) {
-        self.elementID = elementID
-        self.dateAdded = dateAdded
-    }
+	init(elementID: Int, dateAdded: Date) {
+		self.elementID = elementID
+		self.dateAdded = dateAdded
+	}
 }

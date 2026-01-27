@@ -8,43 +8,43 @@ import AppleProductTypes
 import PackageDescription
 
 let package = Package(
-    name: "Elements",
-    platforms: [
-        .iOS("26.0"),
-    ],
-    products: [
-        .iOSApplication(
-            name: "Elements",
-            targets: ["AppModule"],
-            bundleIdentifier: "omeriadon.Elements",
-            teamIdentifier: "C2HN547N49",
-            displayVersion: "1.0",
-            bundleVersion: "1",
-            appIcon: .asset("AppIcon"),
-            accentColor: .asset("AccentColor"),
-            supportedDeviceFamilies: [
-                .pad,
-                .phone,
-            ],
-            supportedInterfaceOrientations: [
-                .portrait,
-                .landscapeRight,
-                .landscapeLeft,
-                .portraitUpsideDown(.when(deviceFamilies: [.pad])),
-            ],
-            appCategory: .education
-        ),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/Lakr233/ColorfulX.git", "6.0.1" ..< "7.0.0"),
-    ],
-    targets: [
-        .executableTarget(
-            name: "AppModule",
-            dependencies: [
-                .product(name: "ColorfulX", package: "colorfulx"),
-            ],
-            path: "."
-        ),
-    ]
+	name: "Elements",
+	platforms: [
+		.iOS("26.0"),
+	],
+	products: [
+		.iOSApplication(
+			name: "Elements",
+			targets: ["AppModule"],
+			bundleIdentifier: "omeriadon.Elements",
+			teamIdentifier: "C2HN547N49",
+			displayVersion: "1.0",
+			bundleVersion: "1",
+			appIcon: .asset("AppIcon"),
+			accentColor: .asset("AccentColor"),
+			supportedDeviceFamilies: [
+				.pad,
+				.phone,
+			],
+			supportedInterfaceOrientations: [
+				.portrait,
+				.landscapeRight,
+				.landscapeLeft,
+				.portraitUpsideDown(.when(deviceFamilies: [.pad])),
+			],
+			appCategory: .education
+		),
+	],
+	dependencies: [
+		.package(url: "https://github.com/Lakr233/ColorfulX.git", "6.0.1" ..< "7.0.0"),
+	],
+	targets: [
+		.executableTarget(
+			name: "AppModule",
+			dependencies: [
+				.product(name: "ColorfulX", package: "colorfulx"),
+			],
+			path: "."
+		),
+	]
 )
