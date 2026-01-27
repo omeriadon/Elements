@@ -46,6 +46,5 @@ let package = Package(
             ],
             path: "."
         ),
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )

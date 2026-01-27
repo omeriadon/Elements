@@ -45,8 +45,6 @@ struct PlacedElement: Identifiable {
 struct TableView: View {
     let elements: [Element]
 
-    @State private var scale: CGFloat = 0.9
-
     @State var selectedElement: Element? = nil
 
     let columns: [GridItem] = Array(
@@ -54,7 +52,7 @@ struct TableView: View {
             .fixed(CGFloat(elementCellHeight)),
             alignment: .center
         ),
-        count: 22
+        count: 19
     )
 
     var positionedElements: [PlacedElement] {
@@ -82,8 +80,8 @@ struct TableView: View {
     var main: some View {
         ScrollView([.horizontal, .vertical]) {
             LazyVGrid(columns: columns) {
-                ForEach(0 ..< 16, id: \.self) { row in
-                    ForEach(0 ..< 22, id: \.self) { column in
+                ForEach(2 ..< 13, id: \.self) { row in
+                    ForEach(1 ..< 20, id: \.self) { column in
                         Group {
                             if row == 2, column >= 2, column < 20 {
                                 Text("\(column - 1)")
@@ -110,38 +108,21 @@ struct TableView: View {
                     }
                 }
             }
-            .scaleEffect(scale)
-            .animation(.interpolatingSpring(mass: 0.5, stiffness: 400, damping: 200), value: scale)
+            .padding(20)
+            .padding(.bottom, 80)
+            .padding([.trailing, .top], 10)
         }
     }
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .topTrailing) {
-                main
-                    .contentShape(Rectangle())
-                    .sheet(item: $selectedElement) { element in
-                        ElementDetailView(element: element)
-                    }
+        main
+            .overlay(alignment: .top) {
+                VariableBlurView(maxBlurRadius: 2.5, direction: .blurredTopClearBottom)
+                    .frame(height: 50)
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Slider(value: $scale, in: 0.2 ... 1.6, step: 0.35, neutralValue: 0.9, label: {
-                        Text("Zoom")
-                    }, currentValueLabel: {
-                        Text(scale.description + "×")
-                    }, minimumValueLabel: {
-                        Text("0.2×")
-                            .monospaced()
-                            .font(.caption)
-                    }, maximumValueLabel: {
-                        Text("1.6×")
-                            .monospaced()
-                            .font(.caption)
-                    })
-                }
-                .sharedBackgroundVisibility(.hidden)
+            .ignoresSafeArea()
+            .sheet(item: $selectedElement) { element in
+                ElementDetailView(element: element)
             }
-        }
     }
 }
