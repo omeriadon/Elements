@@ -108,7 +108,7 @@ struct SettingsView: View {
                 header: "Shells",
                 sectionBinding: $showSectionShells,
                 rows: [
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -117,7 +117,7 @@ struct SettingsView: View {
                 rows: [
                     RowSetting(name: "Atomic Mass", binding: $showAtomicMass),
                     RowSetting(name: "Valence Electrons", binding: $showValenceElectrons),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -131,7 +131,7 @@ struct SettingsView: View {
                     RowSetting(name: "Curie Point", binding: $showCuriePoint),
                     RowSetting(name: "Neel Point", binding: $showNeelPoint),
                     RowSetting(name: "Superconducting Point", binding: $showSuperconductingPoint),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -141,7 +141,7 @@ struct SettingsView: View {
                     RowSetting(name: "Block", binding: $showBlock),
                     RowSetting(name: "Group", binding: $showGroupRow),
                     RowSetting(name: "Period", binding: $showPeriod),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -156,7 +156,7 @@ struct SettingsView: View {
                     RowSetting(name: "Mohs (calculated)", binding: $showMohsCalculated),
                     RowSetting(name: "Mohs (MPa)", binding: $showMohsMPA),
                     RowSetting(name: "Speed of sound", binding: $showSpeedOfSound),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -164,7 +164,7 @@ struct SettingsView: View {
                 sectionBinding: $showSectionMagnetic,
                 rows: [
                     RowSetting(name: "Magnetic Type", binding: $showMagneticType),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -172,7 +172,7 @@ struct SettingsView: View {
                 sectionBinding: $showSectionElectrical,
                 rows: [
                     RowSetting(name: "Electrical Type", binding: $showElectricalType),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -180,7 +180,7 @@ struct SettingsView: View {
                 sectionBinding: $showSectionCrystal,
                 rows: [
                     RowSetting(name: "Crystal Structure", binding: $showCrystalStructure),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -192,7 +192,7 @@ struct SettingsView: View {
                     RowSetting(name: "Half Life / Radioactivity", binding: $showHalfLife),
                     RowSetting(name: "Lifetime", binding: $showLifetime),
                     RowSetting(name: "Decay Type", binding: $showDecayMode),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -203,7 +203,7 @@ struct SettingsView: View {
                     RowSetting(name: "Radius - Calculated", binding: $showRadiusCalculated),
                     RowSetting(name: "Refractive Index", binding: $showRefractiveIndex),
                     RowSetting(name: "Allotropes", binding: $showAllotropes),
-                ],
+                ]
             ),
 
             SectionSetting(
@@ -212,7 +212,7 @@ struct SettingsView: View {
                 rows: [
                     RowSetting(name: "Summary", binding: $showSummary),
                     RowSetting(name: "Source", binding: $showSourceRow),
-                ],
+                ]
             ),
         ]
     }

@@ -326,7 +326,7 @@ struct ElementDetailView: View {
                 .padding(10)
                 .glassEffect(
                     .clear.tint(element.series.themeColor).interactive(),
-                    in: .circle,
+                    in: .circle
                 )
 
             ForEach(element.electronsPerShell.indices, id: \.self) { i in
@@ -766,38 +766,38 @@ struct ElementDetailView: View {
                                 Text(
                                     "Universe: " + String(
                                         format: "%.3f",
-                                        element.abundance.universe,
-                                    ) + "%",
+                                        element.abundance.universe
+                                    ) + "%"
                                 )
                                 Text(
                                     "Solar: " + String(
                                         format: "%.3f",
-                                        element.abundance.solar,
-                                    ) + "%",
+                                        element.abundance.solar
+                                    ) + "%"
                                 )
                                 Text(
                                     "Meteor: " + String(
                                         format: "%.3f",
-                                        element.abundance.meteor,
-                                    ) + "%",
+                                        element.abundance.meteor
+                                    ) + "%"
                                 )
                                 Text(
                                     "Crust: " + String(
                                         format: "%.3f",
-                                        element.abundance.crust,
-                                    ) + "%",
+                                        element.abundance.crust
+                                    ) + "%"
                                 )
                                 Text(
                                     "Ocean: " + String(
                                         format: "%.3f",
-                                        element.abundance.ocean,
-                                    ) + "%",
+                                        element.abundance.ocean
+                                    ) + "%"
                                 )
                                 Text(
                                     "Human: " + String(
                                         format: "%.3f",
-                                        element.abundance.human,
-                                    ) + "%",
+                                        element.abundance.human
+                                    ) + "%"
                                 )
                             }
                             .fontDesign(.monospaced)

@@ -52,9 +52,9 @@ struct TableView: View {
     let columns: [GridItem] = Array(
         repeating: .init(
             .fixed(CGFloat(elementCellHeight)),
-            alignment: .center,
+            alignment: .center
         ),
-        count: 22,
+        count: 22
     )
 
     var positionedElements: [PlacedElement] {
@@ -105,7 +105,7 @@ struct TableView: View {
                         }
                         .frame(
                             width: CGFloat(elementCellHeight),
-                            height: CGFloat(elementCellHeight),
+                            height: CGFloat(elementCellHeight)
                         )
                     }
                 }

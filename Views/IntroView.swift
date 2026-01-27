@@ -57,15 +57,15 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
         case .welcome:
             "Detailed interactive periodic table in your pocket."
         case .tableView:
-            "Use the table view to move around the periodic table and click on an element to view its details. The slider at the top allows you to zoom between set levels to navigate faster."
+            "Use the table view to move around the periodic table and click on an element to view its details.\nThe slider at the top allows you to zoom between set levels to navigate faster."
         case .listView:
-            "Use the list view to quickly browse all elements filtered by element category, phase, group period, or block and sorted alphabetically or by atomic number."
+            "Use the list view to quickly browse or search all elements filtered by element category, phase, group period, or block. You can also sort elements."
         case .settingsView:
-            "Choose what to show in the detail view or come back to this intro in settings.."
+            "Choose what properties to show in the detail view or come back to this intro in settings..."
         case .quizView:
-            "Generate and complete a quiz to get marked."
+            "Generate a quiz at your own level using Apple Intelligence, and then have it marked."
         case .elementDetailView:
-            "Click on an element to see all its properties and summary"
+            "Click on an element to see information about it, read its summary at the bottom, or copy its name."
         }
     }
 
@@ -92,15 +92,7 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 struct IntroPageView: View {
     @Environment(\.colorScheme) var colorScheme
     let page: OnboardingPage
-    let onContinue: () -> Void
-
-    var buttonText: String {
-        page == OnboardingPage.allCases.last ? "Done" : (page == .welcome ? "Go" : "Continue")
-    }
-
-    var buttonIcon: String {
-        page == OnboardingPage.allCases.last ? "checkmark" : "arrow.right"
-    }
+    let onContinue: (() -> Void)?
 
     var displayImage: String {
         if page == .welcome {
@@ -109,52 +101,67 @@ struct IntroPageView: View {
         return page.imageName
     }
 
+    var isFirstOrLast: Bool {
+        page == .welcome || page == OnboardingPage.allCases.last
+    }
+
     var body: some View {
-        VStack(spacing: 20) {
-            if page == .welcome {
-                Image(displayImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(.horizontal, 40)
+        NavigationStack {
+            VStack(spacing: 20) {
+                if page == .welcome {
+                    Image(displayImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.horizontal, 40)
 
-                Text("Elements")
-                    .font(.system(size: 50))
-                    .monospaced()
-                    .fontWeight(.black)
-                    .padding(.bottom, 7)
-                    .foregroundStyle(.tint)
-            } else {
-                Image(displayImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .clipShape(RoundedRectangle(cornerRadius: 27))
-            }
+                    Text("Elements")
+                        .font(.system(size: 50))
+                        .monospaced()
+                        .fontWeight(.black)
+                        .padding(.bottom, 7)
+                        .foregroundStyle(.tint)
+                } else {
+                    Image(displayImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .clipShape(RoundedRectangle(cornerRadius: 27))
+                }
 
-            Text(page.description)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal)
+                Text(page.description)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding()
+                    .fontDesign(.monospaced)
+                    .font(page == .welcome ? .title3 : .body)
+                    .ignoresSafeArea()
 
-            Spacer()
+                Spacer()
 
-            Button {
-                onContinue()
-            } label: {
-                Label(buttonText, systemImage: buttonIcon)
-            }
-            .font(.title)
-            .padding()
-            .labelStyle(.titleAndIcon)
-            .glassEffect(.clear.tint(.accentColor).interactive())
-            .foregroundStyle(.white)
-        }
-        .padding()
-        .toolbar {
-            ToolbarItem(placement: .title) {
-                Label(page.name, systemImage: page.symbol)
-                    .monospaced()
-                    .labelStyle(.titleAndIcon)
+                if isFirstOrLast, let onContinue {
+                    Button {
+                        onContinue()
+                    } label: {
+                        Label(
+                            page == .welcome ? "Go" : "Done",
+                            systemImage: page == .welcome ? "arrow.right" : "checkmark"
+                        )
+                    }
                     .font(.title)
+                    .padding(.vertical)
+                    .padding(.horizontal, 20)
+                    .labelStyle(.titleAndIcon)
+                    .glassEffect(.clear.tint(.accentColor).interactive())
+                    .foregroundStyle(.white)
+                }
+            }
+            .padding(.horizontal)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Label(page.name, systemImage: page.symbol)
+                        .monospaced()
+                        .labelStyle(.titleAndIcon)
+                        .font(.title)
+                }
             }
         }
     }
@@ -162,32 +169,38 @@ struct IntroPageView: View {
 
 struct IntroView: View {
     private let pages = OnboardingPage.allCases
-    @State private var currentPage: OnboardingPage = .welcome
     @Binding var appHasOpenedBefore: Bool
+    @State private var scrollPosition: OnboardingPage.ID?
 
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView(.horizontal) {
-                ScrollViewReader { proxy in
-                    HStack(spacing: 0) {
-                        ForEach(pages) { page in
-                            NavigationStack {
-                                IntroPageView(page: page) {
-                                    handleNavigation(from: page, proxy: proxy)
-                                }
-                            }
-                            .frame(width: geometry.size.width)
-                            .id(page.id)
-                        }
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 0) {
+                ForEach(pages) { page in
+                    IntroPageView(
+                        page: page,
+                        onContinue: page == .welcome ? { scrollToNext() } : (page == pages.last ? { dismiss() } : nil)
+                    )
+                    .containerRelativeFrame(.horizontal)
+                    .visualEffect { content, proxy in
+                        let minX = proxy.frame(in: .scrollView).minX
+                        let containerWidth = proxy.size.width
+                        let distance = abs(minX) / containerWidth
+                        let blur = min(distance * 5, 5)
+                        let scale = 1 - min(distance * 0.1, 0.1)
+
+                        return content
+                            .blur(radius: blur)
+                            .scaleEffect(scale)
                     }
-                    .scrollTargetLayout()
+                    .id(page.id)
                 }
             }
-            .scrollTargetBehavior(.viewAligned)
-            .scrollIndicators(.hidden)
-            .scrollDisabled(true)
+            .scrollTargetLayout()
         }
-        .presentationBackground(.background)
+        .scrollTargetBehavior(.paging)
+        .ignoresSafeArea()
+        .scrollIndicators(.visible)
+        .scrollPosition(id: $scrollPosition)
         .background {
             ColorfulView(color: .lavandula)
                 .saturation(2.5)
@@ -196,15 +209,18 @@ struct IntroView: View {
         }
     }
 
-    private func handleNavigation(from page: OnboardingPage, proxy: ScrollViewProxy) {
-        if let index = pages.firstIndex(of: page), index < pages.count - 1 {
-            let nextPage = pages[index + 1]
-            withAnimation {
-                proxy.scrollTo(nextPage.id, anchor: .center)
-                currentPage = nextPage
-            }
-        } else {
-            appHasOpenedBefore = true
+    private func scrollToNext() {
+        guard let current = scrollPosition,
+              let currentPage = pages.first(where: { $0.id == current }),
+              let index = pages.firstIndex(of: currentPage),
+              index < pages.count - 1 else { return }
+
+        withAnimation {
+            scrollPosition = pages[index + 1].id
         }
+    }
+
+    private func dismiss() {
+        appHasOpenedBefore = true
     }
 }

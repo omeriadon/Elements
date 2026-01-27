@@ -15,17 +15,17 @@ struct ContentView: View {
             AppTabItem(
                 name: "Table",
                 symbol: "atom",
-                view: AnyView(TableView(elements: elements)),
+                view: AnyView(TableView(elements: elements))
             ),
             AppTabItem(
                 name: "Quiz",
                 symbol: "questionmark.circle",
-                view: AnyView(QuizView(elements: elements)),
+                view: AnyView(QuizView(elements: elements))
             ),
             AppTabItem(
                 name: "Settings",
                 symbol: "gear",
-                view: AnyView(SettingsView()),
+                view: AnyView(SettingsView())
             ),
         ]
     }
