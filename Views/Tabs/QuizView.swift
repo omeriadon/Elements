@@ -40,7 +40,7 @@ struct QuizView: View {
         If format == "textField":
         options must be nil
         correctAnswer must be the exact expected answer (for manual marking)
-        """
+        """,
     )
 
     @State var quiz: Quiz.PartiallyGenerated? = nil
@@ -79,7 +79,7 @@ struct QuizView: View {
                     isGrading: isGrading,
                     allQuestionsAnswered: allQuestionsAnswered,
                     submitQuiz: submitQuiz,
-                    resetQuiz: resetQuiz
+                    resetQuiz: resetQuiz,
                 )
                 Text("AI was used to create and mark these answers. It may not always be accurate.")
                     .font(.caption)
@@ -113,11 +113,11 @@ struct QuizView: View {
 
         let candidateElements = elements.filter { element in
             if difficulty == .easy {
-                return element.atomicNumber <= 20
+                element.atomicNumber <= 20
             } else if difficulty == .medium {
-                return element.atomicNumber <= 50
+                element.atomicNumber <= 50
             } else {
-                return true
+                true
             }
         }
 
@@ -155,7 +155,7 @@ struct QuizView: View {
                     }
                     print("Received partial update")
                     withAnimation {
-                        self.quiz = partial.content
+                        quiz = partial.content
                     }
                 }
                 print("Quiz generation complete")
@@ -190,7 +190,7 @@ struct QuizView: View {
 
                     do {
                         let response = try await session.respond(
-                            to: gradePrompt, generating: Bool.self
+                            to: gradePrompt, generating: Bool.self,
                         )
                         gradingResults[index] = response.content
                     } catch {
@@ -219,28 +219,28 @@ struct QuizView: View {
                     ContentUnavailableView(
                         "Device Not Elegible", systemImage: "apple.intelligence.badge.xmark",
                         description: Text(
-                            "This device can't use Apple Intelligence to create a quiz. Sorry.")
+                            "This device can't use Apple Intelligence to create a quiz. Sorry."),
                     )
                 case .unavailable(.appleIntelligenceNotEnabled):
                     ContentUnavailableView(
                         "Apple Intelligence Not Enabled", systemImage: "apple.intelligence",
-                        description: Text("Please enable Apple Intelligence to make a quiz.")
+                        description: Text("Please enable Apple Intelligence to make a quiz."),
                     )
                 case .unavailable(.modelNotReady):
                     ContentUnavailableView(
                         "Apple Intelligence Not Ready",
                         systemImage: "apple.intelligence.badge.xmark",
                         description: Text(
-                            "Apple Intelligence is not ready at this moment. Please try again later."
-                        )
+                            "Apple Intelligence is not ready at this moment. Please try again later.",
+                        ),
                     )
                 case .unavailable:
                     ContentUnavailableView(
                         "Apple Intelligence Unavailable",
                         systemImage: "apple.intelligence.badge.xmark",
                         description: Text(
-                            "Apple Intelligence is unavailable at this moment. Please try again later."
-                        )
+                            "Apple Intelligence is unavailable at this moment. Please try again later.",
+                        ),
                     )
                 }
             }
@@ -298,7 +298,7 @@ private struct ActiveQuizView: View {
                         userAnswers: $userAnswers,
                         gradingResults: gradingResults,
                         isReviewing: isReviewing,
-                        isGrading: isGrading
+                        isGrading: isGrading,
                     )
                     .transition(.blurReplace)
                 }
@@ -333,7 +333,7 @@ private struct QuizQuestionView: View {
                         {
                             Image(
                                 systemName: result
-                                    ? "checkmark.circle.fill" : "xmark.circle.fill"
+                                    ? "checkmark.circle.fill" : "xmark.circle.fill",
                             )
                             .foregroundStyle(result ? .green : .red)
                             .font(.title2)
@@ -362,11 +362,11 @@ private struct QuizQuestionView: View {
                                         Text(option)
                                             .font(.body)
                                             .foregroundStyle(
-                                                isSelected ? .white : .primary
+                                                isSelected ? .white : .primary,
                                             )
                                             .frame(
                                                 maxWidth: .infinity,
-                                                alignment: .leading
+                                                alignment: .leading,
                                             )
 
                                         Image(systemName: "circle.fill")
@@ -378,7 +378,7 @@ private struct QuizQuestionView: View {
                                         if isReviewing {
                                             if isCorrect {
                                                 Color.green
-                                            } else if isSelected && !isCorrect {
+                                            } else if isSelected, !isCorrect {
                                                 Color.red
                                             } else {
                                                 Color.gray.opacity(0.2)
@@ -401,8 +401,8 @@ private struct QuizQuestionView: View {
                         "Your Answer",
                         text: Binding(
                             get: { userAnswers[index] ?? "" },
-                            set: { userAnswers[index] = $0 }
-                        )
+                            set: { userAnswers[index] = $0 },
+                        ),
                     )
                     .textFieldStyle(.plain)
                     .padding()

@@ -52,9 +52,9 @@ struct TableView: View {
     let columns: [GridItem] = Array(
         repeating: .init(
             .fixed(CGFloat(elementCellHeight)),
-            alignment: .center
+            alignment: .center,
         ),
-        count: 22
+        count: 22,
     )
 
     var positionedElements: [PlacedElement] {
@@ -85,12 +85,12 @@ struct TableView: View {
                 ForEach(0 ..< 16, id: \.self) { row in
                     ForEach(0 ..< 22, id: \.self) { column in
                         Group {
-                            if row == 2 && column >= 2 && column < 20 {
+                            if row == 2, column >= 2, column < 20 {
                                 Text("\(column - 1)")
                                     .font(.caption2.monospacedDigit())
                                     .foregroundColor(.secondary)
 
-                            } else if column == 1 && row >= 3 && row < 13 {
+                            } else if column == 1, row >= 3, row < 13 {
                                 Text("\(row - 2)")
                                     .font(.caption2.monospaced())
                                     .foregroundColor(.secondary)
@@ -105,7 +105,7 @@ struct TableView: View {
                         }
                         .frame(
                             width: CGFloat(elementCellHeight),
-                            height: CGFloat(elementCellHeight)
+                            height: CGFloat(elementCellHeight),
                         )
                     }
                 }

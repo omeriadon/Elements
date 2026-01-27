@@ -28,7 +28,7 @@ struct ElementsApp: App {
                             },
                             set: {
                                 appHasOpenedBefore = $0
-                            }
+                            },
                         ))
                         .interactiveDismissDisabled()
                         .presentationDragIndicator(.hidden)

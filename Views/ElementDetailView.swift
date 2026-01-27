@@ -200,12 +200,12 @@ struct ElementDetailView: View {
     }
 
     private var atomicStructureHasVisibleRow: Bool {
-        return showAtomicMass ||
+        showAtomicMass ||
             (showValenceElectrons && element.valenceElectrons != nil)
     }
 
     private var thermoDynamicHasVisibleRow: Bool {
-        return (showMeltingPoint && element.meltingPoint != nil) ||
+        (showMeltingPoint && element.meltingPoint != nil) ||
             (showBoilingPoint && element.boilingPoint != nil) ||
             (showCriticalTemperature && element.criticalTemperature != nil) ||
             (showCriticalPressure && element.criticalPressure != nil) ||
@@ -215,13 +215,13 @@ struct ElementDetailView: View {
     }
 
     private var classificationHasVisibleRow: Bool {
-        return showBlock ||
+        showBlock ||
             showGroupRow ||
             showPeriod
     }
 
     private var mechanicalHasVisibleRow: Bool {
-        return (showShearModulus && element.density?.shear != nil) ||
+        (showShearModulus && element.density?.shear != nil) ||
             (showYoungModulus && element.density?.young != nil) ||
             (showStandardDensity && element.density?.stp != nil) ||
             (showAtomicIonicRadius && element.hardness?.radius != nil) ||
@@ -232,7 +232,7 @@ struct ElementDetailView: View {
     }
 
     private var magneticHasVisibleRow: Bool {
-        return showMagneticType && element.magneticType != nil
+        showMagneticType && element.magneticType != nil
     }
 
     private var electricalHasVisibleRow: Bool {
@@ -240,11 +240,11 @@ struct ElementDetailView: View {
     }
 
     private var crystalHasVisibleRow: Bool {
-        return showCrystalStructure && element.crystalStructure != nil
+        showCrystalStructure && element.crystalStructure != nil
     }
 
     private var nuclearHasVisibleRow: Bool {
-        return (showKnownIsotopes && element.isotopesKnown != nil) ||
+        (showKnownIsotopes && element.isotopesKnown != nil) ||
             (showIsotopicAbundances && element.isotopicAbundances != nil) ||
             (showHalfLife && {
                 if case .stable = element.halfLife { return true }
@@ -259,14 +259,14 @@ struct ElementDetailView: View {
     }
 
     private var otherHasVisibleRow: Bool {
-        return showAbundance ||
+        showAbundance ||
             (showRadiusCalculated && element.radius?.calculated != nil) ||
             (showRefractiveIndex && element.refractiveIndex != nil) ||
             (showAllotropes && element.allotropes != nil)
     }
 
     private var infoHasVisibleRow: Bool {
-        return (showSummary && !element.summary.isEmpty) || (showSourceRow && !element.source.isEmpty)
+        (showSummary && !element.summary.isEmpty) || (showSourceRow && !element.source.isEmpty)
     }
 
     var header: some View {
@@ -326,7 +326,7 @@ struct ElementDetailView: View {
                 .padding(10)
                 .glassEffect(
                     .clear.tint(element.series.themeColor).interactive(),
-                    in: .circle
+                    in: .circle,
                 )
 
             ForEach(element.electronsPerShell.indices, id: \.self) { i in
@@ -575,20 +575,18 @@ struct ElementDetailView: View {
                     }
 
                     // Compute Mohs 1-10 from Vickers
-                    let mohsValue: Int = {
-                        switch vickers {
-                        case 0 ..< 60: return 1
-                        case 60 ..< 120: return 2
-                        case 120 ..< 200: return 3
-                        case 200 ..< 400: return 4
-                        case 400 ..< 500: return 5
-                        case 500 ..< 700: return 6
-                        case 700 ..< 1000: return 7
-                        case 1000 ..< 1200: return 8
-                        case 1200 ..< 1400: return 9
-                        default: return 10
-                        }
-                    }()
+                    let mohsValue = switch vickers {
+                    case 0 ..< 60: 1
+                    case 60 ..< 120: 2
+                    case 120 ..< 200: 3
+                    case 200 ..< 400: 4
+                    case 400 ..< 500: 5
+                    case 500 ..< 700: 6
+                    case 700 ..< 1000: 7
+                    case 1000 ..< 1200: 8
+                    case 1200 ..< 1400: 9
+                    default: 10
+                    }
 
                     if showMohsCalculated {
                         LeftRight {
@@ -768,38 +766,38 @@ struct ElementDetailView: View {
                                 Text(
                                     "Universe: " + String(
                                         format: "%.3f",
-                                        element.abundance.universe
-                                    ) + "%"
+                                        element.abundance.universe,
+                                    ) + "%",
                                 )
                                 Text(
                                     "Solar: " + String(
                                         format: "%.3f",
-                                        element.abundance.solar
-                                    ) + "%"
+                                        element.abundance.solar,
+                                    ) + "%",
                                 )
                                 Text(
                                     "Meteor: " + String(
                                         format: "%.3f",
-                                        element.abundance.meteor
-                                    ) + "%"
+                                        element.abundance.meteor,
+                                    ) + "%",
                                 )
                                 Text(
                                     "Crust: " + String(
                                         format: "%.3f",
-                                        element.abundance.crust
-                                    ) + "%"
+                                        element.abundance.crust,
+                                    ) + "%",
                                 )
                                 Text(
                                     "Ocean: " + String(
                                         format: "%.3f",
-                                        element.abundance.ocean
-                                    ) + "%"
+                                        element.abundance.ocean,
+                                    ) + "%",
                                 )
                                 Text(
                                     "Human: " + String(
                                         format: "%.3f",
-                                        element.abundance.human
-                                    ) + "%"
+                                        element.abundance.human,
+                                    ) + "%",
                                 )
                             }
                             .fontDesign(.monospaced)

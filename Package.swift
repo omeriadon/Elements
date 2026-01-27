@@ -32,7 +32,7 @@ let package = Package(
                 .landscapeLeft,
                 .portraitUpsideDown(.when(deviceFamilies: [.pad])),
             ],
-            appCategory: .education
+            appCategory: .education,
         ),
     ],
     dependencies: [
@@ -44,7 +44,7 @@ let package = Package(
             dependencies: [
                 .product(name: "ColorfulX", package: "colorfulx"),
             ],
-            path: "."
+            path: ".",
         ),
-    ]
+    ],
 )

@@ -156,7 +156,7 @@ struct ListView: View {
                         ForEach(1 ... 7, id: \.self) { period in
                             Label(
                                 "Period \(period)",
-                                systemImage: period.description + ".square"
+                                systemImage: period.description + ".square",
                             )
                             .foregroundStyle(colourForPeriod(period))
                             .tag(period as Int?)
@@ -188,7 +188,7 @@ struct ListView: View {
                 .padding(10)
                 .glassEffect(
                     .regular
-                        .interactive()
+                        .interactive(),
                 )
                 .fixedSize()
                 .contentShape(Rectangle())
@@ -204,7 +204,7 @@ struct ListView: View {
             main
                 .searchable(
                     text: $searchText,
-                    prompt: "Names, series, and more"
+                    prompt: "Names, series, and more",
                 )
                 .overlay(alignment: .bottomTrailing) {
                     filters

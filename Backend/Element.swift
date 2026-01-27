@@ -430,11 +430,11 @@ struct Abundance: Decodable, Equatable {
     let human: Double
 
     var isSynthetic: Bool {
-        return universe == 0 && solar == 0 && meteor == 0 && crust == 0 && ocean == 0 && human == 0
+        universe == 0 && solar == 0 && meteor == 0 && crust == 0 && ocean == 0 && human == 0
     }
 
     static var synthetic: Abundance {
-        return Abundance(universe: 0, solar: 0, meteor: 0, crust: 0, ocean: 0, human: 0)
+        Abundance(universe: 0, solar: 0, meteor: 0, crust: 0, ocean: 0, human: 0)
     }
 }
 
@@ -472,9 +472,9 @@ enum DotNumbers: Decodable {
     var description: String {
         switch self {
         case let .single(value):
-            return String(value)
+            String(value)
         case let .multiple(value):
-            return value
+            value
         }
     }
 }
@@ -567,23 +567,23 @@ enum Category: String, Codable, CaseIterable, Equatable {
     var themeColor: Color {
         switch self {
         case .alkaliMetal:
-            return Color(red: 1.0, green: 107 / 255, blue: 53 / 255)
+            Color(red: 1.0, green: 107 / 255, blue: 53 / 255)
         case .alkalineEarthMetal:
-            return Color(red: 126 / 255, green: 217 / 255, blue: 87 / 255)
+            Color(red: 126 / 255, green: 217 / 255, blue: 87 / 255)
         case .transitionMetal:
-            return Color(red: 108 / 255, green: 117 / 255, blue: 125 / 255)
+            Color(red: 108 / 255, green: 117 / 255, blue: 125 / 255)
         case .postTransitionMetal:
-            return Color(red: 176 / 255, green: 183 / 255, blue: 189 / 255)
+            Color(red: 176 / 255, green: 183 / 255, blue: 189 / 255)
         case .metalloid:
-            return Color(red: 155 / 255, green: 89 / 255, blue: 182 / 255)
+            Color(red: 155 / 255, green: 89 / 255, blue: 182 / 255)
         case .nonmetal:
-            return Color(red: 23 / 255, green: 162 / 255, blue: 184 / 255)
+            Color(red: 23 / 255, green: 162 / 255, blue: 184 / 255)
         case .nobleGas:
-            return Color(red: 93 / 255, green: 169 / 255, blue: 1.0)
+            Color(red: 93 / 255, green: 169 / 255, blue: 1.0)
         case .lanthanide:
-            return Color(red: 1.0, green: 209 / 255, blue: 102 / 255)
+            Color(red: 1.0, green: 209 / 255, blue: 102 / 255)
         case .actinide:
-            return Color(red: 1.0, green: 143 / 255, blue: 163 / 255)
+            Color(red: 1.0, green: 143 / 255, blue: 163 / 255)
         }
     }
 
