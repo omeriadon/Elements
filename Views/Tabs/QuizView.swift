@@ -36,13 +36,11 @@ struct QuizView: View {
 	}
 
 	func resetQuiz() {
-		withAnimation {
-			generatedQuestions = []
-			questionElements = []
-			userAnswers = [:]
-			gradingResults = [:]
-			isReviewing = false
-		}
+		generatedQuestions = []
+		questionElements = []
+		userAnswers = [:]
+		gradingResults = [:]
+		isReviewing = false
 	}
 
 	@ViewBuilder
@@ -97,12 +95,10 @@ struct QuizView: View {
 	}
 
 	func generateQuiz() {
-		withAnimation {
-			isGenerating = true
-			userAnswers = [:]
-			gradingResults = [:]
-			isGrading = false
-		}
+		isGenerating = true
+		userAnswers = [:]
+		gradingResults = [:]
+		isGrading = false
 
 		Task {
 			var questions: [QuizQuestion] = []
@@ -157,12 +153,10 @@ struct QuizView: View {
 					elementNames.append(element.name)
 
 					await MainActor.run {
-						withAnimation {
-							generatedQuestions = questions
-							questionElements = elementNames
-							if i == 0 {
-								isGenerating = false
-							}
+						generatedQuestions = questions
+						questionElements = elementNames
+						if i == 0 {
+							isGenerating = false
 						}
 					}
 				} catch {
@@ -171,9 +165,7 @@ struct QuizView: View {
 			}
 
 			await MainActor.run {
-				withAnimation {
-					isGenerating = false
-				}
+				isGenerating = false
 			}
 		}
 	}
@@ -238,10 +230,8 @@ struct QuizView: View {
 				}
 			}
 
-			withAnimation {
-				isGrading = false
-				isReviewing = true
-			}
+			isGrading = false
+			isReviewing = true
 			showScoreAlert = true
 		}
 	}
@@ -355,6 +345,7 @@ private struct ActiveQuizView: View {
 				.transition(.blurReplace)
 			}
 		}
+		.animation(.easeInOut, value: questions.count)
 	}
 }
 
@@ -461,7 +452,7 @@ private struct QuizQuestionView: View {
 				Text("Correct Answer: \(question.correctAnswer)")
 					.font(.caption)
 					.foregroundStyle(.secondary)
-					.transition(.blurReplace)
+					.transition(.opacity)
 			}
 		}
 	}
