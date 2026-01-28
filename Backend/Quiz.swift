@@ -26,9 +26,9 @@ struct QuizQuestion: Identifiable {
 	@Guide(description: "the right answer")
 	let correctAnswer: String
 
-	@Guide(description: "the options, only one is correct, make it nil if its a textfield instead of multichoice.")
+	@Guide(description: "the options, exactly 4 choices for multipleChoice, empty array for textField")
 	@Guide(.count(4))
-	let options: [String]?
+	let options: [String]
 }
 
 @Generable
