@@ -22,6 +22,7 @@ struct QuizView: View {
 	@State var isGrading = false
 	@State var isReviewing = false
 	@State var showScoreAlert = false
+	@State var scoreAlert: ScoreAlert?
 
 	var allQuestionsAnswered: Bool {
 		if generatedQuestions.isEmpty { return false }
@@ -58,16 +59,6 @@ struct QuizView: View {
 					submitQuiz: submitQuiz,
 					resetQuiz: resetQuiz
 				)
-
-				if generatedQuestions.count < 10 {
-					HStack {
-						Spacer()
-						ProgressView()
-							.controlSize(.extraLarge)
-							.listRowBackground(Color.clear)
-						Spacer()
-					}
-				}
 
 				Text("AI was used to create and mark these answers. It may not always be accurate.")
 					.font(.caption)
@@ -132,8 +123,7 @@ struct QuizView: View {
 					Rules:
 					- format must be "multipleChoice"
 					- Provide exactly 4 options
-					- Each of those 4 options must be different
-					- the options must go in teh options property, don't put the options in the question and then put a b c d into the options
+					- Each of those 4 options must be different - make sure of that, double check
 					- Only ONE option must be correct
 					- correctAnswer must exactly match one of the 4 options
 					- Do NOT reveal the answer in the question text
@@ -200,8 +190,8 @@ struct QuizView: View {
 
 				do {
 					let session = LanguageModelSession(
-						model: .init(useCase: .general, guardrails: .permissiveContentTransformations),
-						instructions: "You are grading a chemistry quiz about \(elementName). Be lenient with spelling and capitalization."
+						model: .init(useCase: .contentTagging, guardrails: .permissiveContentTransformations),
+						instructions: "You are grading a chemistry quiz about \(elementName). Double check your marking, don't mark everything correct or wrong just because you want to."
 					)
 					let response = try await session.respond(
 						to: "Question: \(question.question)\nCorrect answer: \(correctAnswer)\nUser answer: \(userAnswer)\nIs the user's answer correct?",
@@ -214,6 +204,40 @@ struct QuizView: View {
 							== correctAnswer.lowercased().trimmingCharacters(in: .whitespaces)
 				}
 			}
+
+			let finalScore = gradingResults.values.filter(\.self).count
+			let total = generatedQuestions.count
+
+			do {
+				let session = LanguageModelSession(
+					model: .init(useCase: .general, guardrails: .permissiveContentTransformations),
+					instructions: """
+					Generate a short alert for a quiz score. Include the score in the message.
+					Match the tone to the score:
+					- 0-3: sympathetic, encouraging to try again
+					- 4-6: okay effort, room for improvement
+					- 7-8: good job, almost there
+					- 9-10: celebrate, excellent work
+					Keep it brief and natural, not over the top.
+					"""
+				)
+				let response = try await session.respond(
+					to: "Score: \(finalScore)/\(total), Difficulty: \(difficulty.rawValue)",
+					generating: ScoreAlert.self
+				)
+				await MainActor.run {
+					scoreAlert = response.content
+				}
+			} catch {
+				await MainActor.run {
+					scoreAlert = ScoreAlert(
+						title: "Quiz Complete!",
+						message: "You scored \(finalScore)/\(total)",
+						buttonText: "OK"
+					)
+				}
+			}
+
 			withAnimation {
 				isGrading = false
 				isReviewing = true
@@ -296,10 +320,12 @@ struct QuizView: View {
 				}
 			}
 			.alert(
-				"You scored \(score)/\(generatedQuestions.count)",
+				scoreAlert?.title ?? "Quiz Complete!",
 				isPresented: $showScoreAlert
 			) {
-				Button("OK") {}
+				Button(scoreAlert?.buttonText ?? "OK") {}
+			} message: {
+				Text(scoreAlert?.message ?? "You scored \(score)/\(generatedQuestions.count)")
 			}
 		}
 	}
@@ -435,6 +461,7 @@ private struct QuizQuestionView: View {
 				Text("Correct Answer: \(question.correctAnswer)")
 					.font(.caption)
 					.foregroundStyle(.secondary)
+					.transition(.blurReplace)
 			}
 		}
 	}
