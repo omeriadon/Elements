@@ -247,7 +247,6 @@ struct SettingsView: View {
 				} label: {
 					Label("Visibility", systemImage: "circle.lefthalf.filled")
 				}
-				.listRowBackground(Rectangle().fill(.regularMaterial))
 
 				Button {
 					appHasOpenedBefore = false
