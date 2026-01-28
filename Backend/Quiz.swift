@@ -10,23 +10,15 @@ import FoundationModels
 
 @Generable
 struct Quiz {
-	@Guide(.count(10))
 	let questions: [QuizQuestion]
 }
 
 @Generable
 struct QuizQuestion: Identifiable {
 	let id = UUID()
-
 	let format: QuizFormat
-
-	@Guide(description: "The question, in sentence question case.")
 	let question: String
-
-	@Guide(description: "the right answer")
 	let correctAnswer: String
-
-	@Guide(description: "the options, exactly 4 choices for multipleChoice, empty array for textField")
 	@Guide(.count(4))
 	let options: [String]
 }
@@ -38,22 +30,7 @@ enum QuizFormat: String {
 
 enum QuizDifficulty: String, CaseIterable, Identifiable {
 	var id: Self { self }
-	case easy // first 20 elements
-	case medium // first 50 elements
-	case hard // all
-
-	func randomFilteredElement(elements: [Element]) -> Element {
-		var filteredElements: [Element] = []
-
-		switch self {
-			case .easy:
-				filteredElements = elements.filter { $0.atomicNumber <= 20 }
-			case .medium:
-				filteredElements = elements.filter { $0.atomicNumber <= 50 }
-			case .hard:
-				filteredElements = elements
-		}
-
-		return filteredElements.randomElement() ?? elements.first!
-	}
+	case easy
+	case medium
+	case hard
 }

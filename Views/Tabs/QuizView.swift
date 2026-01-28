@@ -13,49 +13,19 @@ struct QuizView: View {
 
 	var model: SystemLanguageModel = .default
 
-	private var generationInstructions: String {
-		"""
-		You are a chemistry teacher generating quizzes only about periodic table elements.
-
-		# Difficulty rules
-		difficulty: "easy" | "medium" | "hard"
-		easy: using only elements 1–20 and only simpler properties of the element
-		medium: use only elements 1–50 and can use somewhat common properties of the element
-		hard: use any element and can use even complicated obscure properties of the element
-
-		# Question design rules
-		Every question must be about the provided element only (name, symbol, atomic number, group, period, classification like metal/nonmetal/metalloid, common uses, etc.).
-		Use variety across the 10 questions (don’t repeat the same style).
-		For easy/medium, mostly use multipleChoice.
-		For hard, include more textField questions.
-		Make sure the question doesn't spoil the options. For example, you shouldn't say "What is the chemical symbol for Hydrogen (H), because that has the answer in the question itself."
-
-		# Multiple choice rules
-		If format == "multipleChoice"
-		options must contain exactly 4 choices
-		Make sure only one options is correct. If you ask  which elements are metals, make sure only one option is actually a metal.
-		correctAnswer must exactly match one of the 4 options
-
-		# Text field rules
-		If format == "textField":
-		options must be an empty array []
-		correctAnswer must be the exact expected answer (for manual marking)
-		"""
-	}
-
-	@State var quiz: Quiz.PartiallyGenerated? = nil
+	@State var generatedQuestions: [QuizQuestion] = []
+	@State var questionElements: [String] = []
 	@State var difficulty: QuizDifficulty = .easy
 	@State var userAnswers: [Int: String] = [:]
 	@State var gradingResults: [Int: Bool] = [:]
 	@State var isGenerating = false
 	@State var isGrading = false
 	@State var isReviewing = false
-
 	@State var showScoreAlert = false
 
 	var allQuestionsAnswered: Bool {
-		guard let questions = quiz?.questions else { return false }
-		let count = questions.count
+		if generatedQuestions.isEmpty { return false }
+		let count = generatedQuestions.count
 		if userAnswers.count != count { return false }
 		return userAnswers.values.allSatisfy { !$0.isEmpty }
 	}
@@ -66,7 +36,8 @@ struct QuizView: View {
 
 	func resetQuiz() {
 		withAnimation {
-			quiz = nil
+			generatedQuestions = []
+			questionElements = []
 			userAnswers = [:]
 			gradingResults = [:]
 			isReviewing = false
@@ -75,10 +46,10 @@ struct QuizView: View {
 
 	@ViewBuilder
 	var main: some View {
-		if let quiz, isGenerating == false {
+		if !generatedQuestions.isEmpty, isGenerating == false {
 			List {
 				ActiveQuizView(
-					quiz: quiz,
+					questions: generatedQuestions,
 					userAnswers: $userAnswers,
 					gradingResults: gradingResults,
 					isReviewing: isReviewing,
@@ -87,32 +58,54 @@ struct QuizView: View {
 					submitQuiz: submitQuiz,
 					resetQuiz: resetQuiz
 				)
+
+				if generatedQuestions.count < 10 {
+					HStack {
+						Spacer()
+						ProgressView()
+							.controlSize(.extraLarge)
+							.listRowBackground(Color.clear)
+						Spacer()
+					}
+				}
+
 				Text("AI was used to create and mark these answers. It may not always be accurate.")
 					.font(.caption)
 					.listRowBackground(Color.clear)
 					.multilineTextAlignment(.center)
 					.foregroundStyle(.secondary)
 			}
-			.transition(.opacity)
+			.listRowSeparator(.hidden)
+			.transition(.blurReplace)
 
 		} else if isGenerating {
 			VStack {
 				QuizLoadingView()
 				Spacer()
 			}
-			.transition(.opacity)
+			.transition(.blurReplace)
 
 		} else {
 			VStack {
 				QuizSetupView(difficulty: $difficulty, generateQuiz: generateQuiz)
 				Spacer()
 			}
-			.transition(.opacity)
+			.transition(.blurReplace)
+		}
+	}
+
+	func filteredElements() -> [Element] {
+		switch difficulty {
+			case .easy:
+				elements.filter { $0.atomicNumber <= 20 }
+			case .medium:
+				elements.filter { $0.atomicNumber <= 50 }
+			case .hard:
+				elements
 		}
 	}
 
 	func generateQuiz() {
-		print("started inner generate quiz")
 		withAnimation {
 			isGenerating = true
 			userAnswers = [:]
@@ -120,71 +113,75 @@ struct QuizView: View {
 			isGrading = false
 		}
 
-		let candidateElements = elements.filter { element in
-			if difficulty == .easy {
-				element.atomicNumber <= 20
-			} else if difficulty == .medium {
-				element.atomicNumber <= 50
-			} else {
-				true
-			}
-		}
-
-		let selectedElements = candidateElements.shuffled().prefix(5)
-		let elementListString = selectedElements.map { "\($0.name) (\($0.symbol))" }.joined(
-			separator: ", ")
-
-		let prompt = """
-		Please make a quiz with 10 questions, with a difficulty of \(difficulty.rawValue).
-		Use these specific elements for the questions: \(elementListString).
-
-		IMPORTANT:
-		- Mix the questions so they cover different elements from the list.
-		- You must ONLY use facts and properties belonging to the specific element being asked about.
-		- Do NOT use information about other elements.
-		- Mention the element name in the question text so the user knows which one refers to.
-		- Ensure specific data matches the provided element exactly.
-		"""
-
-		print("Starting quiz generation with prompt: \(prompt)")
-
 		Task {
-			do {
-				print("Creating stream response...")
-				let session = LanguageModelSession(
-					model: .init(useCase: .general, guardrails: .permissiveContentTransformations),
-					instructions: generationInstructions
-				)
-				let stream = session.streamResponse(to: prompt, generating: Quiz.self)
-				print("Stream created. Iterating...")
+			var questions: [QuizQuestion] = []
+			var elementNames: [String] = []
+			let candidates = filteredElements()
+			let questionCount = 10
 
-				var hasStarted = false
-				for try await partial in stream {
-					let generatedQuiz = partial.content
-					print("Received partial update")
+			for i in 0 ..< questionCount {
+				guard let element = candidates.randomElement() else { continue }
+
+				let useTextField = difficulty == .hard && i >= 7
+				let format = useTextField ? "textField" : "multipleChoice"
+
+				let instructions = if format == "multipleChoice" {
+					"""
+					You are a chemistry teacher. Generate ONE multiple choice question about \(element.name) (\(element.symbol), atomic number \(element.atomicNumber)).
+					Difficulty: \(difficulty.rawValue).
+					Rules:
+					- format must be "multipleChoice"
+					- Provide exactly 4 options
+					- Each of those 4 options must be different
+					- the options must go in teh options property, don't put the options in the question and then put a b c d into the options
+					- Only ONE option must be correct
+					- correctAnswer must exactly match one of the 4 options
+					- Do NOT reveal the answer in the question text
+					- Ask about: symbol, atomic number, group, period, classification (metal/nonmetal/metalloid), common uses, properties
+					- Mention the element name in the question
+					"""
+				} else {
+					"""
+					You are a chemistry teacher. Generate ONE short-answer question about \(element.name) (\(element.symbol), atomic number \(element.atomicNumber)).
+					Difficulty: \(difficulty.rawValue).
+					Rules:
+					- format must be "textField"
+					- options must be empty array []
+					- correctAnswer is the expected text answer (keep it short, 1-3 words)
+					- Do NOT reveal the answer in the question text
+					- Ask about: symbol, atomic number, group, period, classification, properties
+					- Mention the element name in the question
+					"""
+				}
+
+				do {
+					let session = LanguageModelSession(
+						model: .init(useCase: .general, guardrails: .permissiveContentTransformations),
+						instructions: instructions
+					)
+					let response = try await session.respond(
+						to: "Question about \(element.name)",
+						generating: QuizQuestion.self
+					)
+					questions.append(response.content)
+					elementNames.append(element.name)
+
 					await MainActor.run {
 						withAnimation {
-							quiz = generatedQuiz
-
-							if !hasStarted,
-							   let questions = generatedQuiz.questions,
-							   !questions.isEmpty
-							{
+							generatedQuestions = questions
+							questionElements = elementNames
+							if i == 0 {
 								isGenerating = false
-								hasStarted = true
 							}
 						}
 					}
+				} catch {
+					continue
 				}
-				if !hasStarted {
-					await MainActor.run {
-						isGenerating = false
-					}
-				}
-				print("Quiz generation complete")
-			} catch {
-				print("Error generating quiz: \(error)")
-				await MainActor.run {
+			}
+
+			await MainActor.run {
+				withAnimation {
 					isGenerating = false
 				}
 			}
@@ -192,43 +189,29 @@ struct QuizView: View {
 	}
 
 	func submitQuiz() {
-		guard let questions = quiz?.questions else { return }
+		guard !generatedQuestions.isEmpty else { return }
 		isGrading = true
 
 		Task {
-			for (index, question) in questions.enumerated() {
-				guard let format = question.format, let correctAnswer = question.correctAnswer
-				else { continue }
+			for (index, question) in generatedQuestions.enumerated() {
+				let correctAnswer = question.correctAnswer
 				let userAnswer = userAnswers[index] ?? ""
+				let elementName = index < questionElements.count ? questionElements[index] : "unknown element"
 
-				if format == .multipleChoice {
-					gradingResults[index] = userAnswer == correctAnswer
-				} else {
-					let gradePrompt = """
-					Question: \(question.question ?? "")
-					Correct Answer: \(correctAnswer)
-					User Answer: \(userAnswer)
-
-					Is the user answer effectively correct / close enough?
-					Think before answering.
-					"""
-
-					do {
-						let gradingSession = LanguageModelSession(
-							model: .init(useCase: .general, guardrails: .permissiveContentTransformations),
-							instructions: "You are a teacher grading a quiz. Be lenient with spelling and capitalization."
-						)
-						let response = try await gradingSession.respond(
-							to: gradePrompt, generating: Bool.self
-						)
-						gradingResults[index] = response.content
-					} catch {
-						print("Grading error for Q\(index): \(error)")
-						// if the ai fails just check if two values are equal
-						gradingResults[index] =
-							userAnswer.lowercased().trimmingCharacters(in: .whitespaces)
-								== correctAnswer.lowercased().trimmingCharacters(in: .whitespaces)
-					}
+				do {
+					let session = LanguageModelSession(
+						model: .init(useCase: .general, guardrails: .permissiveContentTransformations),
+						instructions: "You are grading a chemistry quiz about \(elementName). Be lenient with spelling and capitalization."
+					)
+					let response = try await session.respond(
+						to: "Question: \(question.question)\nCorrect answer: \(correctAnswer)\nUser answer: \(userAnswer)\nIs the user's answer correct?",
+						generating: Bool.self
+					)
+					gradingResults[index] = response.content
+				} catch {
+					gradingResults[index] =
+						userAnswer.lowercased().trimmingCharacters(in: .whitespaces)
+							== correctAnswer.lowercased().trimmingCharacters(in: .whitespaces)
 				}
 			}
 			withAnimation {
@@ -282,7 +265,7 @@ struct QuizView: View {
 				}
 			}
 			.safeAreaBar(edge: .bottom, alignment: .center) {
-				if quiz != nil, isGenerating == false {
+				if !generatedQuestions.isEmpty, isGenerating == false {
 					Group {
 						if isReviewing {
 							Button(action: resetQuiz) {
@@ -313,7 +296,7 @@ struct QuizView: View {
 				}
 			}
 			.alert(
-				"You scored \(score)/\(quiz?.questions?.count ?? 0)",
+				"You scored \(score)/\(generatedQuestions.count)",
 				isPresented: $showScoreAlert
 			) {
 				Button("OK") {}
@@ -323,7 +306,7 @@ struct QuizView: View {
 }
 
 private struct ActiveQuizView: View {
-	let quiz: Quiz.PartiallyGenerated
+	let questions: [QuizQuestion]
 	@Binding var userAnswers: [Int: String]
 	let gradingResults: [Int: Bool]
 	let isReviewing: Bool
@@ -334,27 +317,24 @@ private struct ActiveQuizView: View {
 
 	var body: some View {
 		Group {
-			if let questions = quiz.questions {
-				ForEach(Array(questions.enumerated()), id: \.offset) { index, question in
-					QuizQuestionView(
-						index: index,
-						question: question,
-						userAnswers: $userAnswers,
-						gradingResults: gradingResults,
-						isReviewing: isReviewing,
-						isGrading: isGrading
-					)
-					.transition(.blurReplace)
-				}
+			ForEach(Array(questions.enumerated()), id: \.offset) { index, question in
+				QuizQuestionView(
+					index: index,
+					question: question,
+					userAnswers: $userAnswers,
+					gradingResults: gradingResults,
+					isReviewing: isReviewing,
+					isGrading: isGrading
+				)
+				.transition(.blurReplace)
 			}
 		}
-		.navigationTitle(isReviewing ? "Review" : "Questions")
 	}
 }
 
 private struct QuizQuestionView: View {
 	let index: Int
-	let question: QuizQuestion.PartiallyGenerated
+	let question: QuizQuestion
 	@Binding var userAnswers: [Int: String]
 	let gradingResults: [Int: Bool]
 	let isReviewing: Bool
@@ -362,107 +342,99 @@ private struct QuizQuestionView: View {
 
 	var body: some View {
 		Section {
-			if let q = question.question {
-				VStack {
-					HStack {
-						Text("\(index + 1)")
-							.foregroundStyle(.secondary)
-							.font(.title3)
-							.fontDesign(.monospaced)
+			VStack {
+				HStack {
+					Text("\(index + 1)")
+						.foregroundStyle(.secondary)
+						.font(.title3)
+						.fontDesign(.monospaced)
 
-						Spacer()
+					Spacer()
 
-						if isReviewing || isGrading,
-						   let result = gradingResults[index]
-						{
-							Image(
-								systemName: result
-									? "checkmark.circle.fill" : "xmark.circle.fill"
-							)
-							.foregroundStyle(result ? .green : .red)
-							.font(.title2)
-						}
+					if isReviewing || isGrading,
+					   let result = gradingResults[index]
+					{
+						Image(
+							systemName: result
+								? "checkmark.circle.fill" : "xmark.circle.fill"
+						)
+						.foregroundStyle(result ? .green : .red)
+						.font(.title2)
 					}
-					HStack {
-						Text(q)
-							.font(.title3.bold())
-						Spacer(minLength: 0)
-					}
+				}
+				HStack {
+					Text(question.question)
+						.font(.title3.bold())
+					Spacer(minLength: 0)
 				}
 			}
 
-			if let format = question.format {
-				switch format {
-					case .multipleChoice:
-						if let options = question.options {
-							VStack(spacing: 12) {
-								ForEach(options, id: \.self) { option in
-									let isSelected = userAnswers[index] == option
-									let isCorrect = question.correctAnswer == option
-									Button(action: {
-										userAnswers[index] = option
-									}) {
-										HStack {
-											Text(option)
-												.font(.body)
-												.foregroundStyle(
-													isSelected ? .white : .primary
-												)
-												.frame(
-													maxWidth: .infinity,
-													alignment: .leading
-												)
+			switch question.format {
+				case .multipleChoice:
+					VStack(spacing: 12) {
+						ForEach(question.options, id: \.self) { option in
+							let isSelected = userAnswers[index] == option
+							let isCorrect = question.correctAnswer == option
+							Button(action: {
+								userAnswers[index] = option
+							}) {
+								HStack {
+									Text(option)
+										.font(.body)
+										.foregroundStyle(
+											isSelected ? .white : .primary
+										)
+										.frame(
+											maxWidth: .infinity,
+											alignment: .leading
+										)
 
-											Image(systemName: "circle.fill")
-												.foregroundStyle(.white)
-												.opacity(isSelected ? 1 : 0)
-										}
-										.padding()
-										.background {
-											if isReviewing {
-												if isCorrect {
-													Color.green
-												} else if isSelected, !isCorrect {
-													Color.red
-												} else {
-													Color.gray.opacity(0.2)
-												}
-											} else {
-												isSelected
-													? Color.accentColor
-													: Color.gray.opacity(0.2)
-											}
-										}
-										.cornerRadius(12)
-									}
-									.buttonStyle(.plain)
-									.disabled(isReviewing)
+									Image(systemName: "circle.fill")
+										.foregroundStyle(.white)
+										.opacity(isSelected ? 1 : 0)
 								}
+								.padding()
+								.background {
+									if isReviewing {
+										if isCorrect {
+											Color.green
+										} else if isSelected, !isCorrect {
+											Color.red
+										} else {
+											Color.gray.opacity(0.2)
+										}
+									} else {
+										isSelected
+											? Color.accentColor
+											: Color.gray.opacity(0.2)
+									}
+								}
+								.cornerRadius(12)
 							}
+							.buttonStyle(.plain)
+							.disabled(isReviewing)
 						}
-					case .textField:
-						TextField(
-							"Your Answer",
-							text: Binding(
-								get: { userAnswers[index] ?? "" },
-								set: { userAnswers[index] = $0 }
-							)
+					}
+				case .textField:
+					TextField(
+						"Your Answer",
+						text: Binding(
+							get: { userAnswers[index] ?? "" },
+							set: { userAnswers[index] = $0 }
 						)
-						.textFieldStyle(.plain)
-						.padding()
-						.background(.gray.opacity(0.2))
-						.cornerRadius(12)
-						.font(.body)
-						.disabled(isReviewing)
-				}
+					)
+					.textFieldStyle(.plain)
+					.padding()
+					.background(.gray.opacity(0.2))
+					.cornerRadius(12)
+					.font(.body)
+					.disabled(isReviewing)
 			}
 
 			if isReviewing || isGrading {
-				if let correctAnswer = question.correctAnswer {
-					Text("Correct Answer: \(correctAnswer)")
-						.font(.caption)
-						.foregroundStyle(.secondary)
-				}
+				Text("Correct Answer: \(question.correctAnswer)")
+					.font(.caption)
+					.foregroundStyle(.secondary)
 			}
 		}
 	}
@@ -503,7 +475,6 @@ private struct QuizSetupView: View {
 			}
 
 			Button {
-				print("started generatin")
 				generateQuiz()
 			} label: {
 				Label("Generate Quiz", systemImage: "sparkles")
