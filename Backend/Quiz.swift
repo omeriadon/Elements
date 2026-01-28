@@ -18,7 +18,7 @@ struct QuizQuestion: Identifiable {
 	let id = UUID()
 	let format: QuizFormat
 
-	@Guide(description: "DO NOT PUT THE OPTIONS HERE")
+	@Guide(description: "DO NOT PUT THE OPTIONS OR THE CORRECT ANSWERS HERE")
 	let question: String
 
 	let correctAnswer: String
