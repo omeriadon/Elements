@@ -102,7 +102,7 @@ struct SettingsView: View {
 
 	@AppStorage("appHasOpenedBefore") var appHasOpenedBefore: Bool = false
 
-	private var settingsSections: [SectionSetting] {
+	private var detailSections: [SectionSetting] {
 		[
 			SectionSetting(
 				header: "Shells",
@@ -219,7 +219,7 @@ struct SettingsView: View {
 
 	private var allBindings: [Binding<Bool>] {
 		var all: [Binding<Bool>] = []
-		for section in settingsSections {
+		for section in detailSections {
 			if let sb = section.sectionBinding {
 				all.append(sb)
 			}
@@ -247,13 +247,14 @@ struct SettingsView: View {
 				} label: {
 					Label("Visibility", systemImage: "circle.lefthalf.filled")
 				}
-				NavigationLink {
-					onboarding
+				.listRowBackground(Rectangle().fill(.regularMaterial))
+
+				Button {
+					appHasOpenedBefore = false
 				} label: {
-					Label("Onboarding", systemImage: "figure.wave")
+					Label("Reopen Onboarding", systemImage: "hand.wave")
 				}
 			}
-
 			.toolbar {
 				ToolbarItem(placement: .title) {
 					Label("Settings", systemImage: "gearshape")
@@ -266,23 +267,6 @@ struct SettingsView: View {
 
 	private var allEnabled: Bool {
 		allBindings.allSatisfy(\.wrappedValue)
-	}
-
-	var onboarding: some View {
-		List {
-			Button {
-				appHasOpenedBefore = false
-			} label: {
-				Label("Reopen Onboarding", systemImage: "hand.wave")
-			}
-		}
-		.toolbar {
-			ToolbarItem(placement: .title) {
-				Label("Onboarding", systemImage: "figure.wave")
-					.labelStyle(.titleAndIcon)
-					.monospaced()
-			}
-		}
 	}
 
 	var visibility: some View {
