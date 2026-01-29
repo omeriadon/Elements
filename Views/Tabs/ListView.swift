@@ -150,6 +150,7 @@ struct ListView: View {
 						.background(.gray.opacity(0.2))
 						.clipShape(Capsule())
 					}
+					.dynamicTypeSize(...DynamicTypeSize.accessibility1)
 					.buttonStyle(.plain)
 					.transition(.blurReplace)
 					.matchedTransitionSource(id: element.id, in: namespace)
@@ -263,8 +264,10 @@ struct ListView: View {
 				.background {
 					Rectangle()
 						.fill(oppositeForegroundStyle)
+						.clipShape(Capsule())
 						.blur(radius: 10)
 				}
+				.dynamicTypeSize(...DynamicTypeSize.accessibility1)
 			}
 		}
 		.onTapGesture {

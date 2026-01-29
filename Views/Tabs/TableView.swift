@@ -28,13 +28,18 @@ struct ElementCell: View {
 				VStack(spacing: 2) {
 					Text("\(element.atomicNumber)")
 						.font(.footnote.monospacedDigit())
+						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
+
 					Text(element.symbol)
 						.font(.title2)
 						.foregroundStyle(element.series.themeColor)
 						.fontDesign(.monospaced)
 						.bold()
+						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
+
 					Text(element.name)
 						.font(.footnote)
+						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
 				}
 				.tint(.secondary)
 				.frame(width: CGFloat(elementCellHeight), height: CGFloat(elementCellHeight))
@@ -44,6 +49,7 @@ struct ElementCell: View {
 					Image(systemName: "bookmark.fill")
 						.foregroundStyle(.tint)
 						.padding(4)
+						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
 				}
 			}
 		}

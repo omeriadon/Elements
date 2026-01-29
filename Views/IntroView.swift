@@ -210,6 +210,7 @@ struct IntroView: View {
 				.opacity(0.2)
 				.ignoresSafeArea()
 		}
+		.dynamicTypeSize(...DynamicTypeSize.accessibility1)
 	}
 
 	private func scrollToNext() {
