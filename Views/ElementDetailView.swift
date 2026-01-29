@@ -13,10 +13,15 @@ struct ElementDetailView: View {
 	@Environment(\.dismiss) private var dismiss
 
 	@Environment(\.modelContext) private var modelContext
+
 	@Query private var bookmarks: [Bookmark]
 
 	init(element: Element) {
 		self.element = element
+		let id = element.atomicNumber
+		_bookmarks = Query(filter: #Predicate {
+			$0.elementID == id
+		})
 	}
 
 	private var isBookmarked: Bool { !bookmarks.isEmpty }
@@ -38,6 +43,7 @@ struct ElementDetailView: View {
 	@State var isCopied = false
 
 	let copyElementNameTip = CopyElementNameTip()
+	let bookmarksTip = BookmarksTip()
 
 	@AppStorage("show_section_shells") private var showSectionShells: Bool = true
 	@AppStorage("show_section_atomicStructure") private var showSectionAtomic: Bool = true
@@ -144,6 +150,7 @@ struct ElementDetailView: View {
 							}
 							.animation(.easeInOut, value: isBookmarked)
 						}
+						.popoverTip(bookmarksTip, attachmentAnchor: .point(.topTrailing))
 					}
 
 					ToolbarItem(placement: .topBarTrailing) {

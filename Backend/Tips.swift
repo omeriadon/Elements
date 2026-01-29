@@ -63,3 +63,17 @@ struct CopyElementNameTip: Tip {
 		Image(systemName: "document.on.document")
 	}
 }
+
+struct BookmarksTip: Tip {
+	var title: Text {
+		Text("Bookmark Elements")
+	}
+
+	var message: Text? {
+		Text("Bookmark an element to access it later faster.")
+	}
+
+	var image: Image? {
+		Image(systemName: "bookmark.circle")
+	}
+}

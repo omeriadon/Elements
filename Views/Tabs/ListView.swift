@@ -13,6 +13,8 @@ struct ListView: View {
 	@Environment(\.modelContext) var modelContext
 	@Environment(\.colorScheme) var colorScheme
 
+	@Query private var bookmarks: [Bookmark]
+
 	let elements: [Element]
 
 	@State var selectedElement: Element? = nil
@@ -49,6 +51,10 @@ struct ListView: View {
 		case name = "Name"
 		case symbol = "Symbol"
 		case atomicMass = "Mass"
+	}
+
+	func isBookmarked(_ element: Element) -> Bool {
+		bookmarks.contains { $0.elementID == element.atomicNumber }
 	}
 
 	var filteredElements: [Element] {
@@ -120,6 +126,11 @@ struct ListView: View {
 							Spacer()
 
 							Text(element.name)
+
+							if isBookmarked(element) {
+								Image(systemName: "bookmark.fill")
+									.foregroundColor(.accentColor)
+							}
 						}
 						.font(.title3)
 						.monospaced()
