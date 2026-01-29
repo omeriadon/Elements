@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
 
 struct ListView: View {
 	@Environment(\.modelContext) var modelContext
@@ -29,6 +30,9 @@ struct ListView: View {
 	@State private var keyboardVisible = false
 
 	@Namespace var namespace
+
+	let sortTip = SortTip()
+	let filterTip = FilterTip()
 
 	enum SortOption: String, CaseIterable {
 		case atomicNumber = "Atomic Number"
@@ -233,6 +237,10 @@ struct ListView: View {
 					.blur(radius: 20)
 			}
 		}
+		.onTapGesture {
+			filterTip.invalidate(reason: .tipClosed)
+		}
+		.popoverTip(filterTip, attachmentAnchor: .point(.bottomTrailing))
 	}
 
 	var body: some View {
@@ -277,6 +285,7 @@ struct ListView: View {
 							}
 						} label: {
 							Label("Sort", systemImage: sortAscending ? "arrow.up" : "arrow.down")
+								.popoverTip(sortTip, attachmentAnchor: .point(.topTrailing))
 						}
 					}
 
