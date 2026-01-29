@@ -254,6 +254,13 @@ struct ListView: View {
 	var body: some View {
 		NavigationStack {
 			main
+				.overlay(alignment: .top) {
+					if keyboardVisible {
+						VariableBlurView(maxBlurRadius: 3, direction: .blurredTopClearBottom)
+							.frame(height: 60)
+							.ignoresSafeArea()
+					}
+				}
 				.searchable(
 					text: $searchText,
 					prompt: "Names, series, and more"
