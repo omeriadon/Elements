@@ -30,21 +30,26 @@ struct ContentView: View {
 		]
 	}
 
+	@State var selectedTab = "Table"
+
 	var body: some View {
-		TabView {
+		TabView(selection: $selectedTab) {
 			ForEach(tabs) { tab in
-				Tab {
+				Tab(value: tab.id) {
 					tab.view
 				} label: {
 					Label(tab.name, systemImage: tab.symbol)
 				}
 			}
 
-			Tab(role: .search) {
+			Tab(value: "Search", role: .search) {
 				ListView(elements: elements)
 			}
 		}
 		.tabBarMinimizeBehavior(.onScrollDown)
+		.onChange(of: selectedTab) {
+			HapticManager.shared.impact()
+		}
 	}
 }
 

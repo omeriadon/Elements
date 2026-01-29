@@ -116,6 +116,7 @@ struct TableView: View {
 
 							} else if let placed = positionedElements.first(where: { $0.row == row && $0.column == column }) {
 								ElementCell(element: placed.element) {
+									HapticManager.shared.impact()
 									tableViewTip.invalidate(reason: .actionPerformed)
 									selectedElement = placed.element
 								}

@@ -153,11 +153,12 @@ struct ElementDetailView: View {
 							.animation(.easeInOut, value: isBookmarked)
 						}
 						.buttonStyle(.plain)
-						.popoverTip(bookmarksTip, attachmentAnchor: .point(.topLeading))
+						.popoverTip(tipGroup.currentTip as? BookmarksTip, attachmentAnchor: .point(.topLeading))
 					}
 
 					ToolbarItem(placement: .topBarTrailing) {
 						Button(role: .close) {
+							HapticManager.shared.impact()
 							dismiss()
 						}
 					}
@@ -184,7 +185,7 @@ struct ElementDetailView: View {
 							}
 							.transition(.blurReplace)
 						}
-						.popoverTip(copyElementNameTip, attachmentAnchor: .point(.bottom))
+						.popoverTip(tipGroup.currentTip as? CopyElementNameTip, attachmentAnchor: .point(.bottom))
 					}
 				}
 				.frame(width: geometry.size.width)

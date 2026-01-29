@@ -9,6 +9,9 @@ import SwiftData
 import SwiftUI
 import TipKit
 
+let filterTip = FilterTip()
+let sortTip = SortTip()
+
 struct ListView: View {
 	@Environment(\.modelContext) var modelContext
 	@Environment(\.colorScheme) var colorScheme
@@ -34,8 +37,15 @@ struct ListView: View {
 
 	@Namespace var namespace
 
-	let sortTip = SortTip()
-	let filterTip = FilterTip()
+	@State private var tipGroup: TipGroup
+
+	init(elements: [Element]) {
+		self.elements = elements
+		_tipGroup = State(initialValue: TipGroup(.firstAvailable) {
+			filterTip
+			sortTip
+		})
+	}
 
 	var oppositeForegroundStyle: Color {
 		switch colorScheme {
@@ -112,6 +122,7 @@ struct ListView: View {
 			LazyVStack(spacing: 8) {
 				ForEach(filteredElements) { element in
 					Button {
+						HapticManager.shared.impact()
 						selectedElement = element
 					} label: {
 						HStack {
@@ -259,7 +270,7 @@ struct ListView: View {
 		.onTapGesture {
 			filterTip.invalidate(reason: .tipClosed)
 		}
-		.popoverTip(filterTip, attachmentAnchor: .point(.bottomTrailing))
+		.popoverTip(tipGroup.currentTip as? FilterTip, attachmentAnchor: .point(.bottomTrailing))
 	}
 
 	var body: some View {
@@ -311,8 +322,10 @@ struct ListView: View {
 							}
 						} label: {
 							Label("Sort", systemImage: sortAscending ? "arrow.up" : "arrow.down")
-								.popoverTip(sortTip, attachmentAnchor: .point(.topTrailing))
 						}
+						.menuStyle(.borderlessButton)
+						.buttonStyle(.plain)
+						.popoverTip(tipGroup.currentTip as? SortTip, attachmentAnchor: .point(.topTrailing))
 					}
 
 					ToolbarItem(placement: .topBarTrailing) {
