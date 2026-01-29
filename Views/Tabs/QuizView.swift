@@ -9,6 +9,8 @@ import FoundationModels
 import SwiftUI
 
 struct QuizView: View {
+	@Environment(\.accessibilityReduceMotion) var reduceMotion
+
 	let elements: [Element]
 
 	var model: SystemLanguageModel = .default
@@ -307,7 +309,7 @@ struct QuizView: View {
 											.transition(.blurReplace)
 									}
 								}
-								.animation(.easeInOut, value: isGrading)
+								.animation(reduceMotion ? nil : .easeInOut, value: isGrading)
 							}
 							.disabled(isGrading || !allQuestionsAnswered)
 							.transition(.blurReplace)
@@ -316,7 +318,7 @@ struct QuizView: View {
 					.buttonStyle(.glassProminent)
 					.controlSize(.extraLarge)
 					.padding(.bottom, 10)
-					.animation(.easeInOut, value: "\(isReviewing)\(isGrading)")
+					.animation(reduceMotion ? nil : .easeInOut, value: "\(isReviewing)\(isGrading)")
 				}
 			}
 			.alert(

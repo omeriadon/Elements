@@ -15,6 +15,7 @@ let sortTip = SortTip()
 struct ListView: View {
 	@Environment(\.modelContext) var modelContext
 	@Environment(\.colorScheme) var colorScheme
+	@Environment(\.accessibilityReduceMotion) var reduceMotion
 
 	@Query private var bookmarks: [Bookmark]
 
@@ -164,7 +165,7 @@ struct ListView: View {
 					.matchedTransitionSource(id: element.id, in: namespace)
 				}
 			}
-			.animation(.spring(response: 0.35, dampingFraction: 0.8), value: filteredElements)
+			.animation(reduceMotion ? nil : .spring(response: 0.35, dampingFraction: 0.8), value: filteredElements)
 			.padding(.horizontal)
 		}
 	}
@@ -188,7 +189,7 @@ struct ListView: View {
 								.foregroundStyle(.secondary)
 						}
 					}
-					.animation(.easeInOut, value: selectedCategory)
+					.animation(reduceMotion ? nil : .easeInOut, value: selectedCategory)
 
 					Picker(selection: $selectedPhase) {
 						Text("All")
@@ -205,7 +206,7 @@ struct ListView: View {
 								.foregroundStyle(.secondary)
 						}
 					}
-					.animation(.easeInOut, value: selectedPhase)
+					.animation(reduceMotion ? nil : .easeInOut, value: selectedPhase)
 
 					Picker(selection: $selectedGroup) {
 						Text("All")
@@ -222,7 +223,7 @@ struct ListView: View {
 								.foregroundStyle(.secondary)
 						}
 					}
-					.animation(.easeInOut, value: selectedGroup)
+					.animation(reduceMotion ? nil : .easeInOut, value: selectedGroup)
 
 					Picker(selection: $selectedPeriod) {
 						Text("All")
@@ -239,7 +240,7 @@ struct ListView: View {
 								.foregroundStyle(.secondary)
 						}
 					}
-					.animation(.easeInOut, value: selectedPeriod)
+					.animation(reduceMotion ? nil : .easeInOut, value: selectedPeriod)
 
 					Picker(selection: $selectedBlock) {
 						Text("All")
@@ -256,7 +257,7 @@ struct ListView: View {
 								.foregroundStyle(.secondary)
 						}
 					}
-					.animation(.easeInOut, value: selectedBlock)
+					.animation(reduceMotion ? nil : .easeInOut, value: selectedBlock)
 
 					Picker(selection: $bookmarkFilter) {
 						ForEach(BookmarkFilter.allCases) { filter in

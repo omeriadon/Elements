@@ -422,6 +422,7 @@ struct SettingsView: View {
 }
 
 struct BookmarksView: View {
+	@Environment(\.accessibilityReduceMotion) var reduceMotion
 	@Environment(\.modelContext) var modelContext
 	@Query(sort: \Bookmark.elementID) private var bookmarks: [Bookmark]
 
@@ -480,7 +481,7 @@ struct BookmarksView: View {
 					.transition(.blurReplace)
 			}
 		}
-		.animation(.easeInOut, value: bookmarks.isEmpty)
+		.animation(reduceMotion ? nil : .easeInOut, value: bookmarks.isEmpty)
 		.toolbar {
 			ToolbarItem(placement: .title) {
 				Label("Bookmarks", systemImage: "bookmark")

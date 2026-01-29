@@ -14,6 +14,7 @@ let copyElementNameTip = CopyElementNameTip()
 
 struct ElementDetailView: View {
 	@Environment(\.dismiss) private var dismiss
+	@Environment(\.accessibilityReduceMotion) var reduceMotion
 	@Environment(\.modelContext) private var modelContext
 	@Query private var bookmarks: [Bookmark]
 
@@ -153,7 +154,7 @@ struct ElementDetailView: View {
 										.accessibilityHint("Adds this element to your bookmarks")
 								}
 							}
-							.animation(.easeInOut, value: isBookmarked)
+							.animation(reduceMotion ? nil : .easeInOut, value: isBookmarked)
 						}
 						.buttonStyle(.plain)
 						.popoverTip(tipGroup.currentTip as? BookmarksTip, attachmentAnchor: .point(.topLeading))
@@ -180,11 +181,11 @@ struct ElementDetailView: View {
 							Group {
 								if !isCopied {
 									Label("Copy", systemImage: "document.on.document")
-										.animation(.easeInOut, value: isCopied)
+										.animation(reduceMotion ? nil : .easeInOut, value: isCopied)
 										.accessibilityHint("Copy this element's name to your clipboard")
 								} else {
 									Label("Copied", systemImage: "checkmark")
-										.animation(.easeInOut, value: isCopied)
+										.animation(reduceMotion ? nil : .easeInOut, value: isCopied)
 										.accessibilityHint("This element is already copied to your clipboard")
 								}
 							}
@@ -404,7 +405,7 @@ struct ElementDetailView: View {
 						.frame(width: 10, height: 10)
 						.offset(y: -radius / 1.333333333333333)
 						.rotationEffect(.degrees(angle))
-						.rotationEffect(.degrees(rotation))
+						.rotationEffect(reduceMotion ? .degrees(0) : .degrees(rotation))
 						.onAppear {
 							withAnimation(.linear(duration: 20).repeatForever(autoreverses: false)) {
 								rotation = 360
