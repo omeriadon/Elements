@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 let elementCellHeight = 80
 
@@ -47,6 +48,8 @@ struct TableView: View {
 
 	@State var selectedElement: Element? = nil
 
+	@State var pressedAnElement = false
+
 	let columns: [GridItem] = Array(
 		repeating: .init(
 			.fixed(CGFloat(elementCellHeight)),
@@ -77,6 +80,10 @@ struct TableView: View {
 		}
 	}
 
+	let tableViewTip = TableViewTip()
+
+	@Namespace var namespace
+
 	var main: some View {
 		ScrollView([.horizontal, .vertical]) {
 			LazyVGrid(columns: columns) {
@@ -95,8 +102,10 @@ struct TableView: View {
 
 							} else if let placed = positionedElements.first(where: { $0.row == row && $0.column == column }) {
 								ElementCell(element: placed.element) {
+									tableViewTip.invalidate(reason: .actionPerformed)
 									selectedElement = placed.element
 								}
+								.matchedTransitionSource(id: placed.element.id, in: namespace)
 							} else {
 								Color.clear
 							}
@@ -120,9 +129,15 @@ struct TableView: View {
 				VariableBlurView(maxBlurRadius: 2.5, direction: .blurredTopClearBottom)
 					.frame(height: 50)
 			}
+			.overlay(alignment: .top) {
+				TipView(tableViewTip)
+					.padding(.top, 40)
+					.padding()
+			}
 			.ignoresSafeArea()
 			.sheet(item: $selectedElement) { element in
 				ElementDetailView(element: element)
+					.navigationTransition(.zoom(sourceID: element.id, in: namespace))
 			}
 	}
 }

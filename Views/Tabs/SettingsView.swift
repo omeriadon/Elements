@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct RowSetting: Identifiable {
 	let id: String
@@ -239,6 +240,9 @@ struct SettingsView: View {
 		setAll(anyOff)
 	}
 
+	@State var resetTipsConfirm = false
+	@State var showReopenAppAlert = false
+
 	var body: some View {
 		NavigationStack {
 			List {
@@ -252,6 +256,24 @@ struct SettingsView: View {
 					appHasOpenedBefore = false
 				} label: {
 					Label("Reopen Onboarding", systemImage: "hand.wave")
+				}
+
+				Button {
+					resetTipsConfirm = true
+				} label: {
+					Label("Show All Tips Again", systemImage: "star")
+						.confirmationDialog("Reset All Tips", isPresented: $resetTipsConfirm) {
+							Button("Reset", role: .destructive) {
+								try? Tips.resetDatastore()
+								showReopenAppAlert = true
+							}
+						} message: {
+							Text("Reset All Tips?")
+						}
+				}
+
+				.alert("Reopen app to show all tips again.", isPresented: $showReopenAppAlert) {
+					Button(role: .close) {}
 				}
 			}
 			.toolbar {

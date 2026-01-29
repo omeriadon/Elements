@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 @main
 struct ElementsApp: App {
@@ -15,6 +16,22 @@ struct ElementsApp: App {
 
 	var showSheet: Bool {
 		!appHasOpenedBefore
+	}
+
+	init() {
+		setupTips()
+	}
+
+	func setupTips() {
+		do {
+			#if DEBUG
+				try Tips.resetDatastore()
+			#endif
+
+			try Tips.configure()
+		} catch {
+			print("Error initializing TipKit \(error.localizedDescription)")
+		}
 	}
 
 	var body: some Scene {
