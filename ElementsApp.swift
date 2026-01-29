@@ -5,6 +5,7 @@
 //  Created by Adon Omeri on 7/11/2025.
 //
 
+import SwiftData
 import SwiftUI
 import TipKit
 
@@ -57,5 +58,6 @@ struct ElementsApp: App {
 					.foregroundStyle(.red)
 			}
 		}
+		.modelContainer(for: Bookmark.self)
 	}
 }

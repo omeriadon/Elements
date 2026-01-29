@@ -5,11 +5,33 @@
 //  Created by Adon Omeri on 8/11/2025.
 //
 
+import SwiftData
 import SwiftUI
 import TipKit
 
 struct ElementDetailView: View {
 	@Environment(\.dismiss) private var dismiss
+
+	@Environment(\.modelContext) private var modelContext
+	@Query private var bookmarks: [Bookmark]
+
+	init(element: Element) {
+		self.element = element
+	}
+
+	private var isBookmarked: Bool { !bookmarks.isEmpty }
+
+	private func toggleBookmark() {
+		if let existing = bookmarks.first {
+			modelContext.delete(existing)
+		} else {
+			let bookmark = Bookmark(elementID: element.atomicNumber, dateAdded: Date.now)
+			modelContext.insert(bookmark)
+		}
+
+		try? modelContext.save()
+	}
+
 	let element: Element
 	@State private var rotation = 0.0
 
@@ -107,6 +129,23 @@ struct ElementDetailView: View {
 				}
 				.scrollIndicatorsFlash(onAppear: true)
 				.toolbar {
+					ToolbarItem(placement: .topBarLeading) {
+						Button {
+							toggleBookmark()
+						} label: {
+							Group {
+								if isBookmarked {
+									Label("Remove Bookmark", systemImage: "bookmark.fill")
+										.transition(.blurReplace)
+								} else {
+									Label("Add Bookmark", systemImage: "bookmark")
+										.transition(.blurReplace)
+								}
+							}
+							.animation(.easeInOut, value: isBookmarked)
+						}
+					}
+
 					ToolbarItem(placement: .topBarTrailing) {
 						Button(role: .close) {
 							dismiss()
