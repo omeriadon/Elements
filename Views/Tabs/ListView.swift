@@ -21,7 +21,6 @@ struct ListView: View {
 	let elements: [Element]
 
 	@State var selectedElement: Element? = nil
-
 	@State var searchText = ""
 
 	@State var selectedCategory: Category?
@@ -34,10 +33,18 @@ struct ListView: View {
 	@State var sortAscending = true
 
 	@State private var keyboardVisible = false
-
 	@Namespace var namespace
 
 	@State private var tipGroup: TipGroup
+
+	enum BookmarkFilter: String, CaseIterable, Identifiable {
+		case onlyBookmarked = "Only Bookmarked"
+		case bookmarkedTop = "Bookmarked at Top"
+		case all = "All"
+		var id: String { rawValue }
+	}
+
+	@State private var bookmarkFilter: BookmarkFilter = .all
 
 	init(elements: [Element]) {
 		self.elements = elements
@@ -51,8 +58,7 @@ struct ListView: View {
 		switch colorScheme {
 			case .dark: .black
 			case .light: .white
-			@unknown default:
-				fatalError("New color scheme??")
+			@unknown default: fatalError("New color scheme??")
 		}
 	}
 
@@ -67,6 +73,15 @@ struct ListView: View {
 		bookmarks.contains { $0.elementID == element.atomicNumber }
 	}
 
+	func compare(lhs: Element, rhs: Element) -> Bool {
+		switch sortBy {
+			case .atomicNumber: lhs.atomicNumber < rhs.atomicNumber
+			case .name: lhs.name < rhs.name
+			case .symbol: lhs.symbol < rhs.symbol
+			case .atomicMass: lhs.atomicMass < rhs.atomicMass
+		}
+	}
+
 	var filteredElements: [Element] {
 		var result = elements
 
@@ -75,43 +90,36 @@ struct ListView: View {
 				element.name.localizedCaseInsensitiveContains(searchText) ||
 					element.symbol.localizedCaseInsensitiveContains(searchText) ||
 					element.atomicNumber.description.contains(searchText) ||
-					element.series.rawValue.localizedCaseInsensitiveContains(searchText) ||
-					element.atomicNumber.description.contains(searchText)
+					element.series.rawValue.localizedCaseInsensitiveContains(searchText)
 			}
 		}
 
-		if let category = selectedCategory {
-			result = result.filter { $0.series == category }
-		}
+		if let category = selectedCategory { result = result.filter { $0.series == category } }
+		if let phase = selectedPhase { result = result.filter { $0.phase == phase } }
+		if let group = selectedGroup { result = result.filter { $0.group == group } }
+		if let period = selectedPeriod { result = result.filter { $0.period == period } }
+		if let block = selectedBlock { result = result.filter { $0.block == block } }
 
-		if let phase = selectedPhase {
-			result = result.filter { $0.phase == phase }
-		}
-
-		if let group = selectedGroup {
-			result = result.filter { $0.group == group }
-		}
-
-		if let period = selectedPeriod {
-			result = result.filter { $0.period == period }
-		}
-
-		if let block = selectedBlock {
-			result = result.filter { $0.block == block }
-		}
-
-		result.sort { lhs, rhs in
-			let comparison: Bool = switch sortBy {
-				case .atomicNumber:
-					lhs.atomicNumber < rhs.atomicNumber
-				case .name:
-					lhs.name < rhs.name
-				case .symbol:
-					lhs.symbol < rhs.symbol
-				case .atomicMass:
-					lhs.atomicMass < rhs.atomicMass
-			}
-			return sortAscending ? comparison : !comparison
+		switch bookmarkFilter {
+			case .onlyBookmarked:
+				result = result.filter { isBookmarked($0) }
+				result.sort { lhs, rhs in
+					let comparison = compare(lhs: lhs, rhs: rhs)
+					return sortAscending ? comparison : !comparison
+				}
+			case .bookmarkedTop:
+				result.sort { lhs, rhs in
+					let lhsBookmarked = isBookmarked(lhs)
+					let rhsBookmarked = isBookmarked(rhs)
+					if lhsBookmarked != rhsBookmarked { return lhsBookmarked }
+					let comparison = compare(lhs: lhs, rhs: rhs)
+					return sortAscending ? comparison : !comparison
+				}
+			case .all:
+				result.sort { lhs, rhs in
+					let comparison = compare(lhs: lhs, rhs: rhs)
+					return sortAscending ? comparison : !comparison
+				}
 		}
 
 		return result
@@ -204,8 +212,7 @@ struct ListView: View {
 							.foregroundStyle(.secondary)
 							.tag(nil as Int?)
 						ForEach(1 ... 18, id: \.self) { group in
-							Label("Group \(group)",
-							      systemImage: group.description + ".circle")
+							Label("Group \(group)", systemImage: group.description + ".circle")
 								.foregroundStyle(colourForGroup(group))
 								.tag(group as Int?)
 						}
@@ -222,12 +229,9 @@ struct ListView: View {
 							.foregroundStyle(.secondary)
 							.tag(nil as Int?)
 						ForEach(1 ... 7, id: \.self) { period in
-							Label(
-								"Period \(period)",
-								systemImage: period.description + ".square"
-							)
-							.foregroundStyle(colourForPeriod(period))
-							.tag(period as Int?)
+							Label("Period \(period)", systemImage: period.description + ".square")
+								.foregroundStyle(colourForPeriod(period))
+								.tag(period as Int?)
 						}
 					} label: {
 						if selectedPeriod == nil {
@@ -253,6 +257,18 @@ struct ListView: View {
 						}
 					}
 					.animation(.easeInOut, value: selectedBlock)
+
+					Picker(selection: $bookmarkFilter) {
+						ForEach(BookmarkFilter.allCases) { filter in
+							Text(filter.rawValue)
+								.tag(filter)
+						}
+					} label: {
+						if bookmarkFilter == .all {
+							Label("Bookmarks", systemImage: "bookmark")
+								.foregroundStyle(.secondary)
+						}
+					}
 				}
 				.pickerStyle(.navigationLink)
 				.padding(.horizontal, 10)
@@ -318,10 +334,8 @@ struct ListView: View {
 							Button {
 								sortAscending.toggle()
 							} label: {
-								Label(
-									sortAscending ? "Ascending" : "Descending",
-									systemImage: sortAscending ? "arrow.up" : "arrow.down"
-								)
+								Label(sortAscending ? "Ascending" : "Descending",
+								      systemImage: sortAscending ? "arrow.up" : "arrow.down")
 							}
 						} label: {
 							Label("Sort", systemImage: sortAscending ? "arrow.up" : "arrow.down")
@@ -339,7 +353,8 @@ struct ListView: View {
 							(selectedPeriod != nil) ||
 							(selectedBlock != nil) ||
 							(sortBy != .atomicNumber) ||
-							!sortAscending
+							!sortAscending ||
+							(bookmarkFilter != .all)
 						{
 							Button {
 								selectedCategory = nil
@@ -349,6 +364,7 @@ struct ListView: View {
 								selectedBlock = nil
 								sortBy = .atomicNumber
 								sortAscending = true
+								bookmarkFilter = .all
 							} label: {
 								Label("Reset", systemImage: "arrow.circlepath")
 							}
