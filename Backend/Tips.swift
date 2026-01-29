@@ -50,20 +50,6 @@ struct FilterTip: Tip {
 	}
 }
 
-struct CopyElementNameTip: Tip {
-	var title: Text {
-		Text("Copy Element Name")
-	}
-
-	var message: Text? {
-		Text("You can filter elements by category, phase, group, period, or block, or a combination of those.")
-	}
-
-	var image: Image? {
-		Image(systemName: "document.on.document")
-	}
-}
-
 struct BookmarksTip: Tip {
 	var title: Text {
 		Text("Bookmark Elements")
@@ -75,6 +61,20 @@ struct BookmarksTip: Tip {
 
 	var image: Image? {
 		Image(systemName: "bookmark.circle")
+	}
+}
+
+struct CopyElementNameTip: Tip {
+	var title: Text {
+		Text("Copy Element Name")
+	}
+
+	var message: Text? {
+		Text("Tap to copy the element name to your clipboard.")
+	}
+
+	var image: Image? {
+		Image(systemName: "document.on.document")
 	}
 }
 

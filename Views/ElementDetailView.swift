@@ -9,20 +9,13 @@ import SwiftData
 import SwiftUI
 import TipKit
 
+let bookmarksTip = BookmarksTip()
+let copyElementNameTip = CopyElementNameTip()
+
 struct ElementDetailView: View {
 	@Environment(\.dismiss) private var dismiss
-
 	@Environment(\.modelContext) private var modelContext
-
 	@Query private var bookmarks: [Bookmark]
-
-	init(element: Element) {
-		self.element = element
-		let id = element.atomicNumber
-		_bookmarks = Query(filter: #Predicate {
-			$0.elementID == id
-		})
-	}
 
 	private var isBookmarked: Bool { !bookmarks.isEmpty }
 
@@ -39,11 +32,7 @@ struct ElementDetailView: View {
 
 	let element: Element
 	@State private var rotation = 0.0
-
 	@State var isCopied = false
-
-	let copyElementNameTip = CopyElementNameTip()
-	let bookmarksTip = BookmarksTip()
 
 	@AppStorage("show_section_shells") private var showSectionShells: Bool = true
 	@AppStorage("show_section_atomicStructure") private var showSectionAtomic: Bool = true
@@ -111,6 +100,18 @@ struct ElementDetailView: View {
 	@AppStorage("show_summary") private var showSummary: Bool = true
 	@AppStorage("show_source") private var showSourceRow: Bool = true
 
+	@State private var tipGroup: TipGroup
+
+	init(element: Element) {
+		self.element = element
+		_tipGroup = State(initialValue: TipGroup(.firstAvailable) {
+			bookmarksTip
+			copyElementNameTip
+		})
+		let elementID = element.atomicNumber
+		_bookmarks = Query(filter: #Predicate { $0.elementID == elementID })
+	}
+
 	var body: some View {
 		NavigationStack {
 			GeometryReader { geometry in
@@ -137,6 +138,7 @@ struct ElementDetailView: View {
 				.toolbar {
 					ToolbarItem(placement: .topBarLeading) {
 						Button {
+							bookmarksTip.invalidate(reason: .actionPerformed)
 							toggleBookmark()
 						} label: {
 							Group {
@@ -150,7 +152,8 @@ struct ElementDetailView: View {
 							}
 							.animation(.easeInOut, value: isBookmarked)
 						}
-						.popoverTip(bookmarksTip, attachmentAnchor: .point(.topTrailing))
+						.buttonStyle(.plain)
+						.popoverTip(bookmarksTip, attachmentAnchor: .point(.topLeading))
 					}
 
 					ToolbarItem(placement: .topBarTrailing) {
@@ -166,6 +169,7 @@ struct ElementDetailView: View {
 
 					ToolbarItem(placement: .status) {
 						Button {
+							copyElementNameTip.invalidate(reason: .actionPerformed)
 							UIPasteboard.general.string = element.name
 							isCopied = true
 						} label: {
