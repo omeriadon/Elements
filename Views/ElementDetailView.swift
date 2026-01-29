@@ -134,6 +134,7 @@ struct ElementDetailView: View {
 					}
 					.padding(.horizontal)
 				}
+				.dynamicTypeSize(...DynamicTypeSize.accessibility1)
 				.scrollIndicatorsFlash(onAppear: true)
 				.toolbar {
 					ToolbarItem(placement: .topBarLeading) {
@@ -145,9 +146,11 @@ struct ElementDetailView: View {
 								if isBookmarked {
 									Label("Remove Bookmark", systemImage: "bookmark.fill")
 										.transition(.blurReplace)
+										.accessibilityHint("Removes this element from your bookmarks")
 								} else {
 									Label("Add Bookmark", systemImage: "bookmark")
 										.transition(.blurReplace)
+										.accessibilityHint("Adds this element to your bookmarks")
 								}
 							}
 							.animation(.easeInOut, value: isBookmarked)
@@ -178,9 +181,11 @@ struct ElementDetailView: View {
 								if !isCopied {
 									Label("Copy", systemImage: "document.on.document")
 										.animation(.easeInOut, value: isCopied)
+										.accessibilityHint("Copy this element's name to your clipboard")
 								} else {
 									Label("Copied", systemImage: "checkmark")
 										.animation(.easeInOut, value: isCopied)
+										.accessibilityHint("This element is already copied to your clipboard")
 								}
 							}
 							.transition(.blurReplace)
@@ -409,6 +414,10 @@ struct ElementDetailView: View {
 			}
 		}
 		.padding(.vertical)
+		.accessibilityLabel("Electron diagram for \(element.name), showing electrons in shells")
+		.accessibilityHint("Visual representation only, not interactive")
+		.accessibilityHidden(true)
+		.accessibilityElement(children: .ignore)
 	}
 
 	var atomicStructure: some View {

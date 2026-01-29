@@ -47,9 +47,13 @@ struct ElementCell: View {
 
 				if isBookmarked {
 					Image(systemName: "bookmark.fill")
+						.font(.body)
+						.dynamicTypeSize(...DynamicTypeSize.large)
 						.foregroundStyle(.tint)
 						.padding(4)
 						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
+						.accessibilityLabel("Bookmark")
+						.accessibilityHint("This element is bookmarked")
 				}
 			}
 		}
