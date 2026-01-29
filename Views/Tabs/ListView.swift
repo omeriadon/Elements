@@ -28,6 +28,8 @@ struct ListView: View {
 
 	@State private var keyboardVisible = false
 
+	@Namespace var namespace
+
 	enum SortOption: String, CaseIterable {
 		case atomicNumber = "Atomic Number"
 		case name = "Name"
@@ -114,6 +116,7 @@ struct ListView: View {
 					}
 					.buttonStyle(.plain)
 					.transition(.blurReplace)
+					.matchedTransitionSource(id: element.id, in: namespace)
 				}
 			}
 			.animation(.spring(response: 0.35, dampingFraction: 0.8), value: filteredElements)
@@ -303,6 +306,7 @@ struct ListView: View {
 				}
 				.sheet(item: $selectedElement) { element in
 					ElementDetailView(element: element)
+						.navigationTransition(.zoom(sourceID: element.id, in: namespace))
 				}
 				.onAppear {
 					NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
