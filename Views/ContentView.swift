@@ -25,7 +25,7 @@ struct ContentView: View {
 			AppTabItem(
 				name: "Settings",
 				symbol: "gear",
-				view: AnyView(SettingsView())
+				view: AnyView(SettingsView(elements: elements))
 			),
 		]
 	}

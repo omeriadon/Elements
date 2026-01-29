@@ -129,7 +129,7 @@ struct ListView: View {
 
 							if isBookmarked(element) {
 								Image(systemName: "bookmark.fill")
-									.foregroundColor(.accentColor)
+									.foregroundStyle(.tint)
 							}
 						}
 						.font(.title3)

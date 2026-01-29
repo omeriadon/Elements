@@ -77,3 +77,17 @@ struct BookmarksTip: Tip {
 		Image(systemName: "bookmark.circle")
 	}
 }
+
+struct BookmarksSettingsTip: Tip {
+	var title: Text {
+		Text("Swipe To Delete")
+	}
+
+	var message: Text? {
+		Text("Swipe an element to delete it, or press the delete all button in the toolbar.")
+	}
+
+	var image: Image? {
+		Image(systemName: "trash")
+	}
+}

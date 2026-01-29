@@ -5,6 +5,7 @@
 //  Created by Adon Omeri on 8/11/2025.
 //
 
+import SwiftData
 import SwiftUI
 import TipKit
 
@@ -13,25 +14,38 @@ let elementCellHeight = 80
 struct ElementCell: View {
 	let element: Element
 	var action: () -> Void
+	@Query private var bookmarks: [Bookmark]
+
+	var isBookmarked: Bool {
+		bookmarks.contains { $0.elementID == element.atomicNumber }
+	}
 
 	var body: some View {
 		Button {
 			action()
 		} label: {
-			VStack(spacing: 2) {
-				Text("\(element.atomicNumber)")
-					.font(.footnote.monospacedDigit())
-				Text(element.symbol)
-					.font(.title2)
-					.foregroundStyle(element.series.themeColor)
-					.fontDesign(.monospaced)
-					.bold()
-				Text(element.name)
-					.font(.footnote)
+			ZStack(alignment: .topTrailing) {
+				VStack(spacing: 2) {
+					Text("\(element.atomicNumber)")
+						.font(.footnote.monospacedDigit())
+					Text(element.symbol)
+						.font(.title2)
+						.foregroundStyle(element.series.themeColor)
+						.fontDesign(.monospaced)
+						.bold()
+					Text(element.name)
+						.font(.footnote)
+				}
+				.tint(.secondary)
+				.frame(width: CGFloat(elementCellHeight), height: CGFloat(elementCellHeight))
+				.background(element.series.themeColor.tertiary, in: RoundedRectangle(cornerRadius: 10))
+
+				if isBookmarked {
+					Image(systemName: "bookmark.fill")
+						.foregroundStyle(.tint)
+						.padding(4)
+				}
 			}
-			.tint(.secondary)
-			.frame(width: CGFloat(elementCellHeight), height: CGFloat(elementCellHeight))
-			.background(element.series.themeColor.tertiary, in: RoundedRectangle(cornerRadius: 10))
 		}
 	}
 }

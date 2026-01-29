@@ -5,6 +5,7 @@
 //  Created by Adon Omeri on 11/11/2025.
 //
 
+import SwiftData
 import SwiftUI
 import TipKit
 
@@ -102,6 +103,8 @@ struct SettingsView: View {
 	@AppStorage("show_source") private var showSourceRow: Bool = true
 
 	@AppStorage("appHasOpenedBefore") var appHasOpenedBefore: Bool = false
+
+	let elements: [Element]
 
 	private var detailSections: [SectionSetting] {
 		[
@@ -250,6 +253,12 @@ struct SettingsView: View {
 					visibility
 				} label: {
 					Label("Visibility", systemImage: "circle.lefthalf.filled")
+				}
+
+				NavigationLink {
+					bookmarks
+				} label: {
+					Label("Bookmarks", systemImage: "bookmark")
 				}
 
 				Button {
@@ -404,6 +413,92 @@ struct SettingsView: View {
 					      systemImage: allEnabled ? "eye.slash" : "eye")
 				}
 			}
+		}
+	}
+
+	var bookmarks: some View {
+		BookmarksView(elements: elements)
+	}
+}
+
+struct BookmarksView: View {
+	@Environment(\.modelContext) var modelContext
+	@Query(sort: \Bookmark.elementID) private var bookmarks: [Bookmark]
+
+	let elements: [Element]
+
+	@State private var deleteAllConfirm = false
+
+	let bookmarksSettingsTip = BookmarksSettingsTip()
+
+	@ViewBuilder
+	var body: some View {
+		Group {
+			if !bookmarks.isEmpty {
+				VStack {
+					TipView(bookmarksSettingsTip, arrowEdge: .bottom)
+						.padding(.horizontal)
+					List {
+						ForEach(bookmarks) { bookmark in
+							if let element = elements.first(where: { $0.atomicNumber == bookmark.elementID }) {
+								HStack {
+									Text(element.symbol)
+										.foregroundStyle(element.series.themeColor)
+										.bold()
+									Text(element.name)
+								}
+								.font(.title3)
+								.monospaced()
+							}
+						}
+						.onDelete(perform: deleteBookmarks)
+					}
+					.toolbar {
+						ToolbarItem(placement: .topBarTrailing) {
+							if !bookmarks.isEmpty {
+								Button(role: .destructive) {
+									deleteAllConfirm = true
+								} label: {
+									Label("Delete All", systemImage: "trash")
+								}
+								.foregroundStyle(.red)
+								.tint(.red)
+								.confirmationDialog("Delete All Bookmarks", isPresented: $deleteAllConfirm) {
+									Button("Delete All", role: .destructive) {
+										deleteAllBookmarks()
+									}
+								} message: {
+									Text("Delete all bookmarks?")
+								}
+							}
+						}
+					}
+				}
+				.transition(.blurReplace)
+			} else {
+				ContentUnavailableView("No Bookmarks Saved Yet", systemImage: "bookmark.slash")
+					.transition(.blurReplace)
+			}
+		}
+		.animation(.easeInOut, value: bookmarks.isEmpty)
+		.toolbar {
+			ToolbarItem(placement: .title) {
+				Label("Bookmarks", systemImage: "bookmark")
+					.labelStyle(.titleAndIcon)
+					.monospaced()
+			}
+		}
+	}
+
+	private func deleteBookmarks(at offsets: IndexSet) {
+		for index in offsets {
+			modelContext.delete(bookmarks[index])
+		}
+	}
+
+	private func deleteAllBookmarks() {
+		for bookmark in bookmarks {
+			modelContext.delete(bookmark)
 		}
 	}
 }
