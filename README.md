@@ -25,7 +25,7 @@ A light, simple, fast periodic table app built with SwiftUI, and also uses Apple
 
 ## Demo Video
 
-https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
+https://github.com/user-attachments/assets/05373b68-6e09-4f1f-86f6-9565c366a43f
 
 <br>
 
