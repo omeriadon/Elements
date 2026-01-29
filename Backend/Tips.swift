@@ -49,3 +49,17 @@ struct FilterTip: Tip {
 		Image(systemName: "line.3.horizontal.decrease")
 	}
 }
+
+struct CopyElementNameTip: Tip {
+	var title: Text {
+		Text("Copy Element Name")
+	}
+
+	var message: Text? {
+		Text("You can filter elements by category, phase, group, period, or block, or a combination of those.")
+	}
+
+	var image: Image? {
+		Image(systemName: "document.on.document")
+	}
+}

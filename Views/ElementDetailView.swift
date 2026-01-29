@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct ElementDetailView: View {
 	@Environment(\.dismiss) private var dismiss
@@ -13,6 +14,8 @@ struct ElementDetailView: View {
 	@State private var rotation = 0.0
 
 	@State var isCopied = false
+
+	let copyElementNameTip = CopyElementNameTip()
 
 	@AppStorage("show_section_shells") private var showSectionShells: Bool = true
 	@AppStorage("show_section_atomicStructure") private var showSectionAtomic: Bool = true
@@ -131,6 +134,7 @@ struct ElementDetailView: View {
 							}
 							.transition(.blurReplace)
 						}
+						.popoverTip(copyElementNameTip, attachmentAnchor: .point(.bottom))
 					}
 				}
 				.frame(width: geometry.size.width)
