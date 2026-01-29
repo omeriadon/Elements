@@ -1,26 +1,39 @@
-<img width="300" height="300" alt="Elemental-iOS-Default-1024x1024@1x" src="https://github.com/user-attachments/assets/1192a653-27fd-4622-8a03-06742cbe120d" />
 
-# Elements
 
-A light, simple, fast periodic table app in SwiftUI
 
-- Uses Apple Foundation Models to generate and mark quiz
-- Added symbols and enimations to make it a pleasure to use
-- Filter list view by category, phase, group, period, or block
+<table>
+  <tr>
+    <td><img width="300" height="300" src="https://github.com/user-attachments/assets/1192a653-27fd-4622-8a03-06742cbe120d" /></td>
+    <td>
+    <h1>Elements</h1>
+    <p>lightweight and modern periodic table</p>
+    </td>
+  </tr>
+</table>
+
+
+
+A light, simple, fast periodic table app built with SwiftUI, and also uses Apple Foundation Models
+
+- Uses Apple Intelligence foundation models to generate and mark your quiz, and then also generate an alert to encourage the user to keep learning!
+- Added SF Symbols and animations to make it a pleasure to use
+- Sort items in list view or filter by category, phase, group, period, or block
+- See lots of information about each element when you tap on one in the table view
+- Detailed onboarding that you can come back to in settings
 
 <br>
 
-# Demo
+# Demo Video
 
 https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
 
 <br>
 
 ## Features
-- Navigateable table
+- Navigateable table of elements
 - List view
 - Quiz
-- Settings to show / hide element porperties
+- Settings to show / hide element properties
 
 <br>
 
@@ -35,4 +48,8 @@ https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
 <br>
 
 # Try It Out
-Clone this, open it with Xcode, build, and run. It's optimised for iPhone, so it's best to run there.
+
+1. Clone with `https://github.com/omeriadon/Elements.git`
+2. Build and run with Xcode, preferably onto a real device
+
+It's optimised for iPhone, so it's best to run the app there.
