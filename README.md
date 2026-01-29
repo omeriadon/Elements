@@ -11,7 +11,7 @@
   </tr>
 </table>
 
-
+<br>
 
 A light, simple, fast periodic table app built with SwiftUI, and also uses Apple Foundation Models
 
@@ -23,7 +23,7 @@ A light, simple, fast periodic table app built with SwiftUI, and also uses Apple
 
 <br>
 
-# Demo Video
+## Demo Video
 
 https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
 
@@ -37,6 +37,8 @@ https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
 
 <br>
 
+## Screenshots
+
 <p>
   <img src="https://github.com/user-attachments/assets/de0b3936-57c3-4d2b-92e0-f42ee011d807" width="170" alt="Screenshot 2026-01-07 at 11 38 47 am">
   <img src="https://github.com/user-attachments/assets/417e7fca-f826-4a36-96d8-6bb6f9dff08e" width="170" alt="Screenshot 2026-01-07 at 11 39 18 am">
@@ -47,7 +49,7 @@ https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
 
 <br>
 
-# Try It Out
+## Try It Out
 
 1. Clone with `https://github.com/omeriadon/Elements.git`
 2. Build and run with Xcode, preferably onto a real device
