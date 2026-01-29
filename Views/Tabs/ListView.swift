@@ -11,6 +11,7 @@ import TipKit
 
 struct ListView: View {
 	@Environment(\.modelContext) var modelContext
+	@Environment(\.colorScheme) var colorScheme
 
 	let elements: [Element]
 
@@ -33,6 +34,15 @@ struct ListView: View {
 
 	let sortTip = SortTip()
 	let filterTip = FilterTip()
+
+	var oppositeForegroundStyle: Color {
+		switch colorScheme {
+			case .dark: .black
+			case .light: .white
+			@unknown default:
+				fatalError("New color scheme??")
+		}
+	}
 
 	enum SortOption: String, CaseIterable {
 		case atomicNumber = "Atomic Number"
@@ -224,17 +234,15 @@ struct ListView: View {
 				.pickerStyle(.navigationLink)
 				.padding(.horizontal, 10)
 				.padding(.vertical, 7)
-				.glassEffect(.regular.interactive())
+				.glassEffect(.clear.interactive())
 				.fixedSize()
 				.contentShape(Rectangle())
 				.foregroundStyle(.secondary)
-			}
-			.background {
-				Rectangle()
-					.fill(.black)
-					.padding()
-					.opacity(0.7)
-					.blur(radius: 20)
+				.background {
+					Rectangle()
+						.fill(oppositeForegroundStyle)
+						.blur(radius: 10)
+				}
 			}
 		}
 		.onTapGesture {
