@@ -25,7 +25,7 @@ A light, simple, fast periodic table app built with SwiftUI, and also uses Apple
 
 ## Demo Video
 
-https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
+https://github.com/user-attachments/assets/05373b68-6e09-4f1f-86f6-9565c366a43f
 
 <br>
 
@@ -40,11 +40,15 @@ https://github.com/user-attachments/assets/521f30ed-bbb0-41f9-af53-44caeda1e2dd
 ## Screenshots
 
 <p>
-  <img src="https://github.com/user-attachments/assets/de0b3936-57c3-4d2b-92e0-f42ee011d807" width="170" alt="Screenshot 2026-01-07 at 11 38 47 am">
-  <img src="https://github.com/user-attachments/assets/417e7fca-f826-4a36-96d8-6bb6f9dff08e" width="170" alt="Screenshot 2026-01-07 at 11 39 18 am">
-  <img src="https://github.com/user-attachments/assets/5e321346-b07c-4042-aee8-e3adf810e86d" width="170" alt="Screenshot 2026-01-07 at 11 39 48 am">
-  <img src="https://github.com/user-attachments/assets/ef58e315-81d8-4d05-a1be-fe892c458b00" width="170" alt="Screenshot 2026-01-07 at 11 39 32 am">
-  <img src="https://github.com/user-attachments/assets/770829c6-7f98-4bcb-89ce-b1a019c50bcb" width="170" alt="Simulator Screenshot - iPhone 17 Pro - 2026-01-07 at 19 04 44"/>
+<img width="300" alt="IMG_0291" src="https://github.com/user-attachments/assets/171d9b4e-49da-49ec-bad5-cbc2137c05a4" />
+<img width="300" alt="IMG_0293" src="https://github.com/user-attachments/assets/7e512fa9-a4ac-431d-bfe6-1e50779baebb" />
+<img width="300" alt="IMG_0295" src="https://github.com/user-attachments/assets/f85716e7-105b-486e-b6aa-8ff09f585081" />
+<img width="300" alt="IMG_0292" src="https://github.com/user-attachments/assets/50d0adfe-8b21-4e3b-a638-b2f180bdec29" />
+<img width="300" alt="IMG_0289" src="https://github.com/user-attachments/assets/d7b18270-6474-48cf-b053-46803542f4ca" />
+<img width="300" alt="IMG_0290" src="https://github.com/user-attachments/assets/ee0f74f3-5863-40ad-8bcc-4720d0b0bf0e" />
+<img width="300" alt="IMG_0296" src="https://github.com/user-attachments/assets/f9e8e942-d1b0-4e1b-ae75-4a0c9cfb01e5" />
+<img width="300" alt="IMG_0288" src="https://github.com/user-attachments/assets/f935024f-b5c3-4d44-a634-b12e9e2d825e" />
+
 </p>
 
 <br>
