@@ -604,10 +604,19 @@ enum Category: String, Codable, CaseIterable, Equatable {
 
 func loadElements() -> [Element]? {
 	do {
-		let data = Data(elementsString.utf8)
-		let decoder = JSONDecoder()
-		return try decoder.decode([Element].self, from: data)
+		print("started")
+		if let fileURL = Bundle.main.url(forResource: "elements", withExtension: "json") {
+			print(fileURL)
+			let fileData = try Data(contentsOf: fileURL)
+			print(fileData)
+			let decoder = JSONDecoder()
+			try print(decoder.decode([Element].self, from: fileData))
+			return try decoder.decode([Element].self, from: fileData)
+		} else {
+			return nil
+		}
 	} catch {
+		print(error)
 		return nil
 	}
 }

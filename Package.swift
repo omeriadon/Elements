@@ -44,7 +44,10 @@ let package = Package(
 			dependencies: [
 				.product(name: "ColorfulX", package: "colorfulx"),
 			],
-			path: "."
+			path: ".",
+			resources: [
+				.process("Resources"),
+			]
 		),
 	]
 )
