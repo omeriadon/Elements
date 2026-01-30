@@ -11,13 +11,33 @@ import TipKit
 
 let elementCellHeight = 80
 
+struct PlacedElement: Identifiable {
+	let id = UUID()
+	let element: Element
+	let row: Int
+	let column: Int
+}
+
 struct ElementCell: View {
 	let element: Element
 	var action: () -> Void
+	var highlightBookmarks: Bool
+
+	@Environment(\.modelContext) private var modelContext
 	@Query private var bookmarks: [Bookmark]
 
+	init(element: Element, action: @escaping () -> Void, highlightBookmarks: Bool) {
+		self.element = element
+		self.action = action
+		self.highlightBookmarks = highlightBookmarks
+		let id = element.atomicNumber
+		_bookmarks = Query(filter: #Predicate {
+			$0.elementID == id
+		})
+	}
+
 	var isBookmarked: Bool {
-		bookmarks.contains { $0.elementID == element.atomicNumber }
+		!bookmarks.isEmpty
 	}
 
 	var body: some View {
@@ -56,15 +76,26 @@ struct ElementCell: View {
 						.accessibilityHint("This element is bookmarked")
 				}
 			}
+			.opacity(highlightBookmarks && !isBookmarked ? 0.5 : 1.0)
+			.animation(.easeInOut, value: highlightBookmarks)
+		}
+		.contextMenu {
+			Button {
+				if let existing = bookmarks.first {
+					modelContext.delete(existing)
+				} else {
+					let bookmark = Bookmark(elementID: element.atomicNumber, dateAdded: Date.now)
+					modelContext.insert(bookmark)
+				}
+				try? modelContext.save()
+			} label: {
+				Label(
+					isBookmarked ? "Remove Bookmark" : "Add Bookmark",
+					systemImage: isBookmarked ? "bookmark.slash" : "bookmark"
+				)
+			}
 		}
 	}
-}
-
-struct PlacedElement: Identifiable {
-	let id = UUID()
-	let element: Element
-	let row: Int
-	let column: Int
 }
 
 struct TableView: View {
@@ -81,6 +112,12 @@ struct TableView: View {
 		),
 		count: 19
 	)
+
+	let tableViewTip = TableViewTip()
+
+	@Namespace var namespace
+
+	@State var highlightBookmarks = false
 
 	var positionedElements: [PlacedElement] {
 		elements.map { element in
@@ -104,9 +141,11 @@ struct TableView: View {
 		}
 	}
 
-	let tableViewTip = TableViewTip()
-
-	@Namespace var namespace
+	private func handleElementTap(_ element: Element) {
+		HapticManager.shared.impact()
+		tableViewTip.invalidate(reason: .actionPerformed)
+		selectedElement = element
+	}
 
 	var main: some View {
 		ScrollView([.horizontal, .vertical]) {
@@ -125,11 +164,11 @@ struct TableView: View {
 									.foregroundColor(.secondary)
 
 							} else if let placed = positionedElements.first(where: { $0.row == row && $0.column == column }) {
-								ElementCell(element: placed.element) {
-									HapticManager.shared.impact()
-									tableViewTip.invalidate(reason: .actionPerformed)
-									selectedElement = placed.element
-								}
+								ElementCell(
+									element: placed.element,
+									action: { handleElementTap(placed.element) },
+									highlightBookmarks: highlightBookmarks
+								)
 								.matchedTransitionSource(id: placed.element.id, in: namespace)
 							} else {
 								Color.clear
@@ -149,20 +188,46 @@ struct TableView: View {
 	}
 
 	var body: some View {
-		main
-			.overlay(alignment: .top) {
-				VariableBlurView(maxBlurRadius: 2.5, direction: .blurredTopClearBottom)
-					.frame(height: 50)
-			}
-			.overlay(alignment: .top) {
-				TipView(tableViewTip)
-					.padding(.top, 40)
-					.padding()
-			}
-			.ignoresSafeArea()
-			.sheet(item: $selectedElement) { element in
-				ElementDetailView(element: element)
-					.navigationTransition(.zoom(sourceID: element.id, in: namespace))
-			}
+		NavigationStack {
+			main
+//				.overlay(alignment: .top) {
+//					VariableBlurView(maxBlurRadius: 2.5, direction: .blurredTopClearBottom)
+//						.frame(height: 50)
+//				}
+				.overlay(alignment: .top) {
+					TipView(tableViewTip)
+						.padding(.top, 40)
+						.padding()
+				}
+				.ignoresSafeArea()
+				.sheet(item: $selectedElement) { element in
+					ElementDetailView(element: element)
+						.navigationTransition(.zoom(sourceID: element.id, in: namespace))
+				}
+				.toolbar {
+					ToolbarItem(placement: .title) {
+						Label("Table", systemImage: "atom")
+							.monospaced()
+							.labelStyle(.titleAndIcon)
+					}
+
+					ToolbarItem(placement: .topBarTrailing) {
+						Button {
+							highlightBookmarks.toggle()
+						} label: {
+							Group {
+								if highlightBookmarks {
+									Label("Unhighlight Bookmarks", systemImage: "bookmark.fill")
+										.transition(.blurReplace)
+								} else {
+									Label("Highlight Bookmarks", systemImage: "bookmark")
+										.transition(.blurReplace)
+								}
+							}
+							.animation(.easeInOut, value: highlightBookmarks)
+						}
+					}
+				}
+		}
 	}
 }
