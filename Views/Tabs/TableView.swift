@@ -190,10 +190,6 @@ struct TableView: View {
 	var body: some View {
 		NavigationStack {
 			main
-//				.overlay(alignment: .top) {
-//					VariableBlurView(maxBlurRadius: 2.5, direction: .blurredTopClearBottom)
-//						.frame(height: 50)
-//				}
 				.overlay(alignment: .top) {
 					TipView(tableViewTip)
 						.padding(.top, 40)
