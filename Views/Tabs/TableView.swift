@@ -181,9 +181,9 @@ struct TableView: View {
 					}
 				}
 			}
-			.padding(20)
-			.padding(.bottom, 80)
-			.padding([.trailing, .top], 10)
+			.padding(.bottom, 100)
+			.padding(.trailing, 20)
+			.padding(.top, 80)
 		}
 	}
 
