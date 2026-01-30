@@ -346,6 +346,8 @@ struct ListView: View {
 						.popoverTip(tipGroup.currentTip as? SortTip, attachmentAnchor: .point(.topTrailing))
 					}
 
+					ToolbarSpacer(placement: .topBarTrailing)
+
 					ToolbarItem(placement: .topBarTrailing) {
 						if
 							(selectedCategory != nil) ||
@@ -372,6 +374,15 @@ struct ListView: View {
 						}
 					}
 				}
+				.animation(.easeInOut, value:
+					(selectedCategory != nil) ||
+						(selectedPhase != nil) ||
+						(selectedGroup != nil) ||
+						(selectedPeriod != nil) ||
+						(selectedBlock != nil) ||
+						(sortBy != .atomicNumber) ||
+						!sortAscending ||
+						(bookmarkFilter != .all))
 				.sheet(item: $selectedElement) { element in
 					ElementDetailView(element: element)
 						.navigationTransition(.zoom(sourceID: element.id, in: namespace))

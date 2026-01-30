@@ -436,57 +436,61 @@ struct BookmarksView: View {
 	var body: some View {
 		Group {
 			if !bookmarks.isEmpty {
-				VStack {
-					TipView(bookmarksSettingsTip, arrowEdge: .bottom)
-						.padding(.horizontal)
-					List {
-						ForEach(bookmarks) { bookmark in
-							if let element = elements.first(where: { $0.atomicNumber == bookmark.elementID }) {
-								HStack {
-									Text(element.symbol)
-										.foregroundStyle(element.series.themeColor)
-										.bold()
-									Text(element.name)
-								}
-								.font(.title3)
-								.monospaced()
-							}
-						}
-						.onDelete(perform: deleteBookmarks)
-					}
-					.toolbar {
-						ToolbarItem(placement: .topBarTrailing) {
-							if !bookmarks.isEmpty {
-								Button(role: .destructive) {
-									deleteAllConfirm = true
-								} label: {
-									Label("Delete All", systemImage: "trash")
-								}
-								.foregroundStyle(.red)
-								.tint(.red)
-								.confirmationDialog("Delete All Bookmarks", isPresented: $deleteAllConfirm) {
-									Button("Delete All", role: .destructive) {
-										deleteAllBookmarks()
-									}
-								} message: {
-									Text("Delete all bookmarks?")
-								}
-							}
-						}
-					}
-				}
-				.transition(.blurReplace)
+				bookmarksListView
+					.transition(.blurReplace)
 			} else {
 				ContentUnavailableView("No Bookmarks Saved Yet", systemImage: "bookmark.slash")
 					.transition(.blurReplace)
 			}
 		}
-		.animation(reduceMotion ? nil : .easeInOut, value: bookmarks.isEmpty)
 		.toolbar {
 			ToolbarItem(placement: .title) {
 				Label("Bookmarks", systemImage: "bookmark")
 					.labelStyle(.titleAndIcon)
 					.monospaced()
+			}
+
+			ToolbarItem(placement: .topBarTrailing) {
+				if !bookmarks.isEmpty {
+					Button(role: .destructive) {
+						deleteAllConfirm = true
+					} label: {
+						Label("Delete All", systemImage: "trash")
+					}
+					.foregroundStyle(.red)
+					.tint(.red)
+					.confirmationDialog("Delete All Bookmarks", isPresented: $deleteAllConfirm) {
+						Button("Delete All", role: .destructive) {
+							deleteAllBookmarks()
+						}
+					} message: {
+						Text("Delete all bookmarks?")
+					}
+				}
+			}
+		}
+		.animation(reduceMotion ? nil : .easeInOut, value: bookmarks.isEmpty)
+	}
+
+	@ViewBuilder
+	private var bookmarksListView: some View {
+		VStack {
+			TipView(bookmarksSettingsTip, arrowEdge: .bottom)
+				.padding(.horizontal)
+			List {
+				ForEach(bookmarks) { bookmark in
+					if let element = elements.first(where: { $0.atomicNumber == bookmark.elementID }) {
+						HStack {
+							Text(element.symbol)
+								.foregroundStyle(element.series.themeColor)
+								.bold()
+							Text(element.name)
+						}
+						.font(.title3)
+						.monospaced()
+					}
+				}
+				.onDelete(perform: deleteBookmarks)
 			}
 		}
 	}

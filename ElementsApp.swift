@@ -26,7 +26,8 @@ struct ElementsApp: App {
 	func setupTips() {
 		do {
 			#if DEBUG
-				try Tips.resetDatastore()
+				// done testing tips for now
+//				try Tips.resetDatastore()
 			#endif
 
 			try Tips.configure()
