@@ -137,6 +137,7 @@ struct ListView: View {
 						HStack {
 							Text(element.atomicNumber.description)
 								.foregroundStyle(.tertiary)
+								.padding(.trailing, 4)
 
 							Text(element.symbol)
 								.foregroundStyle(element.series.themeColor)
@@ -146,16 +147,18 @@ struct ListView: View {
 							Spacer()
 
 							Text(element.name)
+								.padding(.trailing, 4)
 
 							if isBookmarked(element) {
 								Image(systemName: "bookmark.fill")
 									.foregroundStyle(.tint)
+									.accessibilityLabel("This element is bookmarked")
 							}
 						}
 						.font(.title3)
 						.monospaced()
-						.padding(.horizontal)
-						.padding(.vertical, 10)
+						.padding(10)
+						.padding(.leading, 3)
 						.background(.gray.opacity(0.2))
 						.clipShape(Capsule())
 					}
