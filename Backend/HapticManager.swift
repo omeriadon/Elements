@@ -16,6 +16,8 @@ final class HapticManager {
 	private init() { generator.prepare() }
 
 	func impact() {
+		let enabled = UserDefaults.standard.bool(forKey: "hapticsEnabled")
+		guard enabled else { return }
 		generator.impactOccurred()
 		generator.prepare()
 	}

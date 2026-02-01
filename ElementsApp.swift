@@ -20,6 +20,9 @@ struct ElementsApp: App {
 	}
 
 	init() {
+		UserDefaults.standard.register(defaults: [
+			"hapticsEnabled": true,
+		])
 		setupTips()
 	}
 

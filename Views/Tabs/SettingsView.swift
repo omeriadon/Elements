@@ -142,6 +142,7 @@ struct SettingsView: View {
 	@AppStorage("show_source") private var showSourceRow: Bool = true
 
 	@AppStorage("appHasOpenedBefore") var appHasOpenedBefore: Bool = false
+	@AppStorage("hapticsEnabled") var hapticsEnabled: Bool = true
 
 	let elements: [Element]
 
@@ -338,6 +339,8 @@ struct SettingsView: View {
 				} label: {
 					Label("Bookmarks", systemImage: "bookmark")
 				}
+
+				Toggle("Enable Haptics", systemImage: "iphone.radiowaves.left.and.right", isOn: $hapticsEnabled)
 
 				Button {
 					appHasOpenedBefore = false
