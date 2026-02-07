@@ -16,7 +16,9 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 	case settingsView
 	case elementDetailView
 
-	var id: String { rawValue }
+	var id: String {
+		rawValue
+	}
 
 	var name: String {
 		switch self {

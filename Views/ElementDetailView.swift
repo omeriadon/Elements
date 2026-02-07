@@ -18,7 +18,9 @@ struct ElementDetailView: View {
 	@Environment(\.modelContext) private var modelContext
 	@Query private var bookmarks: [Bookmark]
 
-	private var isBookmarked: Bool { !bookmarks.isEmpty }
+	private var isBookmarked: Bool {
+		!bookmarks.isEmpty
+	}
 
 	private func toggleBookmark() {
 		if let existing = bookmarks.first {

@@ -54,7 +54,10 @@ struct ContentView: View {
 }
 
 struct AppTabItem: Identifiable {
-	var id: String { name }
+	var id: String {
+		name
+	}
+
 	let name: String
 	let symbol: String
 	let view: AnyView

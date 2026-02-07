@@ -42,7 +42,9 @@ struct ListView: View {
 		case onlyBookmarked = "Only Bookmarked"
 		case bookmarkedTop = "Bookmarked at Top"
 		case all = "All"
-		var id: String { rawValue }
+		var id: String {
+			rawValue
+		}
 	}
 
 	@State private var bookmarkFilter: BookmarkFilter = .all

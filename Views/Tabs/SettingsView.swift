@@ -551,7 +551,6 @@ struct BookmarksView: View {
 
 	let bookmarksSettingsTip = BookmarksSettingsTip()
 
-	@ViewBuilder
 	var body: some View {
 		Group {
 			if !bookmarks.isEmpty {
@@ -591,7 +590,6 @@ struct BookmarksView: View {
 		.animation(reduceMotion ? nil : .easeInOut, value: bookmarks.isEmpty)
 	}
 
-	@ViewBuilder
 	private var bookmarksListView: some View {
 		VStack {
 			TipView(bookmarksSettingsTip, arrowEdge: .bottom)

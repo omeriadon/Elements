@@ -13,7 +13,9 @@ final class HapticManager {
 	static let shared = HapticManager()
 	private let generator = UIImpactFeedbackGenerator(style: .heavy)
 
-	private init() { generator.prepare() }
+	private init() {
+		generator.prepare()
+	}
 
 	func impact() {
 		let enabled = UserDefaults.standard.bool(forKey: "hapticsEnabled")

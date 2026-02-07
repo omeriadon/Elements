@@ -32,7 +32,10 @@ enum QuizFormat: String {
 }
 
 enum QuizDifficulty: String, CaseIterable, Identifiable {
-	var id: Self { self }
+	var id: Self {
+		self
+	}
+
 	case easy
 	case medium
 	case hard

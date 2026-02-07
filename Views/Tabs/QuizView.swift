@@ -258,7 +258,8 @@ struct QuizView: View {
 						ContentUnavailableView(
 							"Device Not Elegible", systemImage: "apple.intelligence.badge.xmark",
 							description: Text(
-								"This device can't use Apple Intelligence to create a quiz. Sorry.")
+								"This device can't use Apple Intelligence to create a quiz. Sorry."
+							)
 						)
 					case .unavailable(.appleIntelligenceNotEnabled):
 						ContentUnavailableView(
