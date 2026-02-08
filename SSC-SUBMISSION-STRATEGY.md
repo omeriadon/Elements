@@ -212,6 +212,12 @@ Structure your answer around the PRACTICE, not just the features:
 - Mention the customizable visibility as cognitive accessibility
 - Emphasize that you gave users CONTROL (haptics toggle, section toggles, tip dismissal)
 
+> Since usability, accessibility, and customisability were the core ideas behind my app, this was an important part of the design of this app. The app's whole intent is to make the periodic table adaptable and engaging for everyone and anyone, regardless of their needs or preferences or learning stage.
+> To achieve this, I implemented Dynamic Type support to make sure the text scales with the user's preferred size, but also capped sizes to not break layout.
+> I also adjusted the app for Reduce Motion, by conditionally disabling animations and my element animated diagram when reduce motion is on.
+> VoiceOver was another focus. I added labels and hints to buttons and interactive views, and for users who prefer tactile feedback, a haptic feedback toggle in settings, helping users navigate the app.
+> Lastly, I designed the app to be customisable by allowing users to control the visibility of data sections in the element detail view. This reduces cognitive load while still providing all the information they need.
+
 ---
 
 ## 10. ESSAY: "Did you use open source software?" <a name="10-open-source"></a>

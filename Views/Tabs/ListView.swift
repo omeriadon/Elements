@@ -303,9 +303,16 @@ struct ListView: View {
 			main
 				.overlay(alignment: .top) {
 					if keyboardVisible {
-						VariableBlurView(maxBlurRadius: 3, direction: .blurredTopClearBottom)
-							.frame(height: 60)
-							.ignoresSafeArea()
+						ZStack {
+							VariableBlurView(maxBlurRadius: 1.2, direction: .blurredTopClearBottom)
+							LinearGradient(
+								gradient: Gradient(stops: FadeGradient.stops),
+								startPoint: .top,
+								endPoint: .bottom
+							)
+						}
+						.frame(height: 80)
+						.ignoresSafeArea()
 					}
 				}
 				.searchable(
