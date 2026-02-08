@@ -144,6 +144,10 @@ Note: The rules say "Xcode app playgrounds are run in Simulator." Make sure your
 - Don't be generic ("I wanted to help students learn") — be specific about WHAT and WHY
 - Don't undersell your personal story — this is where authenticity wins
 
+> I was a chemistry student, but I found it hard to engage with traditional periodic tables. They were static and either too simple to get useful information out of or too complex to understand at a glance. Remembering valencies and bonds was like an impossible task, and I struggled to make real use out of the data they presented, and because they were static and didn't adapt to my level of understanding, I found it harder to build a good understanding of the subject. I was quite frustrated with how inaccessible and boring these tools were.
+> 
+> So, I wanted to create an app that could help me as a student, that would help make the periodic table more accessible and engaging. I wanted to turn the periodic table into a tool that adapts to the user's level of understanding, making it easier to explore and learn and test their knowledge.
+
 ---
 
 ## 8. ESSAY: "Who would benefit from your app playground and how?" <a name="8-who-benefits"></a>
