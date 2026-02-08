@@ -174,6 +174,8 @@ Note: The rules say "Xcode app playgrounds are run in Simulator." Make sure your
 - Each benefit maps directly to a feature you actually built
 - You're showing accessibility awareness naturally (which sets up the next essay)
 
+> This app is for students who don't like using paper periodic tables that either don’t have enough information or have too much, and aren't helpful for learning. My app aims to fix that by being very customisable - you can choose what element properties you see and filter to only show the elements you need to see, so that it's never too simple or too overwhelming. I also added a quiz feature that uses Apple Intelligence that lets you test yourself at your own knowledge level. I also made this app offline because most periodic table apps need an internet connection, which isn't always accessible for everyone. The general aim of my app is to be customisable, accessible, and reliable for everyone, no matter their learning style or situation.
+
 ---
 
 ## 9. ESSAY: "How did accessibility factor into your design process?" <a name="9-accessibility"></a>
