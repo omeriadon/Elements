@@ -250,6 +250,16 @@ You also use code from **VariableBlurView** (credited in your `VariableBlur.swif
 ### Key point to convey:
 You chose open source strategically for visual polish elements that don't affect the educational core logic, which is entirely your own work.
 
+> I used 3 open source libraries in my app:
+> 
+> - Periodic table data (github.com/sweaver2112/periodic-table-data-complete) This was the source of the element table data.
+> 
+> - ColorfulX (github.com/Lakr233/ColorfulX) This library provides the animated gradient background I used in the onboarding view, to make the introduction more visually engaging.
+> 
+> - VariableBlurView (github.com/jtrivedi/VariableBlurView) I used this file to apply a progressive blur to the top safe area of the list view to make sure the time and status symbols stayed legible as the list items scrolled under.
+> 
+> They all had MIT licenses so I included a third-party licenses file in my project to credit their authors
+
 ---
 
 ## 11. ESSAY: "Did you use AI tools?" <a name="11-ai-tools"></a>
