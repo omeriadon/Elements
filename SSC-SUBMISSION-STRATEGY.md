@@ -294,6 +294,14 @@ Structure your answer in three parts:
 ### The tone to strike:
 "I used AI as an accelerator, not a replacement for understanding. Every design decision, user experience choice, and framework integration reflects my own learning and problem-solving."
 
+> I used GitHub Copilot and ChatGPT to save time with repetitive and menial tasks, which gave me more freedom to focus on the design and user experience.
+> 
+> For example, I used GitHub Copilot to make the Swift structs and enums for the JSON data when it gets decoded. This needed figuring out optional values and embedded objects, which would have been tedious for me to do manually. Copilot also helped with some repetitive code, such as some utility functions and debugging SwiftData @Query keypaths.
+> 
+> I also used ChatGPT because it was useful for teaching me new frameworks and accessibility features. It taught me how to add VoiceOver and Reduce Motion support, which I then applied to my app. It also explained how to use TipKit, because that was a new framework to me.
+> 
+> I reviewed the code because sometimes it makes mistakes, and doesn't always do things correctly. I didn't need AI for the navigation, layout, or design because they were my favourite parts of the app to create. I did learn about grids and scrollviews in the table view, and accessibility, two new areas for me.
+
 ---
 
 ## 12. ESSAY: "What other technologies did you use and why?" <a name="12-other-technologies"></a>
