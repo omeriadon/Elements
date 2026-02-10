@@ -413,8 +413,6 @@ They say it won't influence judging, and that's probably mostly true. But if you
 
 ---
 
----
-
 ## 14.5. Social media
 
 > dev.adonis.pt
