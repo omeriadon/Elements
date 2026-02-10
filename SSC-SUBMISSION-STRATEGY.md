@@ -347,15 +347,15 @@ Pick 4-5 of your strongest framework integrations and explain the WHY for each:
 
 **Don't just list technologies — show you understand WHY each one was the right choice for your specific use case.**
 
-> For my app, I used a few frameworks. The app's UI was made with SwiftUI, because it's a simple but powerful way to make modern UI, and better than SwiftUI because of its advanced features like LazyVGrid, which I used for the table view.
+> The app's UI was made with SwiftUI, because it's a simple way to make modern UI, and better than UIKit because of its advanced features like LazyVGrid, which I used for the table view.
 > 
-> I used the Apple Intelligence Foundation Models to power the personalised quiz feature. It was particularly good because it runs offline on device, keeping the app accessible to as many people as possible by not requiring an internet connection.
+> I used the Apple Intelligence Foundation Models to generate the personalised quizzes. It was especially good because it runs offline on-device, keeping the app accessible to as many people as possible by not requiring an internet connection.
 > 
-> To persist element bookmarks, I used SwiftData because it was really easy to integrate with my existing model, and also easy to query and sort and add and delete bookmarks.
+> To persist element bookmarks, I used SwiftData because it was really easy to integrate with my existing model, and efficient to query, sort, add, and delete bookmarks.
 > 
-> To help the user learn about the app's features, I used TipKit to show some tips throughout the app. It simplified the job of showing and hiding tips, because it automatically tracks when the user dismisses a tip and doesn't show it again.
+> To help the user discover the app's features, I used TipKit to show some tips everywhere. It simplified the job of showing and hiding tips, because it automatically tracks when the user dismisses a tip and doesn't show it again.
 > 
-> I used a little bit of UIKit to trigger haptic feedback for navigation, which enhanced the user experience by making the experience more responsive.
+> I also used some UIKit to trigger haptic feedback when navigating around, which made the app feel more intuitive and comfortable.
 
 ---
 
