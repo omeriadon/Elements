@@ -395,6 +395,12 @@ This is often the weakest essay for most applicants because they haven't done mu
 ### If you genuinely haven't done much yet:
 Focus on what you HAVE done, even if small. Helping one person counts. And mention what you plan to do — showing initiative matters.
 
+> Right now I’m participating in Flavortown, which is a hackathon that started last year December and ends in March. The goal is to ship and release actual projects, which taught me a lot about the full app development lifecycle. In this hackathon I built this app, Elements, as well as a finance-tracking app called Money and my personal portfolio. I learnt how to use TestFlight and App Store Connect, and how to apply user feedback to my projects, things I haven’t learnt before when I was just making apps and leaving them.
+> 
+> I'm also contributing to Anyways, a public transport utility app on the App Store. A friend introduced me to the developers, and since they also happened to use SwiftUI, I started helping the iOS developer improve the app's UI and UX. We spent several hours fixing dozens of issues together, and along the way, we both learnt a lot about SwiftUI modifiers. I’m excited to continue contributing to Anyways and help expand it to Apple Watch and iPad.
+> 
+> I also enjoy helping others learn to code. At school, I'm helping a classmate learn SwiftUI and encouraged him to submit something for the Swift Student Challenge.
+
 ---
 
 ## 14. Apps on the App Store (Optional) <a name="14-app-store"></a>
