@@ -409,6 +409,8 @@ Focus on what you HAVE done, even if small. Helping one person counts. And menti
 
 They say it won't influence judging, and that's probably mostly true. But if you have apps published, mention them briefly. If you don't, **skip this entirely**. Don't apologize for not having apps — many winners didn't have any.
 
+> Leave blank
+
 ---
 
 ## 15. Comments (Optional) <a name="15-comments"></a>
