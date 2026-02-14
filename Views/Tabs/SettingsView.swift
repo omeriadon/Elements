@@ -143,6 +143,7 @@ struct SettingsView: View {
 
 	@AppStorage("appHasOpenedBefore") var appHasOpenedBefore: Bool = false
 	@AppStorage("hapticsEnabled") var hapticsEnabled: Bool = true
+	@AppStorage("showRelativeAtomicMass") var showRelativeAtomicMass: Bool = false
 
 	let elements: [Element]
 
@@ -341,6 +342,7 @@ struct SettingsView: View {
 				}
 
 				Toggle("Enable Haptics", systemImage: "iphone.radiowaves.left.and.right", isOn: $hapticsEnabled)
+				Toggle("Show Relative Atomic Mass", systemImage: "numbersign", isOn: $showRelativeAtomicMass)
 
 				Button {
 					appHasOpenedBefore = false

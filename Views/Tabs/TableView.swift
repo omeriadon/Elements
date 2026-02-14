@@ -25,6 +25,7 @@ struct ElementCell: View {
 
 	@Environment(\.modelContext) private var modelContext
 	@Query private var bookmarks: [Bookmark]
+	@AppStorage("showRelativeAtomicMass") var showRelativeAtomicMass: Bool = false
 
 	init(element: Element, action: @escaping () -> Void, highlightBookmarks: Bool) {
 		self.element = element
@@ -45,7 +46,7 @@ struct ElementCell: View {
 			action()
 		} label: {
 			ZStack(alignment: .topTrailing) {
-				VStack(spacing: 2) {
+				VStack(spacing: showRelativeAtomicMass ? 1 : 2) {
 					Text("\(element.atomicNumber)")
 						.font(.footnote.monospacedDigit())
 						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
@@ -60,6 +61,11 @@ struct ElementCell: View {
 					Text(element.name)
 						.font(.footnote)
 						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
+
+					if showRelativeAtomicMass {
+						Text(element.atomicMass, format: .number.precision(.fractionLength(3)))
+							.font(.footnote.monospacedDigit())
+					}
 				}
 				.tint(.secondary)
 				.frame(width: CGFloat(elementCellHeight), height: CGFloat(elementCellHeight))
