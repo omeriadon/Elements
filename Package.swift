@@ -18,7 +18,7 @@ let package = Package(
 			targets: ["AppModule"],
 			bundleIdentifier: "com.omeriadon.dev.Elements",
 			teamIdentifier: "C2HN547N49",
-			displayVersion: "1.1",
+			displayVersion: "1.0",
 			bundleVersion: "1",
 			appIcon: .asset("AppIcon"),
 			accentColor: .asset("AccentColor"),
