@@ -279,16 +279,10 @@ struct ListView: View {
 				.pickerStyle(.navigationLink)
 				.padding(.horizontal, 10)
 				.padding(.vertical, 7)
-				.glassEffect(.clear.interactive())
+				.glassEffect(.regular.interactive())
 				.fixedSize()
 				.contentShape(Rectangle())
 				.foregroundStyle(.secondary)
-				.background {
-					Rectangle()
-						.fill(oppositeForegroundStyle)
-						.clipShape(Capsule())
-						.blur(radius: 10)
-				}
 				.dynamicTypeSize(...DynamicTypeSize.accessibility1)
 			}
 		}
@@ -311,7 +305,7 @@ struct ListView: View {
 								endPoint: .bottom
 							)
 						}
-						.frame(height: 80)
+						.frame(height: 100)
 						.ignoresSafeArea()
 					}
 				}
