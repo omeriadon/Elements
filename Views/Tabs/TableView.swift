@@ -49,22 +49,23 @@ struct ElementCell: View {
 				VStack(spacing: showRelativeAtomicMass ? 1 : 2) {
 					Text("\(element.atomicNumber)")
 						.font(.footnote.monospacedDigit())
-						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
+						.dynamicTypeSize(...DynamicTypeSize.medium)
 
 					Text(element.symbol)
 						.font(.title2)
 						.foregroundStyle(element.series.themeColor)
 						.fontDesign(.monospaced)
 						.bold()
-						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
+						.dynamicTypeSize(...DynamicTypeSize.medium)
 
 					Text(element.name)
 						.font(.footnote)
-						.dynamicTypeSize(...DynamicTypeSize.xxLarge)
+						.dynamicTypeSize(...DynamicTypeSize.large)
 
 					if showRelativeAtomicMass {
 						Text(element.atomicMass, format: .number.precision(.fractionLength(3)))
 							.font(.footnote.monospacedDigit())
+							.dynamicTypeSize(...DynamicTypeSize.medium)
 					}
 				}
 				.tint(.secondary)
