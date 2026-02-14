@@ -77,7 +77,7 @@ struct ElementCell: View {
 				}
 			}
 			.opacity(highlightBookmarks && !isBookmarked ? 0.5 : 1.0)
-			.animation(.easeInOut, value: highlightBookmarks)
+			.animation(.easeInOut(duration: 0.2), value: highlightBookmarks)
 		}
 		.contextMenu {
 			Button {
@@ -190,11 +190,6 @@ struct TableView: View {
 	var body: some View {
 		NavigationStack {
 			main
-				.overlay(alignment: .top) {
-					TipView(tableViewTip)
-						.padding(.top, 40)
-						.padding()
-				}
 				.ignoresSafeArea()
 				.sheet(item: $selectedElement) { element in
 					ElementDetailView(element: element)
@@ -223,6 +218,11 @@ struct TableView: View {
 							.animation(.easeInOut, value: highlightBookmarks)
 						}
 					}
+				}
+				.overlay(alignment: .bottom) {
+					TipView(tableViewTip)
+						.padding(.bottom)
+						.padding()
 				}
 		}
 	}
