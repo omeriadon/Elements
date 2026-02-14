@@ -505,7 +505,7 @@ struct ElementDetailView: View {
 		VStack(spacing: 20) {
 			if showAtomicMass {
 				LeftRight {
-					Text("Atomic Mass")
+					Text("Relative Atomic Mass")
 						.font(.caption)
 						.foregroundStyle(.tertiary)
 
