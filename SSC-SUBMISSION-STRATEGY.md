@@ -76,6 +76,10 @@ These are straightforward. Double-check:
 3. **Test on a physical device if possible**, especially the quiz feature (Apple Intelligence availability).
 4. Your dependency on `ColorfulX` (the animated gradient library) gets bundled — make sure the total ZIP stays under 25 MB.
 
+**Update (Feb 2026)**: In the current project workspace, there is **no** `PeriodicTableData.swift`. Your size risk is primarily the bundled `Resources/elements.json` (large) plus assets and package dependencies.
+
+**Important licensing note**: Your `elements.json` includes element `summary` text and a `source` URL for each element (commonly Wikipedia). That means you should be prepared to answer **"Did you use any content that you don't have ownership rights to?"** with **Yes**, and explain the licensing/attribution (e.g. Wikipedia content under CC BY-SA, with per-element source links).
+
 ### Which Software
 - Select **Xcode 26** (since your `Package.swift` targets iOS 26.0 and uses iOS 26 APIs like `.glassEffect`, `.safeAreaBar`, `.tabBarMinimizeBehavior`, and `FoundationModels`).
 
@@ -258,7 +262,13 @@ You chose open source strategically for visual polish elements that don't affect
 > 
 > - VariableBlurView (github.com/jtrivedi/VariableBlurView) I used this file to apply a progressive blur to the top safe area of the list view to make sure the time and status symbols stayed legible as the list items scrolled under.
 > 
-> They all had MIT licenses so I included a third-party licenses file in my project to credit their authors
+> I included a third-party licenses file in my project to credit their authors and comply with the licenses.
+
+---
+
+# 10.5 Non-ownership rights part
+
+> The periodic table data I used had a summary for each element sourced from Wikipedia, with a CC BY-SA license. To comply with that license I reference the source link under the summary and included the CC BY-SA license in my third-party licenses file.
 
 ---
 
@@ -499,7 +509,12 @@ Before you hit Submit:
 - [ ] Guardian info is correct and your guardian is aware
 
 ### The Dead Code Issue
-Your `PeriodicTableData.swift` contains a 9,748-line `elementsString` variable that appears to be an alternative way to load element data — but your app actually uses `loadElements()` which reads from `Resources/elements.json`. If `elementsString` is unused dead code, **remove it before submission**. This will significantly reduce your ZIP file size and shows clean code practices.
+Earlier versions of this guide referenced a `PeriodicTableData.swift` file containing an inline JSON string. In the current project, the app loads elements from `Resources/elements.json` via `loadElements()`.
+
+**What to do instead**:
+- Make sure you **only ship one source of truth** for element data.
+- Verify your ZIP stays under **25 MB** (assets + `elements.json` + `ColorfulX`).
+- Double-check licensing/attribution for any bundled content you didn’t author (e.g. element summaries that appear to be sourced from Wikipedia).
 
 ### Final Read-Through
 Read every essay out loud. If something sounds generic or could apply to anyone's app ("I wanted to make learning fun"), rewrite it to be specific to YOUR app and YOUR experience.
