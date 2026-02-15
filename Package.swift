@@ -16,21 +16,17 @@ let package = Package(
 		.iOSApplication(
 			name: "Elements",
 			targets: ["AppModule"],
-			bundleIdentifier: "com.omeriadon.dev.Elements",
-			teamIdentifier: "C2HN547N49",
+			bundleIdentifier: "com.omeriadon.Elements",
+			teamIdentifier: "P6PV2R9443",
 			displayVersion: "1.0",
 			bundleVersion: "1",
 			appIcon: .asset("AppIcon"),
 			accentColor: .asset("AccentColor"),
 			supportedDeviceFamilies: [
-				.pad,
 				.phone,
 			],
 			supportedInterfaceOrientations: [
 				.portrait,
-				.landscapeRight,
-				.landscapeLeft,
-				.portraitUpsideDown(.when(deviceFamilies: [.pad])),
 			],
 			appCategory: .education
 		),
