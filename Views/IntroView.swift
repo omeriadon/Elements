@@ -5,7 +5,6 @@
 //  Created by Adon Omeri on 12/11/2025.
 //
 
-import ColorfulX
 import SwiftUI
 
 enum OnboardingPage: String, Identifiable, CaseIterable {

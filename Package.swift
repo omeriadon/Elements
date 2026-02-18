@@ -16,8 +16,8 @@ let package = Package(
 		.iOSApplication(
 			name: "Elements",
 			targets: ["AppModule"],
-			bundleIdentifier: "com.omeriadon.Elements",
-			teamIdentifier: "P6PV2R9443",
+			bundleIdentifier: "com.omeriadon.dev.Elements",
+			teamIdentifier: "C2HN547N49",
 			displayVersion: "1.0",
 			bundleVersion: "1",
 			appIcon: .asset("AppIcon"),
@@ -31,19 +31,14 @@ let package = Package(
 			appCategory: .education
 		),
 	],
-	dependencies: [
-		.package(url: "https://github.com/Lakr233/ColorfulX.git", "6.0.1" ..< "7.0.0"),
-	],
 	targets: [
 		.executableTarget(
 			name: "AppModule",
-			dependencies: [
-				.product(name: "ColorfulX", package: "colorfulx"),
-			],
 			path: ".",
 			resources: [
 				.process("Resources"),
 			]
 		),
-	]
+	],
+	swiftLanguageVersions: [.v5]
 )
