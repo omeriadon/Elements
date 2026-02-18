@@ -395,13 +395,13 @@ struct ListView: View {
 				}
 				.onAppear {
 					NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
-						Task { @MainActor in
-							withAnimation(.easeInOut) { keyboardVisible = true }
+						withAnimation(.easeInOut) {
+							keyboardVisible = true
 						}
 					}
 					NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
-						Task { @MainActor in
-							withAnimation(.easeInOut) { keyboardVisible = false }
+						withAnimation(.easeInOut) {
+							keyboardVisible = false
 						}
 					}
 				}
