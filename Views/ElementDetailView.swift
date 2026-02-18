@@ -222,15 +222,15 @@ struct ElementDetailView: View {
 							Group {
 								if !isCopied {
 									Label("Copy", systemImage: "document.on.document")
-										.animation(reduceMotion ? nil : .easeInOut, value: isCopied)
+										.transition(.blurReplace)
 										.accessibilityHint("Copy this element's name to your clipboard")
 								} else {
 									Label("Copied", systemImage: "checkmark")
-										.animation(reduceMotion ? nil : .easeInOut, value: isCopied)
+										.transition(.blurReplace)
 										.accessibilityHint("This element is already copied to your clipboard")
 								}
 							}
-							.transition(.blurReplace)
+							.animation(reduceMotion ? nil : .easeInOut, value: isCopied)
 						}
 						.popoverTip(tipGroup.currentTip as? CopyElementNameTip, attachmentAnchor: .point(.bottom))
 					}
@@ -600,15 +600,10 @@ struct ElementDetailView: View {
 						.foregroundStyle(.tertiary)
 				} right: {
 					VStack(alignment: .trailing) {
-						ForEach(Array(ionizationEnergies.prefix(5).enumerated()), id: \.offset) { index, energy in
-							Text("\(index + 1): \(String(format: "%.1f", energy)) kJ/mol")
+						ForEach(Array(ionizationEnergies.enumerated()), id: \.offset) { _, energy in
+							Text("\(String(format: "%.1f", energy)) kJ/mol")
 								.fontDesign(.monospaced)
-								.font(.caption2)
-						}
-						if ionizationEnergies.count > 5 {
-							Text("... +\(ionizationEnergies.count - 5) more")
-								.font(.caption2)
-								.foregroundStyle(.secondary)
+								.font(.caption)
 						}
 					}
 				}
