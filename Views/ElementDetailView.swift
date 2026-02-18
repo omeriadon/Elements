@@ -415,6 +415,7 @@ struct ElementDetailView: View {
 			HStack {
 				Text(element.symbol)
 					.font(.largeTitle)
+					.foregroundStyle(.white)
 					.frame(width: 80, height: 80)
 					.glassEffect(.clear.tint(element.series.themeColor).interactive())
 					.padding(.leading, 10)
@@ -469,6 +470,7 @@ struct ElementDetailView: View {
 					.clear.tint(element.series.themeColor).interactive(),
 					in: .circle
 				)
+				.foregroundStyle(.white)
 
 			ForEach(element.electronsPerShell.indices, id: \.self) { i in
 				let shell = element.electronsPerShell[i]

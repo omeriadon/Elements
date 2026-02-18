@@ -22,7 +22,7 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 	var name: String {
 		switch self {
 			case .welcome:
-				"Welcome"
+				""
 			case .tableView:
 				"Table"
 			case .settingsView:
@@ -32,14 +32,14 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 			case .quizView:
 				"Quiz"
 			case .elementDetailView:
-				"Element Detail"
+				"Element Details"
 		}
 	}
 
 	var symbol: String {
 		switch self {
 			case .welcome:
-				"figure.wave"
+				""
 			case .tableView:
 				"atom"
 			case .settingsView:
@@ -58,11 +58,11 @@ enum OnboardingPage: String, Identifiable, CaseIterable {
 			case .welcome:
 				"Detailed interactive periodic table in your pocket."
 			case .tableView:
-				"Use the table view to move around the periodic table and click on an element to view its details.\nThe slider at the top allows you to zoom between set levels to navigate faster."
+				"- Use the table view to move around the periodic table, and click on an element to view its details.\n- The bookmark toggle allows you to highlight bookmarked elements to get to them faster."
 			case .listView:
-				"Use the list view to quickly browse or search all elements filtered by element category, phase, group period, or block. You can also sort elements."
+				"- Use the list view to quickly browse or search all elements.\n- If you narrow down your search to one item it automatically opens for you.\n- You can sort using the menu in the top right and filter using the pickers in the bottom right."
 			case .settingsView:
-				"Choose what properties to show in the detail view or come back to this intro in settings..."
+				"Choose what properties to show in the detail view, come back to this intro, and toggle haptics."
 			case .quizView:
 				"Generate a quiz at your own level using Apple Intelligence, and then have it marked."
 			case .elementDetailView:
@@ -107,64 +107,63 @@ struct IntroPageView: View {
 	}
 
 	var body: some View {
-		NavigationStack {
-			VStack(spacing: 20) {
-				if page == .welcome {
-					Image(displayImage)
-						.resizable()
-						.aspectRatio(contentMode: .fit)
-						.padding(.horizontal, 40)
+		VStack(spacing: 20) {
+			Label(page.name, systemImage: page.symbol)
+				.monospaced()
+				.labelStyle(.titleAndIcon)
+				.font(.title)
+				.padding(.top, 20)
 
-					Text("Elements")
-						.font(.system(size: 50))
-						.monospaced()
-						.fontWeight(.black)
-						.padding(.bottom, 7)
-						.foregroundStyle(.tint)
-				} else {
-					Image(displayImage)
-						.resizable()
-						.aspectRatio(contentMode: .fit)
-						.clipShape(RoundedRectangle(cornerRadius: 27))
-				}
+			if page == .welcome {
+				Image(displayImage)
+					.resizable()
+					.aspectRatio(contentMode: .fit)
+					.padding(.horizontal, 40)
+					.padding(.bottom)
 
-				Text(page.description)
-					.multilineTextAlignment(.leading)
-					.fixedSize(horizontal: false, vertical: true)
-					.padding()
-					.fontDesign(.monospaced)
-					.font(page == .welcome ? .title3 : .body)
-					.ignoresSafeArea()
-
-				Spacer()
-
-				if isFirstOrLast, let onContinue {
-					Button {
-						onContinue()
-					} label: {
-						Label(
-							page == .welcome ? "Go" : "Done",
-							systemImage: page == .welcome ? "arrow.right" : "checkmark"
-						)
-					}
-					.font(.title)
-					.padding(.vertical)
-					.padding(.horizontal, 20)
-					.labelStyle(.titleAndIcon)
-					.glassEffect(.clear.tint(.accentColor).interactive())
-					.foregroundStyle(.white)
-				}
+				Text("Elements")
+					.font(.system(size: 50))
+					.monospaced()
+					.fontWeight(.black)
+					.padding(.bottom, 7)
+					.foregroundStyle(.tint)
+					.saturation(1.5)
+			} else {
+				Image(displayImage)
+					.resizable()
+					.aspectRatio(contentMode: .fit)
+					.clipShape(RoundedRectangle(cornerRadius: 27))
 			}
-			.padding(.horizontal)
-			.toolbar {
-				ToolbarItem(placement: .principal) {
-					Label(page.name, systemImage: page.symbol)
-						.monospaced()
-						.labelStyle(.titleAndIcon)
-						.font(.title)
+
+			Text(page.description)
+				.multilineTextAlignment(page == .welcome ? .center : .leading)
+				.fixedSize(horizontal: false, vertical: true)
+				.padding()
+				.fontDesign(.monospaced)
+				.font(page == .welcome ? .title3 : .body)
+				.ignoresSafeArea()
+
+			Spacer()
+
+			if isFirstOrLast, let onContinue {
+				Button {
+					onContinue()
+				} label: {
+					Label(
+						page == .welcome ? "Swipe to continue" : "Done",
+						systemImage: page == .welcome ? "arrow.right" : "checkmark"
+					)
 				}
+				.font(.title)
+				.padding(.vertical)
+				.padding(.horizontal, 20)
+				.labelStyle(.titleAndIcon)
+				.buttonStyle(.plain)
+				.glassEffect(.clear.tint(.accentColor).interactive())
+				.foregroundStyle(.white)
 			}
 		}
+		.padding(.horizontal)
 	}
 }
 
@@ -187,7 +186,7 @@ struct IntroView: View {
 						let containerWidth = proxy.size.width
 						let distance = abs(minX) / containerWidth
 						let blur = min(distance * 5, 5)
-						let scale = 1 - min(distance * 0.1, 0.1)
+						let scale = 1 - min(distance * 0.2, 0.2)
 
 						return content
 							.blur(radius: blur)
@@ -199,7 +198,6 @@ struct IntroView: View {
 			.scrollTargetLayout()
 		}
 		.scrollTargetBehavior(.paging)
-		.ignoresSafeArea()
 		.scrollIndicators(.visible)
 		.scrollPosition(id: $scrollPosition)
 		.onAppear {
@@ -207,8 +205,8 @@ struct IntroView: View {
 		}
 		.background {
 			ColorfulView(color: .lavandula)
-				.saturation(2.5)
-				.opacity(0.2)
+				.saturation(2)
+				.opacity(0.5)
 				.ignoresSafeArea()
 		}
 		.dynamicTypeSize(...DynamicTypeSize.accessibility1)

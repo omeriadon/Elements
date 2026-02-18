@@ -43,7 +43,7 @@ struct ElementsApp: App {
 		WindowGroup {
 			if let elementsSafe = elements {
 				ContentView(elements: elementsSafe)
-					.sheet(isPresented: .constant(showSheet)) {
+					.fullScreenCover(isPresented: .constant(showSheet)) {
 						IntroView(appHasOpenedBefore: Binding(
 							get: {
 								appHasOpenedBefore

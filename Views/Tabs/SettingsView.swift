@@ -342,7 +342,10 @@ struct SettingsView: View {
 				}
 
 				Toggle("Enable Haptics", systemImage: "iphone.radiowaves.left.and.right", isOn: $hapticsEnabled)
-				Toggle("Show Relative Atomic Mass", systemImage: "numbersign", isOn: $showRelativeAtomicMass)
+				Toggle(isOn: $showRelativeAtomicMass) {
+					Label("Show Relative Atomic Mass", systemImage: "numbersign")
+					Text("In the table view")
+				}
 
 				Button {
 					appHasOpenedBefore = false

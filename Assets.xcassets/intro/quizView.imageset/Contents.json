@@ -1,7 +1,18 @@
 {
   "images" : [
     {
-      "filename" : "Simulator Screenshot - iPhone 17 Pro - 2026-01-07 at 19.04.44.png",
+      "filename" : "simulator_screenshot_DD72EA5E-867E-4A82-9CED-EC9D869E5EB8.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "simulator_screenshot_611B317E-A592-452A-9E7F-B47D24FD7456.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -10,6 +21,26 @@
       "scale" : "2x"
     },
     {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "idiom" : "universal",
       "scale" : "3x"
     }
