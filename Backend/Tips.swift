@@ -38,7 +38,7 @@ struct SortTip: Tip {
 
 struct FilterTip: Tip {
 	var title: Text {
-		Text("Fitler Elements")
+		Text("Filter Elements")
 	}
 
 	var message: Text? {
