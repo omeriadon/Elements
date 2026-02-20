@@ -16,8 +16,8 @@ let package = Package(
 		.iOSApplication(
 			name: "Elements",
 			targets: ["AppModule"],
-			bundleIdentifier: "com.omeriadon.dev.Elements",
-			teamIdentifier: "C2HN547N49",
+			bundleIdentifier: "com.omeriadon.Elements",
+			teamIdentifier: "P6PV2R9443",
 			displayVersion: "1.0",
 			bundleVersion: "1",
 			appIcon: .asset("AppIcon"),
@@ -40,5 +40,5 @@ let package = Package(
 			]
 		),
 	],
-	swiftLanguageModes: [.v5]
+	swiftLanguageVersions: [.v5]
 )
